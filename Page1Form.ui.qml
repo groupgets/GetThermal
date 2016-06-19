@@ -18,7 +18,7 @@ Item {
 
     UvcVideoProducer {
         id: player
-        videoFormat: acq.videoFormat
+        uvc: acq
     }
 
     VideoOutput {

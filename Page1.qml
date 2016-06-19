@@ -10,7 +10,4 @@ Page1Form {
     button2.onClicked: {
         console.log("Button 2 clicked.");
     }
-    Component.onCompleted: {
-        acq.frameReady.connect(player.onNewVideoContentReceived);
-    }
 }

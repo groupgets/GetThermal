@@ -23,7 +23,7 @@ public:
     UvcAcquisition(QList<UsbId> ids);
     virtual ~UvcAcquisition();
 
-    Q_PROPERTY(const QVideoSurfaceFormat& videoFormat READ videoFormat)
+    Q_PROPERTY(const QVideoSurfaceFormat& videoFormat READ videoFormat WRITE setVideoFormat NOTIFY formatChanged)
     const QVideoSurfaceFormat& videoFormat() const { return m_format; }
 
 signals:
@@ -31,6 +31,7 @@ signals:
     void formatChanged(const QVideoSurfaceFormat &format);
 
 public slots:
+    void setVideoFormat(const QVideoSurfaceFormat &format);
 
 protected:
     uvc_context_t *ctx;

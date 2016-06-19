@@ -4,12 +4,8 @@
 UvcVideoProducer::UvcVideoProducer(QObject *parent)
     : QObject(parent)
     , m_surface(NULL)
-    , m_format(QVideoSurfaceFormat(QSize(-1, -1), QVideoFrame::Format_Invalid))
+    , m_uvc(NULL)
 {
-//    m_format = QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_RGB24);
-//    m_format = QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_NV12);
-//    m_format = QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_YUV420P);
-//    m_format.setYCbCrColorSpace(QVideoSurfaceFormat::YCbCr_BT601);
 }
 
 void UvcVideoProducer::setVideoSurface(QAbstractVideoSurface *surface)
@@ -26,26 +22,38 @@ void UvcVideoProducer::setVideoSurface(QAbstractVideoSurface *surface)
     printf("\n");
     fflush(stdout);
 
-    if (m_surface)
-        m_surface->start(m_format);
+    if (m_uvc)
+        m_surface->start(m_uvc->videoFormat());
+
+    emit surfaceChanged(m_surface);
 }
 
-void UvcVideoProducer::setVideoFormat(const QVideoSurfaceFormat &format)
+void UvcVideoProducer::setUvc(UvcAcquisition *uvc)
 {
-    if (m_surface && m_surface->isActive()) {
-        m_surface->stop();
-    }
+    if (m_uvc)
+        disconnect(m_uvc, &UvcAcquisition::frameReady,
+                   this, &UvcVideoProducer::onNewVideoContentReceived);
 
-    m_format = format;
-
-    QVideoSurfaceFormat new_format = m_surface->nearestFormat(m_format);
-    printf("Surface supports format %d width %d height %d",
-           new_format.pixelFormat(),
-           new_format.frameWidth(), new_format.frameHeight());
-    fflush(stdout);
+    m_uvc = uvc;
+    emit uvcChanged(uvc);
 
     if (m_surface)
-        m_surface->start(m_format);
+    {
+        if (m_surface->isActive()) {
+            m_surface->stop();
+        }
+
+        QVideoSurfaceFormat new_format = m_surface->nearestFormat(uvc->videoFormat());
+        printf("Surface supports format %d width %d height %d",
+               new_format.pixelFormat(),
+               new_format.frameWidth(), new_format.frameHeight());
+        fflush(stdout);
+
+        m_surface->start(uvc->videoFormat());
+    }
+
+    connect(m_uvc, &UvcAcquisition::frameReady,
+            this, &UvcVideoProducer::onNewVideoContentReceived);
 }
 
 void UvcVideoProducer::onNewVideoContentReceived(const QVideoFrame &frame)
