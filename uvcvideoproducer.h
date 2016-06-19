@@ -15,6 +15,10 @@ public:
     QAbstractVideoSurface* videoSurface() const { return m_surface; }
     void setVideoSurface(QAbstractVideoSurface *surface);
 
+    Q_PROPERTY(const QVideoSurfaceFormat& videoFormat READ videoFormat WRITE setVideoFormat)
+    const QVideoSurfaceFormat& videoFormat() const { return m_format; }
+    void setVideoFormat(const QVideoSurfaceFormat &surface);
+
 signals:
 
 public slots:

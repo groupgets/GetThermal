@@ -3,7 +3,9 @@
 #include <QQmlComponent>
 #include <QAbstractVideoSurface>
 #include <QDebug>
+#include <libuvc/libuvc.h>
 #include "uvcvideoproducer.h"
+#include "uvcacquisition.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,6 +13,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<UvcVideoProducer>("GetThermal", 1,0, "UvcVideoProducer");
+    qmlRegisterType<UvcAcquisition>("GetThermal", 1,0, "UvcAcquisition");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));

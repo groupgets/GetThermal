@@ -10,6 +10,16 @@ Item {
     property alias button2: button2
     property alias videoOutput: videoOutput
     property alias player: player
+    property alias acq: acq
+
+    UvcAcquisition {
+        id: acq
+    }
+
+    UvcVideoProducer {
+        id: player
+        videoFormat: acq.videoFormat
+    }
 
     VideoOutput {
         id: videoOutput
@@ -21,10 +31,8 @@ Item {
         anchors.bottomMargin: 54
         anchors.top: parent.top
         anchors.topMargin: 8
-        fillMode: PreserveAspectFit
-        source: UvcVideoProducer {
-            id: player
-        }
+        fillMode: VideoOutput.PreserveAspectFit
+        source: player
     }
 
     RowLayout {
