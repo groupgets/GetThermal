@@ -3,6 +3,8 @@
 #include <QList>
 #include <libuvc/libuvc.h>
 
+#include "leptonvariation.h"
+
 //#define PLANAR_BUFFER 1
 #define ACQ_RGB 1
 
@@ -11,6 +13,7 @@ UvcAcquisition::UvcAcquisition(QObject *parent)
     , ctx(NULL)
     , dev(NULL)
     , devh(NULL)
+    , m_cci(NULL)
 {
     _ids.append({ 0, 0 });
     init();
@@ -21,12 +24,18 @@ UvcAcquisition::UvcAcquisition(QList<UsbId> ids)
     , dev(NULL)
     , devh(NULL)
     , _ids(ids)
+    , m_cci(NULL)
 {
     init();
 }
 
 UvcAcquisition::~UvcAcquisition()
 {
+    if (m_cci != NULL)
+    {
+        delete m_cci;
+    }
+
     if (devh != NULL)
     {
         uvc_stop_streaming(devh);
@@ -98,6 +107,8 @@ void UvcAcquisition::init()
     /* Print out a message containing all the information that libuvc
      * knows about the device */
     uvc_print_diag(devh, stderr);
+
+    m_cci = new LeptonVariation(ctx, dev, devh);
 
 #if ACQ_YUV420
     setVideoFormat(QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_YUV420P));

@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<UvcVideoProducer>("GetThermal", 1,0, "UvcVideoProducer");
     qmlRegisterType<UvcAcquisition>("GetThermal", 1,0, "UvcAcquisition");
+    qmlRegisterUncreatableType<AbstractCCInterface>("GetThermal", 1,0, "AbstractCCInterface", "");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));

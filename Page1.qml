@@ -4,8 +4,8 @@ import GetThermal 1.0
 
 Page1Form {
     button1.onClicked: {
-        console.log("Button 1 clicked.");
-        player.produceContent();
+//        console.log("Button 1 clicked.");
+        acq.cci.PerformFFC();
     }
     button2.onClicked: {
         console.log("Button 2 clicked.");

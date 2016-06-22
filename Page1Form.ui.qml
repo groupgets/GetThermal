@@ -18,6 +18,7 @@ Item {
 
     UvcVideoProducer {
         id: player
+        // @disable-check M16
         uvc: acq
     }
 
@@ -44,7 +45,7 @@ Item {
 
         Button {
             id: button1
-            text: qsTr("Press Me 1")
+            text: qsTr("Run FFC")
         }
 
         Button {

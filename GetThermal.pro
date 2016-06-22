@@ -15,16 +15,15 @@ SOURCES += main.cpp \
     libuvc/stream.c \
     uvcacquisition.cpp \
     uvcbuffer.cpp \
+    leptonvariation.cpp \
+    abstractccinterface.cpp \
     lepton_sdk/Src/LEPTON_AGC.c \
-    lepton_sdk/Src/LEPTON_I2C_Protocol.c \
-    lepton_sdk/Src/LEPTON_I2C_Service.c \
     lepton_sdk/Src/LEPTON_OEM.c \
     lepton_sdk/Src/LEPTON_RAD.c \
     lepton_sdk/Src/LEPTON_SDK.c \
     lepton_sdk/Src/LEPTON_SYS.c \
     lepton_sdk/Src/LEPTON_VID.c \
-    lepton_sdk/Src/crc16fast.c \
-    lepton_sdk/Src/i2c_stubs.c
+    lepton_sdk/Src/crc16fast.c
 
 RESOURCES += qml.qrc
 
@@ -41,11 +40,10 @@ HEADERS += \
     libuvc/utlist.h \
     uvcbuffer.h \
     uvcacquisition.h \
+    leptonvariation.h \
+    abstractccinterface.h \
     lepton_sdk/Inc/LEPTON_AGC.h \
     lepton_sdk/Inc/LEPTON_ErrorCodes.h \
-    lepton_sdk/Inc/LEPTON_I2C_Protocol.h \
-    lepton_sdk/Inc/LEPTON_I2C_Reg.h \
-    lepton_sdk/Inc/LEPTON_I2C_Service.h \
     lepton_sdk/Inc/LEPTON_Macros.h \
     lepton_sdk/Inc/LEPTON_OEM.h \
     lepton_sdk/Inc/LEPTON_RAD.h \
@@ -54,7 +52,8 @@ HEADERS += \
     lepton_sdk/Inc/LEPTON_SYS.h \
     lepton_sdk/Inc/LEPTON_Types.h \
     lepton_sdk/Inc/LEPTON_VID.h \
-    lepton_sdk/Inc/crc16.h
+    lepton_sdk/Inc/crc16.h \
+    lepton_sdk/Inc/uvc_sdk.h
 
 SUBDIRS += \
     libuvc/libuvc.pro

@@ -238,8 +238,7 @@ extern "C"
     {
         LEP_UINT16  portID;
         LEP_CAMERA_PORT_E   portType;
-        LEP_UINT16  portBaudRate;
-        LEP_UINT8 deviceAddress;
+        void* userPtr;
     }LEP_CAMERA_PORT_DESC_T, *LEP_CAMERA_PORT_DESC_T_PTR;
 
 

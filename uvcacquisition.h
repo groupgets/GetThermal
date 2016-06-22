@@ -9,6 +9,8 @@
 #include <libuvc/libuvc.h>
 #include <unistd.h>
 
+#include "abstractccinterface.h"
+
 class UvcAcquisition : public QObject
 {
     Q_OBJECT
@@ -26,6 +28,8 @@ public:
     Q_PROPERTY(const QVideoSurfaceFormat& videoFormat READ videoFormat WRITE setVideoFormat NOTIFY formatChanged)
     const QVideoSurfaceFormat& videoFormat() const { return m_format; }
 
+    Q_PROPERTY(AbstractCCInterface* cci MEMBER m_cci)
+
 signals:
     void frameReady(const QVideoFrame &frame);
     void formatChanged(const QVideoSurfaceFormat &format);
@@ -38,6 +42,7 @@ protected:
     uvc_device_t *dev;
     uvc_device_handle_t *devh;
     QVideoSurfaceFormat m_format;
+    AbstractCCInterface *m_cci;
 
 private:
     static void cb(uvc_frame_t *frame, void *ptr);
