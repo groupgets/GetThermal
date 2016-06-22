@@ -59,7 +59,8 @@ SUBDIRS += \
     libuvc/libuvc.pro
 
 DISTFILES += \
-    libuvc/ctrl-gen.py
+    libuvc/ctrl-gen.py \
+    qtquickcontrols2.conf
 
 INCLUDEPATH += $$PWD/lepton_sdk/Inc
 
