@@ -61,11 +61,3 @@ void UvcVideoProducer::onNewVideoContentReceived(const QVideoFrame &frame)
     if (m_surface)
         m_surface->present(frame);
 }
-
-void UvcVideoProducer::produceContent()
-{
-    QImage image("/Users/kurt/Desktop/uvc.png");
-    QVideoFrame frame(image);
-    printf("Width: %d Height: %d isValid: %d", frame.width(), frame.height(), frame.isValid());
-    this->onNewVideoContentReceived(frame);
-}

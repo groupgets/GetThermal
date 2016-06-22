@@ -24,7 +24,6 @@ signals:
 
 public slots:
     void onNewVideoContentReceived(const QVideoFrame &frame);
-    void produceContent();
 
 private:
     QAbstractVideoSurface *m_surface;
