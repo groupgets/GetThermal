@@ -4,34 +4,11 @@ import QtQuick.Layouts 1.0
 
 ApplicationWindow {
     visible: true
-    width: 640
+    width: 840
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("GetThermal")
 
-    SwipeView {
-        id: swipeView
+    Page1 {
         anchors.fill: parent
-        currentIndex: tabBar.currentIndex
-
-        Page1 {
-        }
-
-        Page {
-            Label {
-                text: qsTr("Second page")
-                anchors.centerIn: parent
-            }
-        }
-    }
-
-    footer: TabBar {
-        id: tabBar
-        currentIndex: swipeView.currentIndex
-        TabButton {
-            text: qsTr("First")
-        }
-        TabButton {
-            text: qsTr("Second")
-        }
     }
 }

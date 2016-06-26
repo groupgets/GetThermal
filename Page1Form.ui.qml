@@ -6,11 +6,12 @@ import GetThermal 1.0
 
 Item {
     id: item1
-    property alias button1: button1
-    property alias button2: button2
+    anchors.fill: parent
+
     property alias videoOutput: videoOutput
     property alias player: player
     property alias acq: acq
+    property alias leptonControls1: leptonControls1
 
     UvcAcquisition {
         id: acq
@@ -18,39 +19,56 @@ Item {
 
     UvcVideoProducer {
         id: player
-        // @disable-check M16
         uvc: acq
     }
 
-    VideoOutput {
-        id: videoOutput
-        anchors.right: parent.right
-        anchors.rightMargin: 8
-        anchors.left: parent.left
-        anchors.leftMargin: 8
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 54
-        anchors.top: parent.top
-        anchors.topMargin: 8
-        fillMode: VideoOutput.PreserveAspectFit
-        source: player
-    }
-
     RowLayout {
-        x: 217
-        y: 220
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 8
+        anchors.fill: parent
 
-        Button {
-            id: button1
-            text: qsTr("Run FFC")
+        Page {
+            id: frame1
+            width: 200
+            Layout.fillHeight: true
+
+            header: TabBar {
+                id: tabBar
+                currentIndex: swipeView.currentIndex
+                TabButton {
+                    text: qsTr("First")
+                }
+                TabButton {
+                    text: qsTr("Second")
+                }
+            }
+
+            SwipeView {
+                id: swipeView
+                currentIndex: tabBar.currentIndex
+                anchors.fill: parent
+
+                LeptonControls {
+                    id: leptonControls1
+                }
+
+                Page {
+
+                }
+            }
+
         }
 
-        Button {
-            id: button2
-            text: qsTr("Press Me 2")
+        Pane {
+            width: 400
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            VideoOutput {
+                id: videoOutput
+                anchors.fill: parent
+                fillMode: VideoOutput.PreserveAspectFit
+                source: player
+            }
         }
+
     }
+
 }

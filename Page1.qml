@@ -3,11 +3,8 @@ import QtMultimedia 5.5
 import GetThermal 1.0
 
 Page1Form {
-    button1.onClicked: {
+    leptonControls1.button1.onClicked: {
 //        console.log("Button 1 clicked.");
         acq.cci.PerformFFC();
-    }
-    button2.onClicked: {
-        console.log("Button 2 clicked.");
     }
 }
