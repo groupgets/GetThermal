@@ -122,7 +122,6 @@ void UvcAcquisition::init()
 void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
 {
     uvc_error_t res;
-    uvc_stream_ctrl_t ctrl;
     enum uvc_frame_format uvcFormat;
 
     uvc_stop_streaming(devh);
@@ -228,4 +227,20 @@ void UvcAcquisition::cb(uvc_frame_t *frame, void *ptr) {
 void UvcAcquisition::emitFrameReady(const QVideoFrame &frame)
 {
     emit frameReady(frame);
+}
+
+void UvcAcquisition::pauseStream() {
+    uvc_stop_streaming(devh);
+}
+
+void UvcAcquisition::resumeStream() {
+    uvc_error_t res = uvc_start_streaming(devh, &ctrl, UvcAcquisition::cb, this, 0);
+
+    if (res < 0) {
+        uvc_perror(res, "start_streaming"); /* unable to start stream */
+        uvc_close(devh);
+        puts("Device closed");
+
+        return;
+    }
 }

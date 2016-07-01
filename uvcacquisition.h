@@ -38,10 +38,14 @@ signals:
 public slots:
     void setVideoFormat(const QVideoSurfaceFormat &format);
 
+    void pauseStream();
+    void resumeStream();
+
 protected:
     uvc_context_t *ctx;
     uvc_device_t *dev;
     uvc_device_handle_t *devh;
+    uvc_stream_ctrl_t ctrl;
     QVideoSurfaceFormat m_format;
     AbstractCCInterface *m_cci;
 

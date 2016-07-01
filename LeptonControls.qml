@@ -3,6 +3,7 @@ import QtQuick.Controls 2.0
 import GetThermal 1.0
 
 Item {
+    id: root
     width: 200
     property UvcAcquisition acq: null
 
@@ -39,6 +40,7 @@ Item {
 
     Frame {
         id: frame1
+        height: buttonFfc.height + 20
 
         anchors.margins: 5
         anchors.top: groupBox1.bottom
@@ -48,6 +50,15 @@ Item {
         Button {
             id: buttonFfc
             text: qsTr("Perform AGC")
+        }
+
+        BusyIndicator {
+            id: busyFfc
+            height: buttonFfc.height
+            visible: false
+            width: height
+            anchors.left: buttonFfc.right
+            anchors.leftMargin: 5
         }
     }
 
@@ -87,10 +98,29 @@ Item {
         }
     }
 
+    function delay(delayTime, cb) {
+        function Timer() {
+            return Qt.createQmlObject("import QtQuick 2.0; Timer {}", root);
+        }
+        var timer = new Timer();
+        timer.interval = delayTime;
+        timer.repeat = false;
+        timer.triggered.connect(cb);
+        timer.start();
+    }
+
     Connections {
         target: buttonFfc
         onClicked: {
-            acq.cci.performFfc();
+            busyFfc.visible = true;
+            acq.pauseStream();
+            delay(150, function(){
+                acq.cci.performFfc();
+                delay(1500, function() {
+                    acq.resumeStream();
+                    busyFfc.visible = false;
+                });
+            });
         }
     }
 }
