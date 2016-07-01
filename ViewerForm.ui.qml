@@ -3,14 +3,15 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtMultimedia 5.5
 import GetThermal 1.0
+import "lepton" as LeptonModule
 
 Item {
     id: item1
     anchors.fill: parent
 
-    property alias videoOutput: videoOutput
-    property alias player: player
     property alias acq: acq
+    property alias player: player
+    property alias videoOutput: videoOutput
     property alias leptonControls1: leptonControls1
 
     UvcAcquisition {
@@ -46,8 +47,9 @@ Item {
                 currentIndex: tabBar.currentIndex
                 anchors.fill: parent
 
-                LeptonControls {
+                LeptonModule.LeptonControls {
                     id: leptonControls1
+                    acq: acq
                 }
 
                 Page {

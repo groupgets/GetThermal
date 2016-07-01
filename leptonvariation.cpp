@@ -2,7 +2,9 @@
 #include "uvc_sdk.h"
 #include "LEPTON_SDK.h"
 #include "LEPTON_OEM.h"
+#include "LEPTON_RAD.h"
 #include "LEPTON_SYS.h"
+#include "LEPTON_VID.h"
 
 #define LEP_CID_AGC_MODULE (0x0100)
 #define LEP_CID_OEM_MODULE (0x0800)
@@ -17,6 +19,12 @@ typedef enum {
   VC_CONTROL_XU_LEP_SYS_ID,
   VC_CONTROL_XU_LEP_VID_ID,
 } VC_TERMINAL_ID;
+
+void registerLeptonVariationQmlTypes()
+{
+    qmlRegisterUncreatableType<LEP::QE_PCOLOR_LUT_E>("GetThermal", 1,0, "LEP_PCOLOR_LUT", "You can't create an enumeration");
+    qRegisterMetaType<LEP::QE_PCOLOR_LUT_E::E>("LEP_PCOLOR_LUT");
+}
 
 LeptonVariation::LeptonVariation(uvc_context_t *ctx,
                                  uvc_device_t *dev,
@@ -51,7 +59,7 @@ const AbstractCCInterface& LeptonVariation::operator =(const AbstractCCInterface
     return LeptonVariation(ctx, dev, devh);
 }
 
-void LeptonVariation::PerformFFC()
+void LeptonVariation::performFfc()
 {
     //LEP_RunOemFFC(&m_portDesc);
     LEP_RunSysFFCNormalization(&m_portDesc);

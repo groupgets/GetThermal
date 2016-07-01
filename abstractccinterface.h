@@ -14,7 +14,7 @@ public:
     virtual const AbstractCCInterface &operator =(const AbstractCCInterface &format) = 0;
 
 public slots:
-    virtual void PerformFFC() = 0;
+    virtual void performFfc() = 0;
 };
 
 #endif // ABSTRACTCCINTERFACE_H

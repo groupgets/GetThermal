@@ -6,6 +6,7 @@
 #include <libuvc/libuvc.h>
 #include "uvcvideoproducer.h"
 #include "uvcacquisition.h"
+#include "leptonvariation.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,7 +15,10 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<UvcVideoProducer>("GetThermal", 1,0, "UvcVideoProducer");
     qmlRegisterType<UvcAcquisition>("GetThermal", 1,0, "UvcAcquisition");
+    qmlRegisterUncreatableType<LeptonVariation>("GetThermal", 1,0, "LeptonVariation", "");
     qmlRegisterUncreatableType<AbstractCCInterface>("GetThermal", 1,0, "AbstractCCInterface", "");
+
+    registerLeptonVariationQmlTypes();
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));

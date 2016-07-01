@@ -28,11 +28,12 @@ public:
     Q_PROPERTY(const QVideoSurfaceFormat& videoFormat READ videoFormat WRITE setVideoFormat NOTIFY formatChanged)
     const QVideoSurfaceFormat& videoFormat() const { return m_format; }
 
-    Q_PROPERTY(AbstractCCInterface* cci MEMBER m_cci)
+    Q_PROPERTY(AbstractCCInterface* cci MEMBER m_cci NOTIFY cciChanged)
 
 signals:
     void frameReady(const QVideoFrame &frame);
     void formatChanged(const QVideoSurfaceFormat &format);
+    void cciChanged(AbstractCCInterface *format);
 
 public slots:
     void setVideoFormat(const QVideoSurfaceFormat &format);

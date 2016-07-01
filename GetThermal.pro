@@ -53,7 +53,8 @@ HEADERS += \
     lepton_sdk/Inc/LEPTON_Types.h \
     lepton_sdk/Inc/LEPTON_VID.h \
     lepton_sdk/Inc/crc16.h \
-    lepton_sdk/Inc/uvc_sdk.h
+    lepton_sdk/Inc/uvc_sdk.h \
+    leptonvariation_types.h
 
 SUBDIRS += \
     libuvc/libuvc.pro

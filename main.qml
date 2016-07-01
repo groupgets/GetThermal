@@ -8,7 +8,7 @@ ApplicationWindow {
     height: 480
     title: qsTr("GetThermal")
 
-    Page1 {
+    Viewer {
         anchors.fill: parent
     }
 }
