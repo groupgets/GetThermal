@@ -20,10 +20,17 @@ typedef enum {
   VC_CONTROL_XU_LEP_VID_ID,
 } VC_TERMINAL_ID;
 
+#define QML_REGISTER_ENUM(name) \
+    qmlRegisterUncreatableType<LEP::QE_##name>("GetThermal", 1,0, "LEP_" #name, "You can't create enumeration " #name); \
+    qRegisterMetaType<LEP::QE_##name::E>("LEP_" #name);
+
 void registerLeptonVariationQmlTypes()
 {
-    qmlRegisterUncreatableType<LEP::QE_PCOLOR_LUT_E>("GetThermal", 1,0, "LEP_PCOLOR_LUT", "You can't create an enumeration");
-    qRegisterMetaType<LEP::QE_PCOLOR_LUT_E::E>("LEP_PCOLOR_LUT");
+    QML_REGISTER_ENUM(PCOLOR_LUT_E)
+    QML_REGISTER_ENUM(POLARITY_E)
+    QML_REGISTER_ENUM(AGC_ENABLE_E)
+    QML_REGISTER_ENUM(AGC_POLICY_E)
+    QML_REGISTER_ENUM(AGC_HEQ_SCALE_FACTOR_E)
 }
 
 LeptonVariation::LeptonVariation(uvc_context_t *ctx,

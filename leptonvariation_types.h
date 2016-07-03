@@ -5,6 +5,7 @@
 #include <QMetaType>
 
 #include "LEPTON_ErrorCodes.h"
+#include "LEPTON_AGC.h"
 #include "LEPTON_VID.h"
 
 #define QML_ENUM(name, storageType, ...)\
@@ -33,6 +34,27 @@ namespace LEP {
         LEP_VID_RAIN_LUT, \
         LEP_VID_USER_LUT \
     )
+
+    QML_ENUM(POLARITY_E, char, \
+        LEP_VID_WHITE_HOT, \
+        LEP_VID_BLACK_HOT, \
+    )
+
+    QML_ENUM(AGC_ENABLE_E, char, \
+        LEP_AGC_DISABLE, \
+        LEP_AGC_ENABLE, \
+    )
+
+    QML_ENUM(AGC_POLICY_E, char, \
+        LEP_AGC_LINEAR, \
+        LEP_AGC_HEQ, \
+    )
+
+    QML_ENUM(AGC_HEQ_SCALE_FACTOR_E, char, \
+        LEP_AGC_SCALE_TO_8_BITS,
+        LEP_AGC_SCALE_TO_14_BITS, \
+    )
+
 }
 void registerLeptonVariationQmlTypes();
 

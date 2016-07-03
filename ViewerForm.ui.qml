@@ -3,7 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtMultimedia 5.5
 import GetThermal 1.0
-import "lepton" as LeptonModule
+import "qrc:/lepton"
 
 Item {
     id: item1
@@ -29,16 +29,17 @@ Item {
         Page {
             id: frame1
             width: 200
+            clip: true
             Layout.fillHeight: true
 
             header: TabBar {
                 id: tabBar
                 currentIndex: swipeView.currentIndex
                 TabButton {
-                    text: qsTr("First")
+                    text: qsTr("Camera")
                 }
                 TabButton {
-                    text: qsTr("Second")
+                    text: qsTr("AGC")
                 }
             }
 
@@ -47,13 +48,26 @@ Item {
                 currentIndex: tabBar.currentIndex
                 anchors.fill: parent
 
-                LeptonModule.LeptonControls {
+                LeptonControls {
                     id: leptonControls1
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.left: parent.left
+                    anchors.leftMargin: 0
+                    anchors.top: parent.top
+                    anchors.topMargin: 0
                     acq: acq
                 }
 
-                Page {
-
+                AgcControls {
+                    id: agcControls1
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.left: leptonControls1.right
+                    anchors.leftMargin: 0
+                    anchors.top: parent.top
+                    anchors.topMargin: 0
+                    acq: acq
                 }
             }
 

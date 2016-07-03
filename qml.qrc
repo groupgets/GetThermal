@@ -4,9 +4,14 @@
         <file>Viewer.qml</file>
         <file>ViewerForm.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>AgcControls.qml</file>
     </qresource>
     <qresource prefix="/lepton">
         <file>PaletteModel.qml</file>
         <file>LeptonControls.qml</file>
+        <file>AgcControls.qml</file>
+    </qresource>
+    <qresource prefix="/controls">
+        <file>ValueSlider.qml</file>
     </qresource>
 </RCC>

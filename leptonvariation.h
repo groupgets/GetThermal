@@ -4,6 +4,7 @@
 #include <QObject>
 #include "LEPTON_Types.h"
 #include "LEPTON_ErrorCodes.h"
+#include "LEPTON_AGC.h"
 #include "LEPTON_VID.h"
 
 #include <libuvc/libuvc.h>
@@ -15,6 +16,18 @@
 using namespace std;
 using namespace std::placeholders;
 using namespace LEP;
+
+#define SDK_ENUM_PROPERTY(type, name, sdk_name) \
+    Q_PROPERTY(type name \
+               READ (bind_get<LEP_##type, type>(LEP_Get##sdk_name)) \
+               WRITE (bind_set<LEP_##type, type>(LEP_Set##sdk_name, (bind(&LeptonVariation::name##Changed, _t, _1)))) \
+               NOTIFY name##Changed)
+
+#define SDK_UINT16_PROPERTY(name, sdk_name) \
+    Q_PROPERTY(int name \
+               READ (bind_get<uint16_t, int>(LEP_Get##sdk_name)) \
+               WRITE (bind_set<uint16_t, int>(LEP_Set##sdk_name, (bind(&LeptonVariation::name##Changed, _t, _1)))) \
+               NOTIFY name##Changed)
 
 class LeptonVariation : public AbstractCCInterface
 {
@@ -38,17 +51,38 @@ public:
 
     virtual const AbstractCCInterface& operator =(const AbstractCCInterface&);
 
-    Q_PROPERTY(PCOLOR_LUT_E vidPcolorLut
-               READ (bind_get<LEP_PCOLOR_LUT_E, PCOLOR_LUT_E>(LEP_GetVidPcolorLut))
-               WRITE (bind_set<LEP_PCOLOR_LUT_E, PCOLOR_LUT_E>(LEP_SetVidPcolorLut, (bind(&LeptonVariation::vidPcolorLutChanged, _t, _1))))
-               NOTIFY vidPcolorLutChanged)
+    SDK_ENUM_PROPERTY(AGC_ENABLE_E, agcEnable, AgcEnableState)
+    SDK_ENUM_PROPERTY(AGC_POLICY_E, agcPolicy, AgcPolicy)
+    SDK_ENUM_PROPERTY(AGC_HEQ_SCALE_FACTOR_E, agcHeqScaleFactor, AgcHeqScaleFactor)
+    SDK_ENUM_PROPERTY(AGC_ENABLE_E, agcCalcEnable, AgcCalcEnableState)
 
-    virtual void performFfc();
+    SDK_UINT16_PROPERTY(agcLinearHistogramTailSize, AgcLinearHistogramTailSize)
+    SDK_UINT16_PROPERTY(agcLinearHistogramClipPercent, AgcLinearHistogramClipPercent)
+    SDK_UINT16_PROPERTY(agcLinearMaxGain, AgcLinearMaxGain)
+    SDK_UINT16_PROPERTY(agcLinearMidPoint, AgcLinearMidPoint)
+    SDK_UINT16_PROPERTY(agcLinearDampeningFactor, AgcLinearDampeningFactor)
+
+    SDK_ENUM_PROPERTY(PCOLOR_LUT_E, vidPcolorLut, VidPcolorLut)
+    SDK_ENUM_PROPERTY(POLARITY_E, vidPolarity, VidPolarity)
 
 signals:
-    void vidPcolorLutChanged(PCOLOR_LUT_E lut);
+
+    void agcEnableChanged(AGC_ENABLE_E val);
+    void agcPolicyChanged(AGC_POLICY_E val);
+    void agcHeqScaleFactorChanged(AGC_HEQ_SCALE_FACTOR_E val);
+    void agcCalcEnableChanged(AGC_ENABLE_E val);
+
+    void agcLinearHistogramTailSizeChanged(uint16_t val);
+    void agcLinearHistogramClipPercentChanged(uint16_t val);
+    void agcLinearMaxGainChanged(uint16_t val);
+    void agcLinearMidPointChanged(uint16_t val);
+    void agcLinearDampeningFactorChanged(uint16_t val);
+
+    void vidPcolorLutChanged(PCOLOR_LUT_E val);
+    void vidPolarityChanged(POLARITY_E val);
 
 public slots:
+    virtual void performFfc();
 
 private:
 
@@ -89,5 +123,9 @@ private:
 };
 
 Q_DECLARE_METATYPE(PCOLOR_LUT_E)
+Q_DECLARE_METATYPE(POLARITY_E)
+Q_DECLARE_METATYPE(AGC_ENABLE_E)
+Q_DECLARE_METATYPE(AGC_POLICY_E)
+Q_DECLARE_METATYPE(AGC_HEQ_SCALE_FACTOR_E)
 
 #endif // LEPTONVARIATION_H

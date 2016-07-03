@@ -62,8 +62,9 @@ Item {
         }
     }
 
-    Frame {
+    GroupBox {
         id: frame2
+        title: qsTr("VID module")
 
         anchors.margins: 5
         anchors.top: frame1.bottom
@@ -71,18 +72,21 @@ Item {
         anchors.right: parent.right
 
         ComboBox {
-            id: comboBoxLut
+            id: comboVidPcolorLut
+
+            anchors.margins: 5
+            anchors.top: parent.top
 
             model: ListModel {
-                ListElement { text: "Wheel"; data: LEP_PCOLOR_LUT.LEP_VID_WHEEL6_LUT }
-                ListElement { text: "Fusion"; data: LEP_PCOLOR_LUT.LEP_VID_FUSION_LUT }
-                ListElement { text: "Rainbow"; data: LEP_PCOLOR_LUT.LEP_VID_RAINBOW_LUT }
-                ListElement { text: "Glowbow"; data: LEP_PCOLOR_LUT.LEP_VID_GLOBOW_LUT }
-                ListElement { text: "Sepia"; data: LEP_PCOLOR_LUT.LEP_VID_SEPIA_LUT }
-                ListElement { text: "Color"; data: LEP_PCOLOR_LUT.LEP_VID_COLOR_LUT }
-                ListElement { text: "Ice & Fire"; data: LEP_PCOLOR_LUT.LEP_VID_ICE_FIRE_LUT }
-                ListElement { text: "Rain"; data: LEP_PCOLOR_LUT.LEP_VID_RAIN_LUT }
-                ListElement { text: "User"; data: LEP_PCOLOR_LUT.LEP_VID_USER_LUT }
+                ListElement { text: "Wheel"; data: LEP_PCOLOR_LUT_E.LEP_VID_WHEEL6_LUT }
+                ListElement { text: "Fusion"; data: LEP_PCOLOR_LUT_E.LEP_VID_FUSION_LUT }
+                ListElement { text: "Rainbow"; data: LEP_PCOLOR_LUT_E.LEP_VID_RAINBOW_LUT }
+                ListElement { text: "Glowbow"; data: LEP_PCOLOR_LUT_E.LEP_VID_GLOBOW_LUT }
+                ListElement { text: "Sepia"; data: LEP_PCOLOR_LUT_E.LEP_VID_SEPIA_LUT }
+                ListElement { text: "Color"; data: LEP_PCOLOR_LUT_E.LEP_VID_COLOR_LUT }
+                ListElement { text: "Ice & Fire"; data: LEP_PCOLOR_LUT_E.LEP_VID_ICE_FIRE_LUT }
+                ListElement { text: "Rain"; data: LEP_PCOLOR_LUT_E.LEP_VID_RAIN_LUT }
+                ListElement { text: "User"; data: LEP_PCOLOR_LUT_E.LEP_VID_USER_LUT }
             }
             textRole: qsTr("text")
 
@@ -91,9 +95,9 @@ Item {
     }
 
     Connections {
-        target: comboBoxLut
+        target: comboVidPcolorLut
         onCurrentIndexChanged: {
-            var currentItem = comboBoxLut.model.get(comboBoxLut.currentIndex);
+            var currentItem = comboVidPcolorLut.model.get(comboVidPcolorLut.currentIndex);
             acq.cci.vidPcolorLut = currentItem.data;
         }
     }
