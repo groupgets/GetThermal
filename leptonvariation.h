@@ -5,6 +5,9 @@
 #include "LEPTON_Types.h"
 #include "LEPTON_ErrorCodes.h"
 #include "LEPTON_AGC.h"
+#include "LEPTON_OEM.h"
+#include "LEPTON_RAD.h"
+#include "LEPTON_SYS.h"
 #include "LEPTON_VID.h"
 
 #include <libuvc/libuvc.h>
@@ -17,17 +20,17 @@ using namespace std;
 using namespace std::placeholders;
 using namespace LEP;
 
-#define SDK_ENUM_PROPERTY(type, name, sdk_name) \
+#define SDK_SIMPLE_PROPERTY(type, sdk_type, name, sdk_name) \
     Q_PROPERTY(type name \
-               READ (bind_get<LEP_##type, type>(LEP_Get##sdk_name)) \
-               WRITE (bind_set<LEP_##type, type>(LEP_Set##sdk_name, (bind(&LeptonVariation::name##Changed, _t, _1)))) \
+               READ (bind_get<sdk_type, type>(LEP_Get##sdk_name)) \
+               WRITE (bind_set<sdk_type, type>(LEP_Set##sdk_name, (bind(&LeptonVariation::name##Changed, _t, _1)))) \
                NOTIFY name##Changed)
 
+#define SDK_ENUM_PROPERTY(type, name, sdk_name) \
+    SDK_SIMPLE_PROPERTY(type, LEP_##type, name, sdk_name)
+
 #define SDK_UINT16_PROPERTY(name, sdk_name) \
-    Q_PROPERTY(int name \
-               READ (bind_get<uint16_t, int>(LEP_Get##sdk_name)) \
-               WRITE (bind_set<uint16_t, int>(LEP_Set##sdk_name, (bind(&LeptonVariation::name##Changed, _t, _1)))) \
-               NOTIFY name##Changed)
+    SDK_SIMPLE_PROPERTY(unsigned int, uint16_t, name, sdk_name)
 
 class LeptonVariation : public AbstractCCInterface
 {
@@ -62,8 +65,15 @@ public:
     SDK_UINT16_PROPERTY(agcLinearMidPoint, AgcLinearMidPoint)
     SDK_UINT16_PROPERTY(agcLinearDampeningFactor, AgcLinearDampeningFactor)
 
+    Q_PROPERTY(const QString sysFlirSerialNumber READ getSysFlirSerialNumber)
+    const QString getSysFlirSerialNumber();
+
+    Q_PROPERTY(const QString sysCustSerialNumber READ getSysCustSerialNumber)
+    const QString getSysCustSerialNumber();
+
     SDK_ENUM_PROPERTY(PCOLOR_LUT_E, vidPcolorLut, VidPcolorLut)
     SDK_ENUM_PROPERTY(POLARITY_E, vidPolarity, VidPolarity)
+    SDK_ENUM_PROPERTY(VID_SBNUC_ENABLE_E, vidSbNucEnableState, VidSbNucEnableState)
 
 signals:
 
@@ -80,6 +90,7 @@ signals:
 
     void vidPcolorLutChanged(PCOLOR_LUT_E val);
     void vidPolarityChanged(POLARITY_E val);
+    void vidSbNucEnableStateChanged(VID_SBNUC_ENABLE_E val);
 
 public slots:
     virtual void performFfc();
@@ -124,6 +135,7 @@ private:
 
 Q_DECLARE_METATYPE(PCOLOR_LUT_E)
 Q_DECLARE_METATYPE(POLARITY_E)
+Q_DECLARE_METATYPE(VID_SBNUC_ENABLE_E)
 Q_DECLARE_METATYPE(AGC_ENABLE_E)
 Q_DECLARE_METATYPE(AGC_POLICY_E)
 Q_DECLARE_METATYPE(AGC_HEQ_SCALE_FACTOR_E)

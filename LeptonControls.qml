@@ -9,14 +9,16 @@ Item {
 
     GroupBox {
         id: groupBox1
+        clip: true
 
         anchors.margins: 5
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.left: parent.left
-        title: qsTr("Camera Info")
+        title: qsTr("Lepton Serial Numbers")
 
         Grid {
+            id: grid
 
             columns: 1
             rows: 8
@@ -26,56 +28,43 @@ Item {
 
             Label {
                 id: label1
-                text: qsTr("Label")
+                text: acq.cci.sysFlirSerialNumber
             }
 
             Label {
                 id: label2
-                text: qsTr("Label")
+                text: acq.cci.sysCustSerialNumber
             }
         }
 
 
     }
 
-    Frame {
-        id: frame1
-        height: buttonFfc.height + 20
+    GroupBox {
+        id: frame2
+        title: qsTr("Video")
 
         anchors.margins: 5
         anchors.top: groupBox1.bottom
-        anchors.right: parent.right
-        anchors.left: parent.left
-
-        Button {
-            id: buttonFfc
-            text: qsTr("Perform AGC")
-        }
-
-        BusyIndicator {
-            id: busyFfc
-            height: buttonFfc.height
-            visible: false
-            width: height
-            anchors.left: buttonFfc.right
-            anchors.leftMargin: 5
-        }
-    }
-
-    GroupBox {
-        id: frame2
-        title: qsTr("VID module")
-
-        anchors.margins: 5
-        anchors.top: frame1.bottom
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        Label {
+            id: labelPcolor
+            anchors.margins: 5
+            anchors.top: parent.top
+            text: qsTr("Pseudo-Color Palette:")
+        }
 
         ComboBox {
             id: comboVidPcolorLut
-
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            anchors.left: parent.left
+            anchors.leftMargin: 0
             anchors.margins: 5
-            anchors.top: parent.top
+            anchors.top: labelPcolor.bottom
 
             model: ListModel {
                 ListElement { text: "Wheel"; data: LEP_PCOLOR_LUT_E.LEP_VID_WHEEL6_LUT }
@@ -92,13 +81,47 @@ Item {
 
             currentIndex: acq.cci.vidPcolorLut
         }
+
+        Switch {
+            id: switchSbNuc
+            text: qsTr("Scene-based NUC")
+            anchors.left: parent.left
+            anchors.top: comboVidPcolorLut.bottom
+            checked: (acq.cci.vidSbNucEnableState == LEP_VID_SBNUC_ENABLE_E.LEP_VID_SBNUC_ENABLE)
+        }
+
+        Button {
+            id: buttonFfc
+            text: qsTr("Perform AGC")
+            anchors.topMargin: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.margins: 5
+            anchors.top: switchSbNuc.bottom
+        }
+
+        BusyIndicator {
+            id: busyFfc
+            height: buttonFfc.height
+            anchors.verticalCenter: buttonFfc.verticalCenter
+            anchors.horizontalCenter: buttonFfc.horizontalCenter
+            visible: false
+            width: height
+            anchors.margins: 5
+        }
     }
 
     Connections {
         target: comboVidPcolorLut
         onCurrentIndexChanged: {
-            var currentItem = comboVidPcolorLut.model.get(comboVidPcolorLut.currentIndex);
+            var currentItem = target.model.get(target.currentIndex);
             acq.cci.vidPcolorLut = currentItem.data;
+        }
+    }
+
+    Connections {
+        target: switchSbNuc
+        onCheckedChanged: {
+            acq.cci.vidSbNucEnableState = (target.checked ? LEP_VID_SBNUC_ENABLE_E.LEP_VID_SBNUC_ENABLE : LEP_VID_SBNUC_ENABLE_E.LEP_VID_SBNUC_DISABLE)
         }
     }
 

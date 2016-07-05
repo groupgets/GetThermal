@@ -15,7 +15,7 @@ Item {
         anchors.fill: parent
         anchors.margins: 5
 
-        CheckBox {
+        Switch {
             id: checkAgcEnable
             height: 30
             text: "AGC Enable"
@@ -23,7 +23,7 @@ Item {
         }
 
 
-        CheckBox {
+        Switch {
             id: checkAgcCalcEnable
             height: 30
             text: qsTr("AGC Calc Enable")

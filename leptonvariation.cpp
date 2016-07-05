@@ -28,6 +28,7 @@ void registerLeptonVariationQmlTypes()
 {
     QML_REGISTER_ENUM(PCOLOR_LUT_E)
     QML_REGISTER_ENUM(POLARITY_E)
+    QML_REGISTER_ENUM(VID_SBNUC_ENABLE_E)
     QML_REGISTER_ENUM(AGC_ENABLE_E)
     QML_REGISTER_ENUM(AGC_POLICY_E)
     QML_REGISTER_ENUM(AGC_HEQ_SCALE_FACTOR_E)
@@ -64,6 +65,19 @@ LeptonVariation::LeptonVariation(uvc_context_t *ctx,
 const AbstractCCInterface& LeptonVariation::operator =(const AbstractCCInterface&)
 {
     return LeptonVariation(ctx, dev, devh);
+}
+
+const QString LeptonVariation::getSysFlirSerialNumber()
+{
+    uint64_t serialNumber = pget<uint64_t, uint64_t>(LEP_GetSysFlirSerialNumber);
+    return QString::asprintf("%08llx", serialNumber);
+}
+
+const QString LeptonVariation::getSysCustSerialNumber()
+{
+    LEP_SYS_CUST_SERIAL_NUMBER_T serialNumber;
+    LEP_GetSysCustSerialNumber(&m_portDesc, &serialNumber);
+    return QString::fromLatin1(serialNumber.value, LEP_SYS_MAX_SERIAL_NUMBER_CHAR_SIZE);
 }
 
 void LeptonVariation::performFfc()

@@ -24,11 +24,12 @@ Item {
     }
 
     RowLayout {
+        spacing: 0
         anchors.fill: parent
 
         Page {
             id: frame1
-            width: 200
+            width: 220
             clip: true
             Layout.fillHeight: true
 
@@ -74,7 +75,12 @@ Item {
         }
 
         Pane {
+            x: 220
             width: 400
+            bottomPadding: 5
+            rightPadding: 5
+            leftPadding: 5
+            topPadding: 5
             Layout.fillWidth: true
             Layout.fillHeight: true
             VideoOutput {

@@ -40,6 +40,11 @@ namespace LEP {
         LEP_VID_BLACK_HOT, \
     )
 
+    QML_ENUM(VID_SBNUC_ENABLE_E, char, \
+        LEP_VID_SBNUC_DISABLE, \
+        LEP_VID_SBNUC_ENABLE, \
+    )
+
     QML_ENUM(AGC_ENABLE_E, char, \
         LEP_AGC_DISABLE, \
         LEP_AGC_ENABLE, \
