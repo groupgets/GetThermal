@@ -103,9 +103,19 @@ const QString LeptonVariation::getOemDspSoftwareVersion()
     return QString::asprintf("%d.%d.%d", swVers.dsp_major, swVers.dsp_minor, swVers.dsp_build);
 }
 
-const QString LeptonVariation::getPtFirmwareVersion()
+const QString LeptonVariation::getPtFirmwareVersion() const
 {
     return QString::asprintf("%s", desc->serialNumber);
+}
+
+bool LeptonVariation::getSupportsHwPseudoColor() const
+{
+    return !getPtFirmwareVersion().contains("Y16");
+}
+
+bool LeptonVariation::getSupportsRadiometry()
+{
+    return !getSupportsHwPseudoColor() && getOemFlirPartNumber().contains("500-0763-01");
 }
 
 const QVideoSurfaceFormat LeptonVariation::getDefaultFormat()

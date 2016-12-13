@@ -23,6 +23,7 @@ Item {
         ComboBox {
             id: comboVidPcolorLut
             width: parent.width
+            visible: acq.cci.supportsHwPseudoColor
 
             model: ListModel {
                 ListElement { text: "Wheel"; data: LEP_PCOLOR_LUT_E.LEP_VID_WHEEL6_LUT }
@@ -38,6 +39,21 @@ Item {
             textRole: qsTr("text")
 
             currentIndex: acq.cci.vidPcolorLut
+        }
+
+        ComboBox {
+            id: comboSwPcolorLut
+            width: parent.width
+            visible: !acq.cci.supportsHwPseudoColor
+
+            model: ListModel {
+                ListElement { text: "Iron Black"; data: DataFormatter.IronBlack }
+                ListElement { text: "Rainbow"; data: DataFormatter.Rainbow }
+                ListElement { text: "Grayscale"; data: DataFormatter.Grayscale }
+            }
+            textRole: qsTr("text")
+
+            currentIndex: acq.dataFormatter.pseudocolorPalette
         }
 
         Switch {
@@ -67,6 +83,14 @@ Item {
         onCurrentIndexChanged: {
             var currentItem = target.model.get(target.currentIndex);
             acq.cci.vidPcolorLut = currentItem.data;
+        }
+    }
+
+    Connections {
+        target: comboSwPcolorLut
+        onCurrentIndexChanged: {
+            var currentItem = target.model.get(target.currentIndex);
+            acq.dataFormatter.pseudocolorPalette = currentItem.data;
         }
     }
 

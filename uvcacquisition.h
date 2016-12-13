@@ -10,6 +10,7 @@
 #include <unistd.h>
 
 #include "abstractccinterface.h"
+#include "dataformatter.h"
 
 class UvcAcquisition : public QObject
 {
@@ -30,10 +31,14 @@ public:
 
     Q_PROPERTY(AbstractCCInterface* cci MEMBER m_cci NOTIFY cciChanged)
 
+    Q_PROPERTY(DataFormatter* dataFormatter READ getDataFormatter() NOTIFY dataFormatterChanged)
+    DataFormatter* getDataFormatter() { return &m_df; }
+
 signals:
     void frameReady(const QVideoFrame &frame);
     void formatChanged(const QVideoSurfaceFormat &format);
     void cciChanged(AbstractCCInterface *format);
+    void dataFormatterChanged(AbstractCCInterface *format);
 
 public slots:
     void setVideoFormat(const QVideoSurfaceFormat &format);
@@ -49,6 +54,7 @@ protected:
     QVideoSurfaceFormat m_format;
     QVideoSurfaceFormat m_uvc_format;
     AbstractCCInterface *m_cci;
+    DataFormatter m_df;
 
 private:
     static void cb(uvc_frame_t *frame, void *ptr);

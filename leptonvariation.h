@@ -88,14 +88,22 @@ public:
     Q_PROPERTY(const QString oemDspSoftwareVersion READ getOemDspSoftwareVersion)
     const QString getOemDspSoftwareVersion();
 
-    Q_PROPERTY(const QString ptFirmwareVersion READ getPtFirmwareVersion)
-    const QString getPtFirmwareVersion();
-
-    virtual const QVideoSurfaceFormat getDefaultFormat();
-
     SDK_ENUM_PROPERTY(PCOLOR_LUT_E, vidPcolorLut, VidPcolorLut)
     SDK_ENUM_PROPERTY(POLARITY_E, vidPolarity, VidPolarity)
     SDK_ENUM_PROPERTY(VID_SBNUC_ENABLE_E, vidSbNucEnableState, VidSbNucEnableState)
+
+    /* board-specific properties */
+
+    Q_PROPERTY(const QString ptFirmwareVersion READ getPtFirmwareVersion)
+    const QString getPtFirmwareVersion() const;
+
+    Q_PROPERTY(bool supportsHwPseudoColor READ getSupportsHwPseudoColor)
+    bool getSupportsHwPseudoColor() const;
+
+    Q_PROPERTY(bool supportsRadiometry READ getSupportsRadiometry)
+    bool getSupportsRadiometry();
+
+    virtual const QVideoSurfaceFormat getDefaultFormat();
 
 signals:
 

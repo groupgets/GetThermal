@@ -5,7 +5,7 @@
 #include <libuvc/libuvc.h>
 #include <QVideoFrame>
 
-class DataFormatter : QObject
+class DataFormatter : public QObject
 {
     Q_OBJECT
 
@@ -19,7 +19,7 @@ public:
         Grayscale,
     };
     Q_ENUMS(Palette)
-    Q_PROPERTY(Palette pseudocolor_palette MEMBER m_pseudocolor_palette NOTIFY psuedocolorPaletteChanged)
+    Q_PROPERTY(Palette pseudocolorPalette MEMBER m_pseudocolor_palette NOTIFY psuedocolorPaletteChanged)
 
     void FindMinMax(const uvc_frame_t *input, QPoint &minPoint, uint16_t &minVal, QPoint &maxPoint, uint16_t &maxVal) const;
     void AutoGain(uvc_frame_t *input_output) const;
