@@ -4,9 +4,11 @@
 #include <libuvc/libuvc.h>
 
 #include "leptonvariation.h"
+#include "dataformatter.h"
 
 //#define PLANAR_BUFFER 1
-#define ACQ_RGB 1
+//#define ACQ_RGB 1
+#define ACQ_Y16 1
 
 UvcAcquisition::UvcAcquisition(QObject *parent)
     : QObject(parent)
@@ -112,7 +114,7 @@ void UvcAcquisition::init()
 
 #if ACQ_YUV420
     setVideoFormat(QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_YUV420P));
-#elif ACQ_RGB
+#elif ACQ_RGB || ACQ_Y16
     setVideoFormat(QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_RGB32));
 #else
     setVideoFormat(QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_NV12));
@@ -131,8 +133,17 @@ void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
     case QVideoFrame::Format_YUV420P:
         uvcFormat = UVC_FRAME_FORMAT_I420;
         break;
+#if ACQ_Y16
+    case QVideoFrame::Format_RGB32:
+        uvcFormat = UVC_FRAME_FORMAT_Y16;
+        break;
+#else
     case QVideoFrame::Format_RGB32:
         uvcFormat = UVC_FRAME_FORMAT_RGB;
+        break;
+#endif
+    case QVideoFrame::Format_Y16:
+        uvcFormat = UVC_FRAME_FORMAT_Y16;
         break;
     case QVideoFrame::Format_YV12:
         uvcFormat = UVC_FRAME_FORMAT_NV12;
@@ -198,6 +209,11 @@ void UvcAcquisition::cb(uvc_frame_t *frame, void *ptr) {
                            _this->m_format.frameWidth() * 4,
                            _this->m_format.pixelFormat());
 
+#if ACQ_Y16
+        DataFormatter df;
+        df.AutoGain(frame);
+        df.Colorize(frame, qframe);
+#else
         qframe.map(QAbstractVideoBuffer::WriteOnly);
         for (int i = 0; i < qframe.height(); i++)
         {
@@ -213,6 +229,7 @@ void UvcAcquisition::cb(uvc_frame_t *frame, void *ptr) {
             }
         }
         qframe.unmap();
+#endif
         _this->emitFrameReady(qframe);
     }
     else

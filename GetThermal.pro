@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     lepton_sdk/Src/LEPTON_SDK.c \
     lepton_sdk/Src/LEPTON_SYS.c \
     lepton_sdk/Src/LEPTON_VID.c \
-    lepton_sdk/Src/crc16fast.c
+    lepton_sdk/Src/crc16fast.c \
+    dataformatter.cpp
 
 RESOURCES += qml.qrc
 
@@ -54,7 +55,8 @@ HEADERS += \
     lepton_sdk/Inc/LEPTON_VID.h \
     lepton_sdk/Inc/crc16.h \
     lepton_sdk/Inc/uvc_sdk.h \
-    leptonvariation_types.h
+    leptonvariation_types.h \
+    dataformatter.h
 
 SUBDIRS += \
     libuvc/libuvc.pro

@@ -74,6 +74,7 @@ enum uvc_frame_format {
   UVC_FRAME_FORMAT_MJPEG,
   UVC_FRAME_FORMAT_GRAY8,
   UVC_FRAME_FORMAT_BY8,
+  UVC_FRAME_FORMAT_Y16,
   /** Number of formats understood */
   UVC_FRAME_FORMAT_COUNT,
 };
@@ -90,6 +91,7 @@ enum uvc_frame_format {
 #define UVC_COLOR_FORMAT_BGR UVC_FRAME_FORMAT_BGR
 #define UVC_COLOR_FORMAT_MJPEG UVC_FRAME_FORMAT_MJPEG
 #define UVC_COLOR_FORMAT_GRAY8 UVC_FRAME_FORMAT_GRAY8
+#define UVC_COLOR_FORMAT_Y16 UVC_FRAME_FORMAT_Y16
 
 /** VideoStreaming interface descriptor subtype (A.6) */
 enum uvc_vs_desc_subtype {
