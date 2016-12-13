@@ -45,6 +45,11 @@ Item {
                 id: labelDspSoftwareVers
                 text: qsTr("DSP Version: ") + acq.cci.oemDspSoftwareVersion
             }
+
+            Label {
+                id: labelPtFirwmareVers
+                text: qsTr("PT1 FW Version: ") + acq.cci.ptFirmwareVersion
+            }
         }
 
 

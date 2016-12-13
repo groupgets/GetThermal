@@ -40,6 +40,8 @@ public:
                     uvc_device_t *dev,
                     uvc_device_handle_t *devh);
 
+    virtual ~LeptonVariation();
+
     LEP_RESULT UVC_GetAttribute(LEP_COMMAND_ID commandID,
                                 LEP_ATTRIBUTE_T_PTR attributePtr,
                                 LEP_UINT16 attributeWordLength);
@@ -85,6 +87,9 @@ public:
 
     Q_PROPERTY(const QString oemDspSoftwareVersion READ getOemDspSoftwareVersion)
     const QString getOemDspSoftwareVersion();
+
+    Q_PROPERTY(const QString ptFirmwareVersion READ getPtFirmwareVersion)
+    const QString getPtFirmwareVersion();
 
     SDK_ENUM_PROPERTY(PCOLOR_LUT_E, vidPcolorLut, VidPcolorLut)
     SDK_ENUM_PROPERTY(POLARITY_E, vidPolarity, VidPolarity)
@@ -153,6 +158,7 @@ private:
     uvc_device_t *dev;
     uvc_device_handle_t *devh;
     LEP_CAMERA_PORT_DESC_T m_portDesc;
+    uvc_device_descriptor_t *desc;
 
     int leptonCommandIdToUnitId(LEP_COMMAND_ID commandID);
 };

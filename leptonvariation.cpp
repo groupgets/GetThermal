@@ -42,6 +42,10 @@ LeptonVariation::LeptonVariation(uvc_context_t *ctx,
     , devh(devh)
 {
     printf("Initializing lepton SDK with UVC backend...\n");
+
+    uvc_get_device_descriptor(dev, &desc);
+    printf("Using %s %s with firmware %s\n", desc->manufacturer, desc->product, desc->serialNumber);
+
     m_portDesc.portID = 0;
     m_portDesc.portType = LEP_CCI_UVC;
     m_portDesc.userPtr = this;
@@ -60,6 +64,11 @@ LeptonVariation::LeptonVariation(uvc_context_t *ctx,
         printf("\n");
         units = units->next;
     }
+}
+
+LeptonVariation::~LeptonVariation()
+{
+    uvc_free_device_descriptor(desc);
 }
 
 const AbstractCCInterface& LeptonVariation::operator =(const AbstractCCInterface&)
@@ -92,6 +101,11 @@ const QString LeptonVariation::getOemDspSoftwareVersion()
     LEP_OEM_SW_VERSION_T swVers;
     LEP_GetOemSoftwareVersion(&m_portDesc, &swVers);
     return QString::asprintf("%d.%d.%d", swVers.dsp_major, swVers.dsp_minor, swVers.dsp_build);
+}
+
+const QString LeptonVariation::getPtFirmwareVersion()
+{
+    return QString::asprintf("%s", desc->serialNumber);
 }
 
 
