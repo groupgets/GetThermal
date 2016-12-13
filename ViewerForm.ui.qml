@@ -37,10 +37,13 @@ Item {
                 id: tabBar
                 currentIndex: swipeView.currentIndex
                 TabButton {
-                    text: qsTr("Camera")
+                    text: qsTr("VID")
                 }
                 TabButton {
                     text: qsTr("AGC")
+                }
+                TabButton {
+                    text: qsTr("Info")
                 }
             }
 
@@ -49,25 +52,29 @@ Item {
                 currentIndex: tabBar.currentIndex
                 anchors.fill: parent
 
-                LeptonControls {
-                    id: leptonControls1
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
+
+                VidControls {
+                    id: vidControls1
                     anchors.left: parent.left
-                    anchors.leftMargin: 0
+                    anchors.bottom: parent.bottom
                     anchors.top: parent.top
-                    anchors.topMargin: 0
                     acq: acq
                 }
 
                 AgcControls {
                     id: agcControls1
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.left: leptonControls1.right
-                    anchors.leftMargin: 0
+                    anchors.left: vidControls1.right
                     anchors.top: parent.top
-                    anchors.topMargin: 0
+                    acq: acq
+                }
+
+
+                LeptonControls {
+                    id: leptonControls1
+                    anchors.bottom: parent.bottom
+                    anchors.left: agcControls1.right
+                    anchors.top: parent.top
                     acq: acq
                 }
             }

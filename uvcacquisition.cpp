@@ -23,8 +23,8 @@ UvcAcquisition::UvcAcquisition(QList<UsbId> ids)
     : ctx(NULL)
     , dev(NULL)
     , devh(NULL)
-    , _ids(ids)
     , m_cci(NULL)
+    , _ids(ids)
 {
     init();
 }

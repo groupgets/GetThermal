@@ -124,7 +124,7 @@ Item {
                     anchors.top: linearMaxGain.bottom
                     anchors.topMargin: 0
                     description: qsTr("Midpoint")
-                    maximumValue: 256
+                    maximumValue: 254
                     minimumValue: 1
                     model: acq.cci
                     binding: "agcLinearMidPoint"
@@ -146,7 +146,7 @@ Item {
                 }
             }
 
-            Pane {
+            Flow {
                 id: frameAgcHist
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
@@ -165,6 +165,78 @@ Item {
                     textRole: qsTr("text")
 
                     currentIndex: acq.cci.agcHeqScaleFactor
+                }
+
+                ValueSlider {
+                    id: agcHeqDampingFactor
+                    description: qsTr("Dampening Factor")
+                    maximumValue: 100
+                    minimumValue: 0
+                    model: acq.cci
+                    binding: "agcHeqDampingFactor"
+                }
+
+                ValueSlider {
+                    id: agcHeqMaxGain
+                    description: qsTr("Max Gain")
+                    maximumValue: 4
+                    minimumValue: 1
+                    model: acq.cci
+                    binding: "agcHeqMaxGain"
+                }
+
+                ValueSlider {
+                    id: agcHeqClipLimitHigh
+                    description: qsTr("Clip Limit High")
+                    maximumValue: (80*60)
+                    minimumValue: 0
+                    model: acq.cci
+                    binding: "agcHeqClipLimitHigh"
+                }
+
+                ValueSlider {
+                    id: agcHeqClipLimitLow
+                    description: qsTr("Clip Limit Low")
+                    maximumValue: (80*60)
+                    minimumValue: 0
+                    model: acq.cci
+                    binding: "agcHeqClipLimitLow"
+                }
+
+                ValueSlider {
+                    id: agcHeqBinExtension
+                    description: qsTr("Bin Extension")
+                    maximumValue: 16
+                    minimumValue: 0
+                    model: acq.cci
+                    binding: "agcHeqBinExtension"
+                }
+
+                ValueSlider {
+                    id: agcHeqMidPoint
+                    description: qsTr("Midpoint")
+                    maximumValue: 65534
+                    minimumValue: 127
+                    model: acq.cci
+                    binding: "agcHeqMidPoint"
+                }
+
+                ValueSlider {
+                    id: agcHeqEmptyCount
+                    description: qsTr("Empty Count")
+                    maximumValue: 65535
+                    minimumValue: 0
+                    model: acq.cci
+                    binding: "agcHeqEmptyCount"
+                }
+
+                ValueSlider {
+                    id: agcHeqNormalizationFactor
+                    description: qsTr("Normalization Factor")
+                    maximumValue: 65535
+                    minimumValue: 0
+                    model: acq.cci
+                    binding: "agcHeqNormalizationFactor"
                 }
             }
         }

@@ -73,12 +73,27 @@ const QString LeptonVariation::getSysFlirSerialNumber()
     return QString::asprintf("%08llx", serialNumber);
 }
 
-const QString LeptonVariation::getSysCustSerialNumber()
+const QString LeptonVariation::getOemFlirPartNumber()
 {
-    LEP_SYS_CUST_SERIAL_NUMBER_T serialNumber;
-    LEP_GetSysCustSerialNumber(&m_portDesc, &serialNumber);
+    LEP_OEM_PART_NUMBER_T serialNumber;
+    LEP_GetOemFlirPartNumber(&m_portDesc, &serialNumber);
     return QString::fromLatin1(serialNumber.value, LEP_SYS_MAX_SERIAL_NUMBER_CHAR_SIZE);
 }
+
+const QString LeptonVariation::getOemGppSoftwareVersion()
+{
+    LEP_OEM_SW_VERSION_T swVers;
+    LEP_GetOemSoftwareVersion(&m_portDesc, &swVers);
+    return QString::asprintf("%d.%d.%d", swVers.gpp_major, swVers.gpp_minor, swVers.gpp_build);
+}
+
+const QString LeptonVariation::getOemDspSoftwareVersion()
+{
+    LEP_OEM_SW_VERSION_T swVers;
+    LEP_GetOemSoftwareVersion(&m_portDesc, &swVers);
+    return QString::asprintf("%d.%d.%d", swVers.dsp_major, swVers.dsp_minor, swVers.dsp_build);
+}
+
 
 void LeptonVariation::performFfc()
 {

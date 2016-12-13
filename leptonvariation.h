@@ -65,11 +65,26 @@ public:
     SDK_UINT16_PROPERTY(agcLinearMidPoint, AgcLinearMidPoint)
     SDK_UINT16_PROPERTY(agcLinearDampeningFactor, AgcLinearDampeningFactor)
 
+    SDK_UINT16_PROPERTY(agcHeqDampingFactor, AgcHeqDampingFactor)
+    SDK_UINT16_PROPERTY(agcHeqMaxGain, AgcHeqMaxGain)
+    SDK_UINT16_PROPERTY(agcHeqClipLimitHigh, AgcHeqClipLimitHigh)
+    SDK_UINT16_PROPERTY(agcHeqClipLimitLow, AgcHeqClipLimitLow)
+    SDK_UINT16_PROPERTY(agcHeqBinExtension, AgcHeqBinExtension)
+    SDK_UINT16_PROPERTY(agcHeqMidPoint, AgcHeqMidPoint)
+    SDK_UINT16_PROPERTY(agcHeqEmptyCount, AgcHeqEmptyCount)
+    SDK_UINT16_PROPERTY(agcHeqNormalizationFactor, AgcHeqNormalizationFactor)
+
     Q_PROPERTY(const QString sysFlirSerialNumber READ getSysFlirSerialNumber)
     const QString getSysFlirSerialNumber();
 
-    Q_PROPERTY(const QString sysCustSerialNumber READ getSysCustSerialNumber)
-    const QString getSysCustSerialNumber();
+    Q_PROPERTY(const QString oemFlirPartNumber READ getOemFlirPartNumber)
+    const QString getOemFlirPartNumber();
+
+    Q_PROPERTY(const QString oemGppSoftwareVersion READ getOemGppSoftwareVersion)
+    const QString getOemGppSoftwareVersion();
+
+    Q_PROPERTY(const QString oemDspSoftwareVersion READ getOemDspSoftwareVersion)
+    const QString getOemDspSoftwareVersion();
 
     SDK_ENUM_PROPERTY(PCOLOR_LUT_E, vidPcolorLut, VidPcolorLut)
     SDK_ENUM_PROPERTY(POLARITY_E, vidPolarity, VidPolarity)
@@ -87,6 +102,15 @@ signals:
     void agcLinearMaxGainChanged(uint16_t val);
     void agcLinearMidPointChanged(uint16_t val);
     void agcLinearDampeningFactorChanged(uint16_t val);
+
+    void agcHeqDampingFactorChanged(uint16_t val);
+    void agcHeqMaxGainChanged(uint16_t val);
+    void agcHeqClipLimitHighChanged(uint16_t val);
+    void agcHeqClipLimitLowChanged(uint16_t val);
+    void agcHeqBinExtensionChanged(uint16_t val);
+    void agcHeqMidPointChanged(uint16_t val);
+    void agcHeqEmptyCountChanged(uint16_t val);
+    void agcHeqNormalizationFactorChanged(uint16_t val);
 
     void vidPcolorLutChanged(PCOLOR_LUT_E val);
     void vidPolarityChanged(POLARITY_E val);

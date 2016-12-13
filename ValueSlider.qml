@@ -13,14 +13,14 @@ Pane {
     property var model: null
     property string binding: ""
 
-    width: 200
-    height: 90
+    width: 220
+    height: 58
     padding: 0
 
     Binding {
-        target: model
-        property: binding
-        value: value
+        target: valueSlider.model
+        property: valueSlider.binding
+        value: valueSlider.value
     }
 
     function updateValue() {
@@ -44,11 +44,11 @@ Pane {
 
     Slider {
         id: slider
-        height: parent.height / 2.5
+        width: parent.width / 2
+        anchors.bottom: parent.bottom
         to: valueSlider.maximumValue
         from: valueSlider.minimumValue
         anchors.margins: 0
-        anchors.right: parent.right
         anchors.left: parent.left
         anchors.top: label.bottom
         value: valueSlider.value
@@ -61,13 +61,13 @@ Pane {
 
     SpinBox {
         id: spin
-        height: parent.height / 2.5
+        anchors.bottom: parent.bottom
         to: valueSlider.maximumValue
         from: valueSlider.minimumValue
         anchors.margins: 0
         anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.top: slider.bottom
+        anchors.left: slider.right
+        anchors.top: label.bottom
         value: valueSlider.value
         stepSize: valueSlider.stepSize
         onValueChanged: {
