@@ -113,6 +113,9 @@ void DataFormatter::Colorize(const uvc_frame_t *input, QVideoFrame &output) cons
 {
     uint8_t bytes_per_pixel = 0;
 
+    // we don't have a reason to handle frame buffers other than RGBA for now
+    Q_ASSERT(output.pixelFormat() == QVideoFrame::Format_RGB32);
+
     switch (input->frame_format) {
     case UVC_FRAME_FORMAT_Y16:
         bytes_per_pixel = 2;

@@ -91,6 +91,8 @@ public:
     Q_PROPERTY(const QString ptFirmwareVersion READ getPtFirmwareVersion)
     const QString getPtFirmwareVersion();
 
+    virtual const QVideoSurfaceFormat getDefaultFormat();
+
     SDK_ENUM_PROPERTY(PCOLOR_LUT_E, vidPcolorLut, VidPcolorLut)
     SDK_ENUM_PROPERTY(POLARITY_E, vidPolarity, VidPolarity)
     SDK_ENUM_PROPERTY(VID_SBNUC_ENABLE_E, vidSbNucEnableState, VidSbNucEnableState)

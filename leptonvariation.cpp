@@ -108,6 +108,18 @@ const QString LeptonVariation::getPtFirmwareVersion()
     return QString::asprintf("%s", desc->serialNumber);
 }
 
+const QVideoSurfaceFormat LeptonVariation::getDefaultFormat()
+{
+    if (getPtFirmwareVersion().contains("Y16"))
+    {
+        return QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_Y16);
+    }
+    else
+    {
+        return QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_RGB24);
+    }
+}
+
 
 void LeptonVariation::performFfc()
 {

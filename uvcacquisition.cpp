@@ -112,13 +112,7 @@ void UvcAcquisition::init()
 
     m_cci = new LeptonVariation(ctx, dev, devh);
 
-#if ACQ_YUV420
-    setVideoFormat(QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_YUV420P));
-#elif ACQ_RGB || ACQ_Y16
-    setVideoFormat(QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_RGB32));
-#else
-    setVideoFormat(QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_NV12));
-#endif
+    setVideoFormat(m_cci->getDefaultFormat());
 }
 
 void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
@@ -133,15 +127,9 @@ void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
     case QVideoFrame::Format_YUV420P:
         uvcFormat = UVC_FRAME_FORMAT_I420;
         break;
-#if ACQ_Y16
-    case QVideoFrame::Format_RGB32:
-        uvcFormat = UVC_FRAME_FORMAT_Y16;
-        break;
-#else
-    case QVideoFrame::Format_RGB32:
+    case QVideoFrame::Format_RGB24:
         uvcFormat = UVC_FRAME_FORMAT_RGB;
         break;
-#endif
     case QVideoFrame::Format_Y16:
         uvcFormat = UVC_FRAME_FORMAT_Y16;
         break;
@@ -166,7 +154,26 @@ void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
         return;
     }
 
-    m_format = format;
+    m_uvc_format = format;
+
+    switch(format.pixelFormat())
+    {
+    case QVideoFrame::Format_YUV420P:
+        m_format = QVideoSurfaceFormat(format.frameSize(), format.pixelFormat());
+        break;
+    case QVideoFrame::Format_RGB24:
+        m_format = QVideoSurfaceFormat(format.frameSize(), QVideoFrame::Format_RGB32);
+        break;
+    case QVideoFrame::Format_Y16:
+        m_format = QVideoSurfaceFormat(format.frameSize(), QVideoFrame::Format_RGB32);
+        break;
+    case QVideoFrame::Format_YV12:
+        m_format = QVideoSurfaceFormat(format.frameSize(), format.pixelFormat());
+        break;
+    default:
+        m_format = QVideoSurfaceFormat(format.frameSize(), QVideoFrame::Format_Invalid);
+        break;
+    }
 
     // Notify connections of format change
     emit formatChanged(m_format);
@@ -201,35 +208,41 @@ void UvcAcquisition::cb(uvc_frame_t *frame, void *ptr) {
 //    QImage image("/Users/kurt/Desktop/uvc.png");
 //    QVideoFrame qframe(image.convertToFormat(QImage::Format_ARGB32));
 
-    // Need to reshape RGB24 raw input
-    if (_this->m_format.pixelFormat() == QVideoFrame::Format_RGB32)
+    // Need to reshape UVC input
+    if (_this->m_uvc_format.pixelFormat() != _this->m_format.pixelFormat())
     {
+        // we don't have a reason to handle frame buffers other than RGBA for now
+        Q_ASSERT(_this->m_format.pixelFormat() == QVideoFrame::Format_RGB32);
+
         QVideoFrame qframe(_this->m_format.frameWidth() * _this->m_format.frameHeight() * 4,
                            _this->m_format.frameSize(),
                            _this->m_format.frameWidth() * 4,
                            _this->m_format.pixelFormat());
 
-#if ACQ_Y16
-        DataFormatter df;
-        df.AutoGain(frame);
-        df.Colorize(frame, qframe);
-#else
-        qframe.map(QAbstractVideoBuffer::WriteOnly);
-        for (int i = 0; i < qframe.height(); i++)
+        if (_this->m_uvc_format.pixelFormat() == QVideoFrame::Format_Y16)
         {
-            uchar* rgb_line = &((uchar*)frame->data)[frame->step * i];
-            uchar* rgba_line = &qframe.bits()[qframe.bytesPerLine() * i];
-
-            for (int j = 0; j < qframe.width(); j++)
-            {
-                rgba_line[j * 4 + 0] = rgb_line[j * 3 + 0];
-                rgba_line[j * 4 + 1] = rgb_line[j * 3 + 1];
-                rgba_line[j * 4 + 2] = rgb_line[j * 3 + 2];
-                rgba_line[j * 4 + 3] = 0;
-            }
+            DataFormatter df;
+            df.AutoGain(frame);
+            df.Colorize(frame, qframe);
         }
-        qframe.unmap();
-#endif
+        else if (_this->m_uvc_format.pixelFormat() == QVideoFrame::Format_RGB24)
+        {
+            qframe.map(QAbstractVideoBuffer::WriteOnly);
+            for (int i = 0; i < qframe.height(); i++)
+            {
+                uchar* rgb_line = &((uchar*)frame->data)[frame->step * i];
+                uchar* rgba_line = &qframe.bits()[qframe.bytesPerLine() * i];
+
+                for (int j = 0; j < qframe.width(); j++)
+                {
+                    rgba_line[j * 4 + 0] = rgb_line[j * 3 + 0];
+                    rgba_line[j * 4 + 1] = rgb_line[j * 3 + 1];
+                    rgba_line[j * 4 + 2] = rgb_line[j * 3 + 2];
+                    rgba_line[j * 4 + 3] = 0;
+                }
+            }
+            qframe.unmap();
+        }
         _this->emitFrameReady(qframe);
     }
     else

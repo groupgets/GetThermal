@@ -47,6 +47,7 @@ protected:
     uvc_device_handle_t *devh;
     uvc_stream_ctrl_t ctrl;
     QVideoSurfaceFormat m_format;
+    QVideoSurfaceFormat m_uvc_format;
     AbstractCCInterface *m_cci;
 
 private:
