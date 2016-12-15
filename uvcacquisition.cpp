@@ -101,6 +101,7 @@ void UvcAcquisition::init()
 
         /* Release the device descriptor */
         uvc_unref_device(dev);
+        dev = NULL;
         return;
     }
 
