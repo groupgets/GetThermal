@@ -1,6 +1,8 @@
 QT += qml quick multimedia
 
+QT_CONFIG -= no-pkg-config
 CONFIG += c++11
+CONFIG += link_pkgconfig
 
 SOURCES += main.cpp \
     uvcvideoproducer.cpp \
@@ -67,8 +69,12 @@ DISTFILES += \
 
 INCLUDEPATH += $$PWD/lepton_sdk/Inc
 
-INCLUDEPATH += /usr/local/include
-DEPENDPATH += /usr/local/include
-LIBS += -L/usr/local/lib
+mac {
+    INCLUDEPATH += /usr/local/include
+    LIBS += -L/usr/local/lib
+}
 
-unix|win32: LIBS += -lusb-1.0 -ljpeg -lopencv_core
+PKGCONFIG += libusb-1.0 opencv
+LIBS += -ljpeg
+
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
