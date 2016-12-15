@@ -71,4 +71,6 @@ mac {
     # This is required to fixup homebrew libusb-1.0 installation
     # the pkgconfig file for this doesn't include cxxflags, so we need to pick this up
     INCLUDEPATH += /usr/local/include
+
+    ICON = icons/macos.icns
 }
