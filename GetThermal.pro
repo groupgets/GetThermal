@@ -1,8 +1,8 @@
 QT += qml quick multimedia
 
 QT_CONFIG -= no-pkg-config
-CONFIG += c++11
-CONFIG += link_pkgconfig
+CONFIG += c++11 \
+          link_pkgconfig
 
 SOURCES += main.cpp \
     uvcvideoproducer.cpp \
@@ -53,15 +53,7 @@ HEADERS += \
 DISTFILES += \
     qtquickcontrols2.conf
 
-INCLUDEPATH += $$PWD/lepton_sdk/Inc
-
-mac {
-    INCLUDEPATH += /usr/local/include
-    LIBS += -L/usr/local/lib
-}
-
 PKGCONFIG += libusb-1.0 opencv
-LIBS += -ljpeg
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
 
@@ -69,7 +61,14 @@ win32:CONFIG(release, debug|release): LIBS += -L$$PWD/libuvc/build/release/ -luv
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/libuvc/build/debug/ -luvc
 else:unix: LIBS += -L$$PWD/libuvc/build/ -luvc
 
-INCLUDEPATH += $$PWD/libuvc/build/include \
+INCLUDEPATH += $$PWD/lepton_sdk/Inc \
+               $$PWD/libuvc/build/include \
                $$PWD/libuvc/include
 DEPENDPATH += $$PWD/libuvc/build/include \
               $$PWD/libuvc/include
+
+mac {
+    # This is required to fixup homebrew libusb-1.0 installation
+    # the pkgconfig file for this doesn't include cxxflags, so we need to pick this up
+    INCLUDEPATH += /usr/local/include
+}
