@@ -69,5 +69,7 @@ win32:CONFIG(release, debug|release): LIBS += -L$$PWD/libuvc/build/release/ -luv
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/libuvc/build/debug/ -luvc
 else:unix: LIBS += -L$$PWD/libuvc/build/ -luvc
 
-INCLUDEPATH += $$PWD/libuvc/build/include
-DEPENDPATH += $$PWD/libuvc/build/include
+INCLUDEPATH += $$PWD/libuvc/build/include \
+               $$PWD/libuvc/include
+DEPENDPATH += $$PWD/libuvc/build/include \
+              $$PWD/libuvc/include
