@@ -13,5 +13,6 @@
     </qresource>
     <qresource prefix="/controls">
         <file>ValueSlider.qml</file>
+        <file>RangeDisplay.qml</file>
     </qresource>
 </RCC>

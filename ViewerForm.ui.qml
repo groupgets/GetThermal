@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.0
 import QtMultimedia 5.5
 import GetThermal 1.0
 import "qrc:/lepton"
+import "qrc:/controls"
 
 Item {
     id: item1
@@ -13,6 +14,7 @@ Item {
     property alias player: player
     property alias videoOutput: videoOutput
     property alias leptonControls1: leptonControls1
+    width: 640
 
     UvcAcquisition {
         id: acq
@@ -27,9 +29,11 @@ Item {
         spacing: 0
         anchors.fill: parent
 
+
         Page {
             id: frame1
             width: 220
+            Layout.minimumWidth: 220
             clip: true
             Layout.fillHeight: true
 
@@ -49,6 +53,8 @@ Item {
 
             SwipeView {
                 id: swipeView
+                x: 0
+                y: 40
                 currentIndex: tabBar.currentIndex
                 anchors.fill: parent
 
@@ -79,6 +85,7 @@ Item {
                 }
             }
 
+
         }
 
         Pane {
@@ -98,6 +105,18 @@ Item {
             }
         }
 
+
+        Pane {
+            width: 160
+            Layout.minimumWidth: 160
+            Layout.fillHeight: true
+            visible: acq.cci.supportsRadiometry
+
+            RangeDisplay {
+                anchors.fill: parent
+                acq: acq
+            }
+        }
     }
 
 }

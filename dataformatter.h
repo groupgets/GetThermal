@@ -5,6 +5,8 @@
 #include <libuvc/libuvc.h>
 #include <QVideoFrame>
 
+typedef struct { const uint8_t colormap[256 * 3]; } colormap_t;
+
 class DataFormatter : public QObject
 {
     Q_OBJECT
@@ -25,6 +27,8 @@ public:
     void AutoGain(uvc_frame_t *input_output) const;
     void FixedGain(uvc_frame_t *input_output, ushort minval, ushort maxval) const;
     void Colorize(const uvc_frame_t *input, QVideoFrame &output) const;
+
+    static const colormap_t* getPalette(Palette palette);
 
 signals:
 

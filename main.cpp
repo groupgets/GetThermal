@@ -8,6 +8,7 @@
 #include "uvcacquisition.h"
 #include "leptonvariation.h"
 #include "dataformatter.h"
+#include "rangeprovider.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +24,7 @@ int main(int argc, char *argv[])
     registerLeptonVariationQmlTypes();
 
     QQmlApplicationEngine engine;
+    engine.addImageProvider(QLatin1String("palettes"), new RangeProvider);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
     return app.exec();
