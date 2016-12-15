@@ -6,15 +6,6 @@ CONFIG += link_pkgconfig
 
 SOURCES += main.cpp \
     uvcvideoproducer.cpp \
-    libuvc/ctrl-gen.c \
-    libuvc/ctrl.c \
-    libuvc/device.c \
-    libuvc/diag.c \
-    libuvc/frame-mjpeg.c \
-    libuvc/frame.c \
-    libuvc/init.c \
-    libuvc/misc.c \
-    libuvc/stream.c \
     uvcacquisition.cpp \
     uvcbuffer.cpp \
     leptonvariation.cpp \
@@ -39,9 +30,6 @@ include(deployment.pri)
 
 HEADERS += \
     uvcvideoproducer.h \
-    libuvc/libuvc.h \
-    libuvc/libuvc_internal.h \
-    libuvc/utlist.h \
     uvcbuffer.h \
     uvcacquisition.h \
     leptonvariation.h \
@@ -62,11 +50,7 @@ HEADERS += \
     dataformatter.h \
     rangeprovider.h
 
-SUBDIRS += \
-    libuvc/libuvc.pro
-
 DISTFILES += \
-    libuvc/ctrl-gen.py \
     qtquickcontrols2.conf
 
 INCLUDEPATH += $$PWD/lepton_sdk/Inc
@@ -80,3 +64,10 @@ PKGCONFIG += libusb-1.0 opencv
 LIBS += -ljpeg
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/libuvc/build/release/ -luvc
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/libuvc/build/debug/ -luvc
+else:unix: LIBS += -L$$PWD/libuvc/build/ -luvc
+
+INCLUDEPATH += $$PWD/libuvc/build/include
+DEPENDPATH += $$PWD/libuvc/build/include

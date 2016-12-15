@@ -133,9 +133,6 @@ void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
     case QVideoFrame::Format_Y16:
         uvcFormat = UVC_FRAME_FORMAT_Y16;
         break;
-    case QVideoFrame::Format_YV12:
-        uvcFormat = UVC_FRAME_FORMAT_NV12;
-        break;
     default:
         uvcFormat = UVC_FRAME_FORMAT_UNKNOWN;
         break;
