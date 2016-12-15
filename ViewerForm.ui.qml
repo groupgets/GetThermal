@@ -5,6 +5,7 @@ import QtMultimedia 5.5
 import GetThermal 1.0
 import "qrc:/lepton"
 import "qrc:/controls"
+import "qrc:/images"
 
 Item {
     id: item1
@@ -29,63 +30,83 @@ Item {
         spacing: 0
         anchors.fill: parent
 
-
-        Page {
-            id: frame1
-            width: 220
+        Pane {
+            rightPadding: 12
+            topPadding: 12
+            bottomPadding: 12
+            leftPadding: 12
             Layout.minimumWidth: 220
-            clip: true
             Layout.fillHeight: true
+            padding: 0
 
-            header: TabBar {
-                id: tabBar
-                currentIndex: swipeView.currentIndex
-                TabButton {
-                    text: qsTr("VID")
-                }
-                TabButton {
-                    text: qsTr("AGC")
-                }
-                TabButton {
-                    text: qsTr("Info")
-                }
+            Image {
+                id: imageLogo
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.right: parent.right
+                height: 50
+                fillMode: Image.PreserveAspectFit
+                source: "/images/images/brand-logo.png"
             }
 
-            SwipeView {
-                id: swipeView
-                x: 0
-                y: 40
-                currentIndex: tabBar.currentIndex
-                anchors.fill: parent
+            Page {
+                anchors.top: imageLogo.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                clip: true
 
-
-                VidControls {
-                    id: vidControls1
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.top: parent.top
-                    acq: acq
+                header: TabBar {
+                    id: tabBar
+                    currentIndex: swipeView.currentIndex
+                    TabButton {
+                        text: qsTr("VID")
+                    }
+                    TabButton {
+                        text: qsTr("AGC")
+                    }
+                    TabButton {
+                        text: qsTr("Info")
+                    }
                 }
 
-                AgcControls {
-                    id: agcControls1
-                    anchors.bottom: parent.bottom
-                    anchors.left: vidControls1.right
-                    anchors.top: parent.top
-                    acq: acq
+                SwipeView {
+                    id: swipeView
+                    x: 0
+                    y: 40
+                    currentIndex: tabBar.currentIndex
+                    anchors.fill: parent
+
+
+                    VidControls {
+                        id: vidControls1
+                        anchors.left: parent.left
+                        anchors.bottom: parent.bottom
+                        anchors.top: parent.top
+                        acq: acq
+                    }
+
+                    AgcControls {
+                        id: agcControls1
+                        anchors.bottom: parent.bottom
+                        anchors.left: vidControls1.right
+                        anchors.top: parent.top
+                        acq: acq
+                    }
+
+
+                    LeptonControls {
+                        id: leptonControls1
+                        anchors.bottom: parent.bottom
+                        anchors.left: agcControls1.right
+                        anchors.top: parent.top
+                        acq: acq
+                    }
                 }
 
 
-                LeptonControls {
-                    id: leptonControls1
-                    anchors.bottom: parent.bottom
-                    anchors.left: agcControls1.right
-                    anchors.top: parent.top
-                    acq: acq
-                }
+
             }
-
-
         }
 
         Pane {

@@ -40,8 +40,7 @@ Item {
         source: "image://palettes/" + acq.dataFormatter.pseudocolorPalette;
     }
 
-    Column {
-        id: column1
+    Item {
         anchors.left: image1.right
         anchors.leftMargin: 8
         anchors.right: parent.right

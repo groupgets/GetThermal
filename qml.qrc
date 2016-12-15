@@ -15,4 +15,7 @@
         <file>ValueSlider.qml</file>
         <file>RangeDisplay.qml</file>
     </qresource>
+    <qresource prefix="/images">
+        <file>images/brand-logo.png</file>
+    </qresource>
 </RCC>

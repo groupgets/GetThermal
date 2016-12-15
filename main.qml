@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.0
 ApplicationWindow {
     visible: true
     width: 960
-    height: 480
+    height: 540
     title: qsTr("GetThermal")
 
     Viewer {
