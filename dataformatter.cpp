@@ -75,7 +75,7 @@ void DataFormatter::FindMinMax(const uvc_frame_t *input, QPoint &minPoint, uint1
     }
 }
 
-void DataFormatter::AutoGain(uvc_frame_t *input_output) const
+void DataFormatter::AutoGain(uvc_frame_t *input_output)
 {
     uint16_t minval = 0, maxval = 0;
     QPoint minpoint, maxpoint;
@@ -93,7 +93,7 @@ void DataFormatter::AutoGain(uvc_frame_t *input_output) const
     */
 }
 
-void DataFormatter::FixedGain(uvc_frame_t *input_output, ushort minval, ushort maxval) const
+void DataFormatter::FixedGain(uvc_frame_t *input_output, ushort minval, ushort maxval)
 {
     uint8_t bytes_per_pixel = 0;
 
@@ -133,6 +133,19 @@ void DataFormatter::FixedGain(uvc_frame_t *input_output, ushort minval, ushort m
                 *((uint16_t*)elem) = val;
         }
     }
+
+    if (m_minVal != minval)
+    {
+        m_minVal = minval;
+        minValChanged(minval);
+    }
+
+    if (m_maxVal != maxval)
+    {
+        m_maxVal = maxval;
+        maxValChanged(maxval);
+    }
+
 }
 
 void DataFormatter::Colorize(const uvc_frame_t *input, QVideoFrame &output) const

@@ -107,8 +107,8 @@ Item {
 
 
         Pane {
-            width: 160
-            Layout.minimumWidth: 160
+            width: 130
+            Layout.minimumWidth: 130
             Layout.fillHeight: true
             visible: acq.cci.supportsRadiometry
 
