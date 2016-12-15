@@ -79,6 +79,7 @@ Item {
         MouseArea {
             anchors.fill: parent
             onClicked: farenheitTemps = !farenheitTemps
-       }
+        }
     }
+
 }

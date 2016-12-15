@@ -127,6 +127,8 @@ Item {
         }
 
 
+
+
         Pane {
             width: 130
             Layout.minimumWidth: 130
@@ -138,6 +140,7 @@ Item {
                 acq: acq
             }
         }
+
     }
 
 }
