@@ -20,8 +20,7 @@ QT += qml quick multimedia
 
 QT_CONFIG -= no-pkg-config
 CONFIG += c++11 \
-          link_pkgconfig \
-          installer
+          link_pkgconfig
 
 SOURCES += \
     src/main.cpp \
