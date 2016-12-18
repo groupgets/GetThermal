@@ -5,7 +5,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>CFBundleIconFile</key>
-	<string>macx.icns</string>
+	<string>macos.icns</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleVersion</key>
@@ -17,7 +17,7 @@
 	<key>CFBundleExecutable</key>
 	<string>@EXECUTABLE@</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.qgroundcontrol.qgroundcontrol</string>
+	<string>org.groupgets.getthermal</string>
 	<key>NOTE</key>
 	<string>Open source GetThermal app provided by GroupGets and GetLab</string>
 </dict>
