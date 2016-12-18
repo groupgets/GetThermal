@@ -1,3 +1,21 @@
+exists($${OUT_PWD}/GetThermal.pro) {
+    error("You must use shadow build (e.g. mkdir build; cd build; qmake ../GetThermal.pro).")
+}
+
+message(Qt version $$[QT_VERSION])
+
+!equals(QT_MAJOR_VERSION, 5) | !greaterThan(QT_MINOR_VERSION, 6) {
+    error("Unsupported Qt version, 5.7+ is required")
+}
+
+include(common.pri)
+
+DebugBuild {
+    DESTDIR  = $${OUT_PWD}/debug
+} else {
+    DESTDIR  = $${OUT_PWD}/release
+}
+
 QT += qml quick multimedia
 
 QT_CONFIG -= no-pkg-config
@@ -26,9 +44,6 @@ RESOURCES += qml/qml.qrc
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
-# Default rules for deployment.
-include(deployment.pri)
-
 HEADERS += \
     inc/uvcvideoproducer.h \
     inc/uvcbuffer.h \
@@ -54,7 +69,7 @@ HEADERS += \
 DISTFILES += \
     qml/qtquickcontrols2.conf
 
-PKGCONFIG += libusb-1.0 opencv
+PKGCONFIG += libusb-1.0
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
 
@@ -76,3 +91,9 @@ mac {
 
     ICON = icons/macos.icns
 }
+
+# post-link configuration
+include(setup.pri)
+
+# installer scripts
+include(installer.pri)
