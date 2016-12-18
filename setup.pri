@@ -48,9 +48,9 @@ iOSBuild | MacBuild {
 
 MacBuild {
     # Copy non-standard frameworks into app package
-    QMAKE_POST_LINK += && rsync -a --delete $$BASEDIR/libs/lib/Frameworks $$DESTDIR/$${TARGET}.app/Contents/
+    QMAKE_POST_LINK += && rsync -a --delete $$BASEDIR/libuvc/build/*.dylib $$DESTDIR/$${TARGET}.app/Contents/
     # SDL2 Framework
-    QMAKE_POST_LINK += && install_name_tool -change "@rpath/SDL2.framework/Versions/A/SDL2" "@executable_path/../Frameworks/SDL2.framework/Versions/A/SDL2" $$DESTDIR/$${TARGET}.app/Contents/MacOS/$${TARGET}
+    #QMAKE_POST_LINK += && install_name_tool -change "@rpath/SDL2.framework/Versions/A/SDL2" "@executable_path/../Frameworks/SDL2.framework/Versions/A/SDL2" $$DESTDIR/$${TARGET}.app/Contents/MacOS/$${TARGET}
 }
 
 WindowsBuild {

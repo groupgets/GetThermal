@@ -20,7 +20,8 @@ QT += qml quick multimedia
 
 QT_CONFIG -= no-pkg-config
 CONFIG += c++11 \
-          link_pkgconfig
+          link_pkgconfig \
+          installer
 
 SOURCES += \
     src/main.cpp \
@@ -84,12 +85,16 @@ INCLUDEPATH += $$PWD/lepton_sdk/Inc \
 DEPENDPATH += $$PWD/libuvc/build/include \
               $$PWD/libuvc/include
 
-mac {
+MacBuild {
+    QMAKE_INFO_PLIST    = Custom-Info.plist
+    ICON                = $${BASEDIR}/icons/macos.icns
+    OTHER_FILES        += Custom-Info.plist
+equals(QT_MAJOR_VERSION, 5) | greaterThan(QT_MINOR_VERSION, 5) {
+    LIBS               += -framework ApplicationServices
+}
     # This is required to fixup homebrew libusb-1.0 installation
     # the pkgconfig file for this doesn't include cxxflags, so we need to pick this up
     INCLUDEPATH += /usr/local/include
-
-    ICON = icons/macos.icns
 }
 
 # post-link configuration
