@@ -140,7 +140,6 @@ exists ($$PWD/.git) {
 }
 
 DEFINES += GIT_VERSION=\"\\\"$$GIT_VERSION\\\"\"
-DEFINES += EIGEN_MPL2_ONLY
 
 # Installer configuration
 
@@ -175,9 +174,6 @@ BASEDIR      = $$IN_PWD
 }
 
 LANGUAGE = C++
-
-LOCATION_PLUGIN_DESTDIR = $${OUT_PWD}/src/QtLocationPlugin
-LOCATION_PLUGIN_NAME    = QGeoServiceProviderFactoryQGC
 
 # Turn off serial port warnings
 DEFINES += _TTY_NOWARN_

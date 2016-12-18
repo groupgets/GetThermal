@@ -21,21 +21,6 @@ MacBuild {
     DESTDIR_COPY_RESOURCE_LIST = $$DESTDIR/$${TARGET}.app/Contents/MacOS
 }
 
-# Windows version of QMAKE_COPY_DIR of course doesn't work the same as Mac/Linux. It will only
-# copy the contents of the source directory. It doesn't create the top level source directory
-# in the target.
-WindowsBuild {
-    # Make sure to keep both side of this if using the same set of directories
-    DESTDIR_COPY_RESOURCE_LIST = $$replace(DESTDIR,"/","\\")
-    BASEDIR_COPY_RESOURCE_LIST = $$replace(BASEDIR,"/","\\")
-    QMAKE_POST_LINK += $$escape_expand(\\n) $$QMAKE_COPY_DIR \"$$BASEDIR_COPY_RESOURCE_LIST\\resources\\flightgear\" \"$$DESTDIR_COPY_RESOURCE_LIST\\flightgear\"
-} else {
-    !MobileBuild {
-        # Make sure to keep both sides of this if using the same set of directories
-        #QMAKE_POST_LINK += && $$QMAKE_COPY_DIR $$BASEDIR/resources/flightgear $$DESTDIR_COPY_RESOURCE_LIST
-    }
-}
-
 #
 # Perform platform specific setup
 #
@@ -49,8 +34,6 @@ iOSBuild | MacBuild {
 MacBuild {
     # Copy non-standard frameworks into app package
     QMAKE_POST_LINK += && rsync -a --delete $$BASEDIR/libuvc/build/*.dylib $$DESTDIR/$${TARGET}.app/Contents/
-    # SDL2 Framework
-    #QMAKE_POST_LINK += && install_name_tool -change "@rpath/SDL2.framework/Versions/A/SDL2" "@executable_path/../Frameworks/SDL2.framework/Versions/A/SDL2" $$DESTDIR/$${TARGET}.app/Contents/MacOS/$${TARGET}
 }
 
 WindowsBuild {
@@ -106,18 +89,12 @@ LinuxBuild {
             libQt5Gui.so.5 \
             libQt5Multimedia.so.5 \
             libQt5MultimediaQuick_p.so.5 \
-            libQt5Network.so.5 \
             libQt5OpenGL.so.5 \
-            libQt5Positioning.so.5 \
-            libQt5PrintSupport.so.5 \
             libQt5Qml.so.5 \
             libQt5Quick.so.5 \
             libQt5QuickControls2.so.5 \
             libQt5QuickTemplates2.so.5 \
             libQt5QuickWidgets.so.5 \
-            libQt5SerialPort.so.5 \
-            libQt5Svg.so.5 \
-            libQt5Test.so.5 \
             libQt5XcbQpa.so.5
 
         !contains(DEFINES, __rasp_pi2__) {
@@ -137,8 +114,7 @@ LinuxBuild {
             iconengines \
             imageformats \
             platforminputcontexts \
-            platforms \
-            position
+            platforms
 
         !contains(DEFINES, __rasp_pi2__) {
             QT_PLUGIN_LIST += xcbglintegrations

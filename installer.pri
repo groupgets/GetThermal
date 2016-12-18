@@ -10,35 +10,22 @@
 installer {
     DEFINES += QGC_INSTALL_RELEASE
     MacBuild {
-        VideoEnabled {
-            # Install the gstreamer framework
-            # This will:
-            # Copy from the original distibution into DESTDIR/gstwork (if not already there)
-            # Prune the framework, removing stuff we don't need
-            # Relocate all dylibs so they can work under @executable_path/...
-            # Copy the result into the app bundle
-            # Make sure qgroundcontrol can find them
-            message("Preparing GStreamer Framework")
-            QMAKE_POST_LINK += && $$BASEDIR/tools/prepare_gstreamer_framework.sh $${OUT_PWD}/gstwork/ $${DESTDIR}/$${TARGET}.app $${TARGET}
-        } else {
-            message("Skipping GStreamer Framework")
-        }
         # We cd to release directory so we can run macdeployqt without a path to the
-        # qgroundcontrol.app file. If you specify a path to the .app file the symbolic
+        # GetThermal.app file. If you specify a path to the .app file the symbolic
         # links to plugins will not be created correctly.
         QMAKE_POST_LINK += && mkdir -p $${DESTDIR}/package
-        QMAKE_POST_LINK += && cd $${DESTDIR} && $$dirname(QMAKE_QMAKE)/macdeployqt GetThermal.app -appstore-compliant -verbose=2 -qmldir=$${BASEDIR}/src
+        QMAKE_POST_LINK += && cd $${DESTDIR} && $$dirname(QMAKE_QMAKE)/macdeployqt GetThermal.app -appstore-compliant -verbose=2 -qmldir=$${BASEDIR}/qml
         QMAKE_POST_LINK += && cd $${OUT_PWD}
         QMAKE_POST_LINK += && hdiutil create -verbose -stretch 3g -layout SPUD -srcfolder $${DESTDIR}/GetThermal.app -volname GetThermal $${DESTDIR}/package/GetThermal.dmg
     }
     WindowsBuild {
         # The pdb moving command are commented out for now since we are including the .pdb in the installer. This makes it much
         # easier to debug user crashes.
-        #QMAKE_POST_LINK += $$escape_expand(\\n) $$QMAKE_COPY $${DESTDIR_WIN}\\qgroundcontrol.pdb
-        #QMAKE_POST_LINK += $$escape_expand(\\n) del $${DESTDIR_WIN}\\qgroundcontrol.pdb
-        QMAKE_POST_LINK += $$escape_expand(\\n) cd $$BASEDIR_WIN && $$quote("\"C:\\Program Files \(x86\)\\NSIS\\makensis.exe\"" /NOCD "\"/XOutFile $${DESTDIR_WIN}\\GetThermal-installer.exe\"" "$$BASEDIR_WIN\\deploy\\qgroundcontrol_installer.nsi")
-        #QMAKE_POST_LINK += $$escape_expand(\\n) $$QMAKE_COPY qgroundcontrol.pdb $${DESTDIR_WIN}
-        #QMAKE_POST_LINK += $$escape_expand(\\n) del qgroundcontrol.pdb
+        #QMAKE_POST_LINK += $$escape_expand(\\n) $$QMAKE_COPY $${DESTDIR_WIN}\\getthermal.pdb
+        #QMAKE_POST_LINK += $$escape_expand(\\n) del $${DESTDIR_WIN}\\getthermal.pdb
+        QMAKE_POST_LINK += $$escape_expand(\\n) cd $$BASEDIR_WIN && $$quote("\"C:\\Program Files \(x86\)\\NSIS\\makensis.exe\"" /NOCD "\"/XOutFile $${DESTDIR_WIN}\\GetThermal-installer.exe\"" "$$BASEDIR_WIN\\deploy\\getthermal_installer.nsi")
+        #QMAKE_POST_LINK += $$escape_expand(\\n) $$QMAKE_COPY getthermal.pdb $${DESTDIR_WIN}
+        #QMAKE_POST_LINK += $$escape_expand(\\n) del getthermal.pdb
         OTHER_FILES += deploy/qgroundcontrol_installer.nsi
     }
     LinuxBuild {
