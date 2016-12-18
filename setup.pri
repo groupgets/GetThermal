@@ -104,7 +104,6 @@ LinuxBuild {
             libQt5Core.so.5 \
             libQt5DBus.so.5 \
             libQt5Gui.so.5 \
-            libQt5Location.so.5 \
             libQt5Multimedia.so.5 \
             libQt5MultimediaQuick_p.so.5 \
             libQt5Network.so.5 \
@@ -113,19 +112,19 @@ LinuxBuild {
             libQt5PrintSupport.so.5 \
             libQt5Qml.so.5 \
             libQt5Quick.so.5 \
+            libQt5QuickControls2.so.5 \
+            libQt5QuickTemplates2.so.5 \
             libQt5QuickWidgets.so.5 \
             libQt5SerialPort.so.5 \
-            libQt5Sql.so.5 \
             libQt5Svg.so.5 \
             libQt5Test.so.5 \
-            libQt5Widgets.so.5 \
             libQt5XcbQpa.so.5
 
         !contains(DEFINES, __rasp_pi2__) {
             QT_LIB_LIST += \
-                libicudata.so.54 \
-                libicui18n.so.54 \
-                libicuuc.so.54
+                libicudata.so.56 \
+                libicui18n.so.56 \
+                libicuuc.so.56
         }
 
         for(QT_LIB, QT_LIB_LIST) {
@@ -135,14 +134,11 @@ LinuxBuild {
         # QT_INSTALL_PLUGINS
         QT_PLUGIN_LIST = \
             bearer \
-            geoservices \
             iconengines \
             imageformats \
             platforminputcontexts \
             platforms \
-            platformthemes \
-            position \
-            sqldrivers
+            position
 
         !contains(DEFINES, __rasp_pi2__) {
             QT_PLUGIN_LIST += xcbglintegrations
@@ -156,8 +152,8 @@ LinuxBuild {
         QMAKE_POST_LINK += && $$QMAKE_COPY --dereference --recursive $$[QT_INSTALL_QML] $$DESTDIR/Qt/
 
         # GetThermal start script
-        #QMAKE_POST_LINK += && $$QMAKE_COPY $$BASEDIR/deploy/getthermal-start.sh $$DESTDIR
-        #QMAKE_POST_LINK += && $$QMAKE_COPY $$BASEDIR/deploy/getthermal.desktop $$DESTDIR
-        #QMAKE_POST_LINK += && $$QMAKE_COPY $$BASEDIR/resources/icons/gethermal.png $$DESTDIR
+        QMAKE_POST_LINK += && $$QMAKE_COPY $$BASEDIR/deploy/getthermal-start.sh $$DESTDIR
+        QMAKE_POST_LINK += && $$QMAKE_COPY $$BASEDIR/deploy/getthermal.desktop $$DESTDIR
+        QMAKE_POST_LINK += && $$QMAKE_COPY $$BASEDIR/icons/getthermal.png $$DESTDIR
     }
 }

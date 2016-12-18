@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=GetThermal
+GenericName=GetThermal
+Comment=Cross-platform Thermal Camera Viewer
+Icon=getthermal
+Exec=getthermal-start.sh
+Terminal=false
+Categories=Utility;
