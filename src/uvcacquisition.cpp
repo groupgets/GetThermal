@@ -81,7 +81,7 @@ void UvcAcquisition::init()
 
     /* Locates the first attached UVC device, stores in dev */
     for (int i = 0; i < _ids.size(); ++i) {
-        res = uvc_find_device(ctx, &dev, 0, 0, NULL);
+        res = uvc_find_device(ctx, &dev, 0x1e4e, 0x0100, NULL);
         if (res >= 0)
             break;
     }
