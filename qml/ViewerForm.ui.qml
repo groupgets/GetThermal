@@ -64,9 +64,11 @@ Item {
                     }
                     TabButton {
                         text: qsTr("AGC")
+                        visible: typeof acq === "LeptonVariation"
                     }
                     TabButton {
                         text: qsTr("Info")
+                        visible: typeof acq === "LeptonVariation"
                     }
                 }
 
@@ -92,6 +94,7 @@ Item {
                         anchors.left: vidControls1.right
                         anchors.top: parent.top
                         acq: acq
+                        visible: typeof acq === "LeptonVariation"
                     }
 
 
@@ -101,6 +104,7 @@ Item {
                         anchors.left: agcControls1.right
                         anchors.top: parent.top
                         acq: acq
+                        visible: typeof acq === "LeptonVariation"
                     }
                 }
 

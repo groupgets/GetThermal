@@ -37,7 +37,8 @@ SOURCES += \
     lepton_sdk/Src/LEPTON_VID.c \
     lepton_sdk/Src/crc16fast.c \
     src/dataformatter.cpp \
-    src/rangeprovider.cpp
+    src/rangeprovider.cpp \
+    src/bosonvariation.cpp
 
 RESOURCES += qml/qml.qrc
 
@@ -64,7 +65,8 @@ HEADERS += \
     lepton_sdk/Inc/uvc_sdk.h \
     inc/leptonvariation_types.h \
     inc/dataformatter.h \
-    inc/rangeprovider.h
+    inc/rangeprovider.h \
+    inc/bosonvariation.h
 
 DISTFILES += \
     qml/qtquickcontrols2.conf

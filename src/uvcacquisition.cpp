@@ -4,11 +4,16 @@
 #include <libuvc/libuvc.h>
 
 #include "leptonvariation.h"
+#include "bosonvariation.h"
 #include "dataformatter.h"
 
 //#define PLANAR_BUFFER 1
 //#define ACQ_RGB 1
 #define ACQ_Y16 1
+
+#define PT1_VID 0x1e4e
+#define PT1_PID 0x0100
+#define FLIR_VID 0x09cb
 
 UvcAcquisition::UvcAcquisition(QObject *parent)
     : QObject(parent)
@@ -17,7 +22,8 @@ UvcAcquisition::UvcAcquisition(QObject *parent)
     , devh(NULL)
     , m_cci(NULL)
 {
-    _ids.append({ 0, 0 });
+    _ids.append({ PT1_VID, PT1_PID });
+    _ids.append({ FLIR_VID, 0x0000 }); // any flir camera
     init();
 }
 
@@ -81,7 +87,7 @@ void UvcAcquisition::init()
 
     /* Locates the first attached UVC device, stores in dev */
     for (int i = 0; i < _ids.size(); ++i) {
-        res = uvc_find_device(ctx, &dev, 0x1e4e, 0x0100, NULL);
+        res = uvc_find_device(ctx, &dev, _ids[i].vid, _ids[i].pid, NULL);
         if (res >= 0)
             break;
     }
@@ -111,9 +117,27 @@ void UvcAcquisition::init()
      * knows about the device */
     uvc_print_diag(devh, stderr);
 
-    m_cci = new LeptonVariation(ctx, dev, devh);
+    uvc_device_descriptor_t *desc;
+    uvc_get_device_descriptor(dev, &desc);
 
-    setVideoFormat(m_cci->getDefaultFormat());
+    switch (desc->idVendor)
+    {
+    case PT1_VID:
+        m_cci = new LeptonVariation(ctx, dev, devh);
+        break;
+    case FLIR_VID:
+        m_cci = new BosonVariation(ctx, dev, devh);
+        break;
+    default:
+        break;
+    }
+
+    uvc_free_device_descriptor(desc);
+
+    if (m_cci != NULL)
+    {
+        setVideoFormat(m_cci->getDefaultFormat());
+    }
 }
 
 void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)

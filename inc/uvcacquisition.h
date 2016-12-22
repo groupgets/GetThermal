@@ -18,8 +18,8 @@ class UvcAcquisition : public QObject
 
 public:
     struct UsbId {
-        int pid;
         int vid;
+        int pid;
     };
 
     UvcAcquisition(QObject *parent = 0);
