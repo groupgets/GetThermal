@@ -2,11 +2,11 @@
 
 # Supported Cameras
 
-At this time, it supports all FLIR Lepton variants used with the USB
+GetThermal supports all FLIR Lepton variants used with the USB
 [PureThermal 1 Smart I/O Module](https://groupgets.com/manufacturers/getlab/products/purethermal-1-flir-lepton-smart-i-o-module),
 including the Radiometric Lepton 2.5
 
-Future support is planned for the FLIR Boson camera's USB interface.
+Preliminary support for FLIR Boson has been added and is under development.
 
 # Building
 
@@ -45,4 +45,4 @@ and hit run. You can also build from the command line:
 
 # Releases
 
-This is a work in progress. See the Releases tab in github for OS X pre-release builds.
+This is a work in progress. See the Releases tab in github for OS X and Linux pre-release builds.
