@@ -65,7 +65,7 @@ Item {
 
         Button {
             id: buttonFfc
-            text: qsTr("Perform AGC")
+            text: qsTr("Perform FFC")
         }
 
         BusyIndicator {
