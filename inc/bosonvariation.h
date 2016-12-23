@@ -29,12 +29,13 @@ public:
     virtual const QVideoSurfaceFormat getDefaultFormat();
 
 public slots:
-    virtual void performFfc() {}
+    virtual void performFfc();
 
 private:
     uvc_context_t *ctx;
     uvc_device_t *dev;
     uvc_device_handle_t *devh;
+    libusb_device_handle *usb_devh;
     uvc_device_descriptor_t *desc;
 };
 

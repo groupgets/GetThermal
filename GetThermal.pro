@@ -38,7 +38,17 @@ SOURCES += \
     lepton_sdk/Src/crc16fast.c \
     src/dataformatter.cpp \
     src/rangeprovider.cpp \
-    src/bosonvariation.cpp
+    src/bosonvariation.cpp \
+    boson_sdk/Client_API.c \
+    boson_sdk/Client_Dispatcher.c \
+    boson_sdk/Client_Packager.c \
+    boson_sdk/Example.c \
+    boson_sdk/Serializer_BuiltIn.c \
+    boson_sdk/Serializer_Struct.c \
+    boson_sdk/UART_Connector.c \
+    boson_sdk/flirChannels.c \
+    boson_sdk/flirCRC.c \
+    boson_sdk/libusb_binary_protocol.c
 
 RESOURCES += qml/qml.qrc
 
@@ -66,7 +76,18 @@ HEADERS += \
     inc/leptonvariation_types.h \
     inc/dataformatter.h \
     inc/rangeprovider.h \
-    inc/bosonvariation.h
+    inc/bosonvariation.h \
+    boson_sdk/Client_API.h \
+    boson_sdk/Client_Dispatcher.h \
+    boson_sdk/Client_Packager.h \
+    boson_sdk/EnumTypes.h \
+    boson_sdk/FunctionCodes.h \
+    boson_sdk/ReturnCodes.h \
+    boson_sdk/Serializer_BuiltIn.h \
+    boson_sdk/Serializer_Struct.h \
+    boson_sdk/UART_Connector.h \
+    boson_sdk/flirChannels.h \
+    boson_sdk/flirCRC.h
 
 DISTFILES += \
     qml/qtquickcontrols2.conf
