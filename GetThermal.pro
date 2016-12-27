@@ -87,7 +87,8 @@ HEADERS += \
     boson_sdk/Serializer_Struct.h \
     boson_sdk/UART_Connector.h \
     boson_sdk/flirChannels.h \
-    boson_sdk/flirCRC.h
+    boson_sdk/flirCRC.h \
+    inc/bosonvariation_types.h
 
 DISTFILES += \
     qml/qtquickcontrols2.conf

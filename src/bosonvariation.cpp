@@ -45,19 +45,40 @@ const AbstractCCInterface& BosonVariation::operator =(const AbstractCCInterface&
     return BosonVariation(ctx, dev, devh);
 }
 
-bool BosonVariation::getSupportsHwPseudoColor() const
+const QString BosonVariation::getOemFlirPartNumber()
 {
-    return false;
+    FLR_BOSON_PARTNUMBER_T pn;
+    bosonGetCameraPN(&pn);
+    return QString::fromLatin1((char*)pn.value, sizeof(pn.value));
 }
 
-bool BosonVariation::getSupportsRadiometry()
+const QString BosonVariation::getSysFlirSerialNumber()
+{
+    uint32_t camera_sn;
+    bosonGetSensorSN(&camera_sn);
+    return QString::asprintf("%lu", camera_sn);
+}
+
+bool BosonVariation::getSupportsHwPseudoColor() const
 {
     return true;
 }
 
+bool BosonVariation::getSupportsRadiometry()
+{
+    return false;
+}
+
 const QVideoSurfaceFormat BosonVariation::getDefaultFormat()
 {
-    return QVideoSurfaceFormat(QSize(320,256), QVideoFrame::Format_Y16);
+    return QVideoSurfaceFormat(QSize(640,512), QVideoFrame::Format_YUV420P);
+}
+
+float BosonVariation::getCameraInternalTempC()
+{
+    int16_t temp_c_x10;
+    bosonlookupFPATempDegCx10(&temp_c_x10);
+    return (float)temp_c_x10 / 10.0f;
 }
 
 void BosonVariation::performFfc()
