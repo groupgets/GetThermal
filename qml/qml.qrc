@@ -4,16 +4,16 @@
         <file>Viewer.qml</file>
         <file>ViewerForm.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
-    </qresource>
-    <qresource prefix="/lepton">
-        <file>PaletteModel.qml</file>
-        <file>LeptonControls.qml</file>
-        <file>AgcControls.qml</file>
-        <file>VidControls.qml</file>
-    </qresource>
-    <qresource prefix="/controls">
-        <file>ValueSlider.qml</file>
-        <file>RangeDisplay.qml</file>
+        <file>boson/BosonTabs.qml</file>
+        <file>boson/InfoControls.qml</file>
+        <file>controls/CameraControls.qml</file>
+        <file>controls/RangeDisplay.qml</file>
+        <file>controls/ValueSlider.qml</file>
+        <file>lepton/AgcControls.qml</file>
+        <file>lepton/InfoControls.qml</file>
+        <file>lepton/LeptonTabs.qml</file>
+        <file>lepton/VidControls.qml</file>
+        <file>boson/VidControls.qml</file>
     </qresource>
     <qresource prefix="/images">
         <file>images/brand-logo.png</file>

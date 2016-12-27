@@ -64,6 +64,8 @@ LeptonVariation::LeptonVariation(uvc_context_t *ctx,
         printf("\n");
         units = units->next;
     }
+
+    this->setObjectName("LeptonVariation");
 }
 
 LeptonVariation::~LeptonVariation()

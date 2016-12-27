@@ -7,6 +7,15 @@ extern "C" {
 int boson_example();
 }
 
+#define QML_REGISTER_ENUM(name) \
+    qmlRegisterUncreatableType<FLR::QE_##name>("GetThermal", 1,0, "FLR_" #name, "You can't create enumeration " #name); \
+    qRegisterMetaType<FLR::QE_##name::E>("FLR_" #name);
+
+void registerBosonVariationQmlTypes()
+{
+    QML_REGISTER_ENUM(COLORLUT_ID_E)
+}
+
 BosonVariation::BosonVariation(uvc_context_t *ctx,
                                uvc_device_t *dev,
                                uvc_device_handle_t *devh)
@@ -29,7 +38,7 @@ BosonVariation::BosonVariation(uvc_context_t *ctx,
         printf("Failed to initialize CCI interface\n");
     }
 
-    boson_example();
+    this->setObjectName("BosonVariation");
 }
 
 BosonVariation::~BosonVariation()
@@ -45,19 +54,42 @@ const AbstractCCInterface& BosonVariation::operator =(const AbstractCCInterface&
     return BosonVariation(ctx, dev, devh);
 }
 
-const QString BosonVariation::getOemFlirPartNumber()
+const QString BosonVariation::getCameraPartNumber()
 {
     FLR_BOSON_PARTNUMBER_T pn;
     bosonGetCameraPN(&pn);
     return QString::fromLatin1((char*)pn.value, sizeof(pn.value));
 }
 
-const QString BosonVariation::getSysFlirSerialNumber()
+const QString BosonVariation::getCameraSerialNumber()
 {
-    uint32_t camera_sn;
-    bosonGetSensorSN(&camera_sn);
-    return QString::asprintf("%lu", camera_sn);
+    uint32_t sn;
+    bosonGetCameraSN(&sn);
+    return QString::asprintf("%d", sn);
 }
+
+const QString BosonVariation::getSensorPartNumber()
+{
+
+    FLR_BOSON_SENSOR_PARTNUMBER_T pn;
+    bosonGetSensorPN(&pn);
+    return QString::fromLatin1((char*)pn.value, sizeof(pn.value));
+}
+
+const QString BosonVariation::getSensorSerialNumber()
+{
+    uint32_t sn;
+    bosonGetSensorSN(&sn);
+    return QString::asprintf("%d", sn);
+}
+
+const QString BosonVariation::getSoftwareRev()
+{
+    uint32_t maj, min, rev;
+    bosonGetSoftwareRev(&maj, &min, &rev);
+    return QString::asprintf("%d.%d.%d", maj, min, rev);
+}
+
 
 bool BosonVariation::getSupportsHwPseudoColor() const
 {

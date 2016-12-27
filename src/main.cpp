@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<DataFormatter>("GetThermal", 1,0, "DataFormatter", "");
 
     registerLeptonVariationQmlTypes();
+    registerBosonVariationQmlTypes();
 
     QQmlApplicationEngine engine;
     engine.addImageProvider(QLatin1String("palettes"), new RangeProvider);

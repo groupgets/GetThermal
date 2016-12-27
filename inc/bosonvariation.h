@@ -41,13 +41,22 @@ public:
 
     virtual const AbstractCCInterface& operator =(const AbstractCCInterface&);
 
-    BOSON_ENUM_PROPERTY(COLORLUT_ID_E, vidPcolorLut, colorLutGetId, colorLutSetId)
+    BOSON_ENUM_PROPERTY(COLORLUT_ID_E, colorLutId, colorLutGetId, colorLutSetId)
 
-    Q_PROPERTY(const QString sysFlirSerialNumber READ getSysFlirSerialNumber)
-    const QString getSysFlirSerialNumber();
+    Q_PROPERTY(const QString cameraSerialNumber READ getCameraSerialNumber)
+    const QString getCameraSerialNumber();
 
-    Q_PROPERTY(const QString oemFlirPartNumber READ getOemFlirPartNumber)
-    const QString getOemFlirPartNumber();
+    Q_PROPERTY(const QString cameraPartNumber READ getCameraPartNumber)
+    const QString getCameraPartNumber();
+
+    Q_PROPERTY(const QString sensorSerialNumber READ getSensorSerialNumber)
+    const QString getSensorSerialNumber();
+
+    Q_PROPERTY(const QString sensorPartNumber READ getSensorPartNumber)
+    const QString getSensorPartNumber();
+
+    Q_PROPERTY(const QString softwareRev READ getSoftwareRev)
+    const QString getSoftwareRev();
 
     Q_PROPERTY(float cameraInternalTempC READ getCameraInternalTempC NOTIFY cameraInternalTempChanged)
     float getCameraInternalTempC();
@@ -64,7 +73,7 @@ public:
 signals:
     void cameraInternalTempChanged(float temp);
 
-    void vidPcolorLutChanged(COLORLUT_ID_E val);
+    void colorLutIdChanged(COLORLUT_ID_E val);
 
 public slots:
     virtual void performFfc();
