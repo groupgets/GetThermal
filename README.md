@@ -1,5 +1,7 @@
 `GetThermal` is a cross-platform thermal camera viewer application, currently available for Linux and OS X.
 
+![GetThermal screenshot](https://groupgets-files.s3.amazonaws.com/lepton/getthermal_app.png)
+
 # Supported Cameras
 
 GetThermal supports all FLIR Lepton variants used with the USB
