@@ -122,13 +122,23 @@ bool LeptonVariation::getSupportsRadiometry()
 
 const QVideoSurfaceFormat LeptonVariation::getDefaultFormat()
 {
+    int width = 0, height = 0;
+
+    const uvc_format_desc_t *desc = uvc_get_format_descs(devh);
+    while (desc != NULL)
+    {
+        width = desc->frame_descs[0].wWidth;
+        height = desc->frame_descs[0].wHeight;
+        break;
+    }
+
     if (getPtFirmwareVersion().contains("Y16"))
     {
-        return QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_Y16);
+        return QVideoSurfaceFormat(QSize(width,height), QVideoFrame::Format_Y16);
     }
     else
     {
-        return QVideoSurfaceFormat(QSize(80,60), QVideoFrame::Format_RGB24);
+        return QVideoSurfaceFormat(QSize(width,height), QVideoFrame::Format_RGB24);
     }
 }
 
