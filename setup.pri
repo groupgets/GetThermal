@@ -32,8 +32,6 @@ iOSBuild | MacBuild {
 }
 
 MacBuild {
-    # Copy non-standard frameworks into app package
-    QMAKE_POST_LINK += && rsync -a --delete $$BASEDIR/libuvc/build/*.dylib $$DESTDIR/$${TARGET}.app/Contents/
 }
 
 WindowsBuild {

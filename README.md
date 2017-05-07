@@ -24,25 +24,23 @@ you have `libuvc` on your system already, you will have to build the fork.
     git clone https://github.com/groupgets/GetThermal
     cd GetThermal
 
-## Get libuvc and build
+## Configure submodules (first time only)
 
-To build the `libuvc` fork, you can run these shell commands:
+The first time you clone the code, you must run this:
 
     git submodule init
+
+Then the first time, and on subsequent updates (`git pull`, etc.), to make sure dependencies are up-to-date:
+
     git submodule update
-    pushd libuvc
-    mkdir build
-    cd build
-    cmake ..
-    make
-    popd
 
 ## Build GetThermal
 
 GetThermal is a QT qmake project. So all you have to do now is fire up QTCreator, open the project file,
 and hit run. You can also build from the command line:
 
-    qmake # or depending on your installation, maybe ~/Qt/5.7/clang_64/bin/qmake 
+    mkdir build && cd build
+    qmake .. # or depending on your installation, maybe ~/Qt/5.7/clang_64/bin/qmake ..
     make
 
 # Releases

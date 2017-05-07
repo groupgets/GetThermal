@@ -48,7 +48,46 @@ SOURCES += \
     boson_sdk/UART_Connector.c \
     boson_sdk/flirChannels.c \
     boson_sdk/flirCRC.c \
-    boson_sdk/libusb_binary_protocol.c
+    boson_sdk/libusb_binary_protocol.c \
+    libuvc/src/ctrl-gen.c \
+    libuvc/src/ctrl.c \
+    libuvc/src/device.c \
+    libuvc/src/diag.c \
+    libuvc/src/frame.c \
+    libuvc/src/init.c \
+    libuvc/src/misc.c \
+    libuvc/src/stream.c \
+    libusb/libusb/core.c \
+    libusb/libusb/descriptor.c \
+    libusb/libusb/hotplug.c \
+    libusb/libusb/io.c \
+    libusb/libusb/strerror.c \
+    libusb/libusb/sync.c
+
+#    libusb/libusb/os/haiku_pollfs.cpp \
+#    libusb/libusb/os/haiku_usb_backend.cpp \
+#    libusb/libusb/os/haiku_usb_raw.cpp \
+#    libusb/libusb/os/netbsd_usb.c \
+#    libusb/libusb/os/openbsd_usb.c \
+#    libusb/libusb/os/sunos_usb.c \
+
+unix: SOURCES += \
+    libusb/libusb/os/threads_posix.c \
+    libusb/libusb/os/poll_posix.c
+
+win32: SOURCES += \
+    libusb/msvc/missing.c \
+    libusb/libusb/os/threads_windows.c \
+    libusb/libusb/os/wince_usb.c \
+    libusb/libusb/os/windows_nt_common.c \
+    libusb/libusb/os/windows_usbdk.c \
+    libusb/libusb/os/windows_winusb.c \
+    libusb/libusb/os/poll_windows.c
+else:macx: SOURCES += \
+    libusb/libusb/os/darwin_usb.c
+else:unix: SOURCES += \
+    libusb/libusb/os/linux_udev.c \
+    libusb/libusb/os/linux_usbfs.c
 
 RESOURCES += qml/qml.qrc
 
@@ -88,26 +127,65 @@ HEADERS += \
     boson_sdk/UART_Connector.h \
     boson_sdk/flirChannels.h \
     boson_sdk/flirCRC.h \
-    inc/bosonvariation_types.h
+    inc/bosonvariation_types.h \
+    libuvc/include/libuvc/libuvc.h \
+    libuvc/include/libuvc/libuvc_config.h.in \
+    libuvc/include/libuvc/libuvc_internal.h \
+    libuvc/include/utlist.h \
+    libuvc/src/time_mac.h \
+    libusb/android/config.h \
+    libusb/libusb/os/darwin_usb.h \
+    libusb/libusb/os/haiku_usb.h \
+    libusb/libusb/os/haiku_usb_raw.h \
+    libusb/libusb/os/linux_usbfs.h \
+    libusb/libusb/os/poll_posix.h \
+    libusb/libusb/os/poll_windows.h \
+    libusb/libusb/os/sunos_usb.h \
+    libusb/libusb/os/threads_posix.h \
+    libusb/libusb/os/threads_windows.h \
+    libusb/libusb/os/wince_usb.h \
+    libusb/libusb/os/windows_common.h \
+    libusb/libusb/os/windows_nt_common.h \
+    libusb/libusb/os/windows_usbdk.h \
+    libusb/libusb/os/windows_winusb.h \
+    libusb/libusb/hotplug.h \
+    libusb/libusb/libusb.h \
+    libusb/libusb/libusbi.h \
+    libusb/libusb/version.h \
+    libusb/libusb/version_nano.h \
+    libusb/msvc/config.h \
+    libusb/msvc/errno.h \
+    libusb/msvc/inttypes.h \
+    libusb/msvc/missing.h \
+    libusb/msvc/stdint.h \
+    inc/libusb-1.0/libusb.h \
+    inc/libuvc/libuvc_config.h \
+    inc/libusb-1.0/config.h
 
 DISTFILES += \
     qml/qtquickcontrols2.conf
 
-PKGCONFIG += libusb-1.0
+#PKGCONFIG += libusb-1.0
+unix:!macx {
+    PKGCONFIG += udev
+    LIBS += -ludev
+}
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/libuvc/build/release/ -luvc
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/libuvc/build/debug/ -luvc
-else:macos: LIBS += -L$$PWD/libuvc/build/ -luvc
-else:unix: LIBS += -L$$PWD/libuvc/build/ -luvcstatic
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/libuvc/build/release/ -luvc
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/libuvc/build/debug/ -luvc
+#else:macx: LIBS += -L$$PWD/libuvc/build/ -luvc
+#else:unix: LIBS += -L$$PWD/libuvc/build/ -luvcstatic
 
 INCLUDEPATH += $$PWD/lepton_sdk/Inc \
-               $$PWD/libuvc/build/include \
                $$PWD/libuvc/include \
+               $$PWD/libusb/libusb \
+               $$PWD/inc/libusb-1.0 \
                $$PWD/inc
-DEPENDPATH += $$PWD/libuvc/build/include \
-              $$PWD/libuvc/include
+
+#DEPENDPATH += $$PWD/libuvc/build/include \
+#              $$PWD/libuvc/include
 
 MacBuild {
     QMAKE_INFO_PLIST    = Custom-Info.plist

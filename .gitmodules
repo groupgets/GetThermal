@@ -1,3 +1,6 @@
 [submodule "libuvc"]
 	path = libuvc
 	url = https://github.com/groupgets/libuvc
+[submodule "libusb"]
+	path = libusb
+	url = git@github.com:libusb/libusb.git
