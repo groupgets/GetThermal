@@ -1,6 +1,12 @@
-`GetThermal` is a cross-platform thermal camera viewer application, currently available for Linux and OS X.
+`GetThermal` is a cross-platform thermal camera viewer application.
 
 ![GetThermal screenshot](https://groupgets-files.s3.amazonaws.com/lepton/getthermal_app.png)
+
+# Supported Platforms
+
+Binaries are available for desktop Linux (x64) and Mac OS platforms; see the Releases tab on GitHub. The Wiki tab has 
+instructions for building on Raspbian. Success has also been reported on NVIDIA Linux for Tegra. Ultimately, any
+platform that runs QT 5.7+ and libusb should function with some effort.
 
 # Supported Cameras
 
