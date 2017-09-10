@@ -103,6 +103,9 @@ public:
     Q_PROPERTY(bool supportsRadiometry READ getSupportsRadiometry)
     bool getSupportsRadiometry();
 
+    Q_PROPERTY(bool supportsRuntimeAgcChange READ getSupportsRuntimeAgcChange)
+    bool getSupportsRuntimeAgcChange() const;
+
     virtual const QVideoSurfaceFormat getDefaultFormat();
 
 signals:
@@ -169,6 +172,7 @@ private:
     uvc_device_handle_t *devh;
     LEP_CAMERA_PORT_DESC_T m_portDesc;
     uvc_device_descriptor_t *desc;
+    QSize m_sensorSize;
 
     int leptonCommandIdToUnitId(LEP_COMMAND_ID commandID);
 };

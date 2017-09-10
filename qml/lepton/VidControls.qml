@@ -23,7 +23,7 @@ Item {
         ComboBox {
             id: comboVidPcolorLut
             width: parent.width
-            visible: acq.cci.supportsHwPseudoColor
+            visible: acq.cci.supportsHwPseudoColor && !acq.cci.supportsRadiometry
 
             model: ListModel {
                 ListElement { text: "Wheel"; data: LEP_PCOLOR_LUT_E.LEP_VID_WHEEL6_LUT }
@@ -44,7 +44,7 @@ Item {
         ComboBox {
             id: comboSwPcolorLut
             width: parent.width
-            visible: !acq.cci.supportsHwPseudoColor
+            visible: !acq.cci.supportsHwPseudoColor || acq.cci.supportsRadiometry
 
             model: ListModel {
                 ListElement { text: "Iron Black"; data: DataFormatter.IronBlack }

@@ -65,6 +65,16 @@ LeptonVariation::LeptonVariation(uvc_context_t *ctx,
         units = units->next;
     }
 
+    const uvc_format_desc_t *desc = uvc_get_format_descs(devh);
+    while (desc != NULL)
+    {
+        int width, height;
+        width = desc->frame_descs[0].wWidth;
+        height = desc->frame_descs[0].wHeight;
+        m_sensorSize = QSize(width, height);
+        break;
+    }
+
     this->setObjectName("LeptonVariation");
 }
 
@@ -112,33 +122,31 @@ const QString LeptonVariation::getPtFirmwareVersion() const
 
 bool LeptonVariation::getSupportsHwPseudoColor() const
 {
-    return !getPtFirmwareVersion().contains("Y16");
+    return getSupportsRuntimeAgcChange() || !getPtFirmwareVersion().contains("Y16");
 }
 
 bool LeptonVariation::getSupportsRadiometry()
 {
-    return !getSupportsHwPseudoColor() && getOemFlirPartNumber().contains("500-0763-01");
+    bool runtimeAgc = getSupportsRuntimeAgcChange();
+    bool y16Firmware = getPtFirmwareVersion().contains("Y16");
+    bool radiometricLepton = getOemFlirPartNumber().contains("500-0763-01");
+    return (runtimeAgc || y16Firmware) && radiometricLepton;
+}
+
+bool LeptonVariation::getSupportsRuntimeAgcChange() const
+{
+    return !getPtFirmwareVersion().startsWith("v0");
 }
 
 const QVideoSurfaceFormat LeptonVariation::getDefaultFormat()
 {
-    int width = 0, height = 0;
-
-    const uvc_format_desc_t *desc = uvc_get_format_descs(devh);
-    while (desc != NULL)
+    if (!getSupportsHwPseudoColor() || getSupportsRadiometry())
     {
-        width = desc->frame_descs[0].wWidth;
-        height = desc->frame_descs[0].wHeight;
-        break;
-    }
-
-    if (getPtFirmwareVersion().contains("Y16"))
-    {
-        return QVideoSurfaceFormat(QSize(width,height), QVideoFrame::Format_Y16);
+        return QVideoSurfaceFormat(m_sensorSize, QVideoFrame::Format_Y16);
     }
     else
     {
-        return QVideoSurfaceFormat(QSize(width,height), QVideoFrame::Format_RGB24);
+        return QVideoSurfaceFormat(m_sensorSize, QVideoFrame::Format_RGB24);
     }
 }
 
