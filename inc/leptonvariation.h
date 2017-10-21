@@ -174,6 +174,10 @@ private:
     uvc_device_descriptor_t *desc;
     QSize m_sensorSize;
 
+    uint64_t serialNumber;
+    LEP_OEM_SW_VERSION_T swVers;
+    LEP_OEM_PART_NUMBER_T partNumber;
+
     int leptonCommandIdToUnitId(LEP_COMMAND_ID commandID);
 };
 

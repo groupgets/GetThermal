@@ -75,6 +75,10 @@ LeptonVariation::LeptonVariation(uvc_context_t *ctx,
         break;
     }
 
+    LEP_GetOemSoftwareVersion(&m_portDesc, &swVers);
+    LEP_GetOemFlirPartNumber(&m_portDesc, &partNumber);
+    serialNumber = pget<uint64_t, uint64_t>(LEP_GetSysFlirSerialNumber);
+
     this->setObjectName("LeptonVariation");
 }
 
@@ -90,28 +94,21 @@ const AbstractCCInterface& LeptonVariation::operator =(const AbstractCCInterface
 
 const QString LeptonVariation::getSysFlirSerialNumber()
 {
-    uint64_t serialNumber = pget<uint64_t, uint64_t>(LEP_GetSysFlirSerialNumber);
     return QString::asprintf("%08llx", serialNumber);
 }
 
 const QString LeptonVariation::getOemFlirPartNumber()
 {
-    LEP_OEM_PART_NUMBER_T serialNumber;
-    LEP_GetOemFlirPartNumber(&m_portDesc, &serialNumber);
-    return QString::fromLatin1(serialNumber.value, LEP_SYS_MAX_SERIAL_NUMBER_CHAR_SIZE);
+    return QString::fromLatin1(partNumber.value, LEP_SYS_MAX_SERIAL_NUMBER_CHAR_SIZE);
 }
 
 const QString LeptonVariation::getOemGppSoftwareVersion()
 {
-    LEP_OEM_SW_VERSION_T swVers;
-    LEP_GetOemSoftwareVersion(&m_portDesc, &swVers);
     return QString::asprintf("%d.%d.%d", swVers.gpp_major, swVers.gpp_minor, swVers.gpp_build);
 }
 
 const QString LeptonVariation::getOemDspSoftwareVersion()
 {
-    LEP_OEM_SW_VERSION_T swVers;
-    LEP_GetOemSoftwareVersion(&m_portDesc, &swVers);
     return QString::asprintf("%d.%d.%d", swVers.dsp_major, swVers.dsp_minor, swVers.dsp_build);
 }
 
