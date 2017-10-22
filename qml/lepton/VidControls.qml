@@ -98,35 +98,28 @@ Item {
         }
     }
 
-    Connections {
-        target: comboVidPcolorLut
-        onCurrentIndexChanged: {
-            var currentItem = target.model.get(target.currentIndex);
-            acq.cci.vidPcolorLut = currentItem.data;
-        }
+    Binding {
+        target: acq.cci
+        property: "vidPcolorLut"
+        value: comboVidPcolorLut.model.get(comboVidPcolorLut.currentIndex).data
     }
 
-    Connections {
-        target: comboSwPcolorLut
-        onCurrentIndexChanged: {
-            var currentItem = target.model.get(target.currentIndex);
-            acq.dataFormatter.pseudocolorPalette = currentItem.data;
-        }
+    Binding {
+        target: acq.dataFormatter
+        property: "pseudocolorPalette"
+        value: comboSwPcolorLut.model.get(comboSwPcolorLut.currentIndex).data
     }
 
-    Connections {
-        target: switchSbNuc
-        onCheckedChanged: {
-            acq.cci.vidSbNucEnableState = (target.checked ? LEP_VID_SBNUC_ENABLE_E.LEP_VID_SBNUC_ENABLE : LEP_VID_SBNUC_ENABLE_E.LEP_VID_SBNUC_DISABLE)
-        }
+    Binding {
+        target: acq.cci
+        property: "vidSbNucEnableState"
+        value: switchSbNuc.checked ? LEP_VID_SBNUC_ENABLE_E.LEP_VID_SBNUC_ENABLE : LEP_VID_SBNUC_ENABLE_E.LEP_VID_SBNUC_DISABLE
     }
 
-    Connections {
-        target: comboRadTLinearResolution
-        onCurrentIndexChanged: {
-            var currentItem = target.model.get(target.currentIndex);
-            acq.cci.radTLinearResolution = currentItem.data;
-        }
+    Binding {
+        target: acq.cci
+        property: "radTLinearResolution"
+        value: comboRadTLinearResolution.model.get(comboRadTLinearResolution.currentIndex).data
     }
 
     function delay(delayTime, cb) {

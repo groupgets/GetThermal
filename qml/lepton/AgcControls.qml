@@ -245,35 +245,21 @@ Item {
 
     }
 
-    Connections {
-        target: checkAgcEnable
-        onCheckedChanged: {
-            var newValue = (target.checked ? LEP_AGC_ENABLE_E.LEP_AGC_ENABLE : LEP_AGC_ENABLE_E.LEP_AGC_DISABLE);
-            acq.cci.agcEnable = newValue;
-        }
+    Binding {
+        target: acq.cci
+        property: "agcEnable"
+        value: checkAgcEnable.checked ? LEP_AGC_ENABLE_E.LEP_AGC_ENABLE : LEP_AGC_ENABLE_E.LEP_AGC_DISABLE
     }
 
-    Connections {
-        target: checkAgcCalcEnable
-        onCheckedChanged: {
-            var newValue = (target.checked ? LEP_AGC_ENABLE_E.LEP_AGC_ENABLE : LEP_AGC_ENABLE_E.LEP_AGC_DISABLE);
-            acq.cci.agcCalcEnable = newValue;
-        }
+    Binding {
+        target: acq.cci
+        property: "agcPolicy"
+        value: comboAgcPolicy.model.get(comboAgcPolicy.currentIndex).data
     }
 
-    Connections {
-        target: comboAgcPolicy
-        onCurrentIndexChanged: {
-            var currentItem = target.model.get(target.currentIndex);
-            acq.cci.agcPolicy = currentItem.data;
-        }
-    }
-
-    Connections {
-        target: comboAgcHeqScaleFactor
-        onCurrentIndexChanged: {
-            var currentItem = target.model.get(target.currentIndex);
-            acq.cci.agcHeqScaleFactor = currentItem.data;
-        }
+    Binding {
+        target: acq.cci
+        property: "agcHeqScaleFactor"
+        value: comboAgcHeqScaleFactor.model.get(comboAgcHeqScaleFactor.currentIndex).data
     }
 }
