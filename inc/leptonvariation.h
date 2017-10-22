@@ -2,6 +2,7 @@
 #define LEPTONVARIATION_H
 
 #include <QObject>
+#include <QMutex>
 #include "LEPTON_Types.h"
 #include "LEPTON_ErrorCodes.h"
 #include "LEPTON_AGC.h"
@@ -173,6 +174,7 @@ private:
     LEP_CAMERA_PORT_DESC_T m_portDesc;
     uvc_device_descriptor_t *desc;
     QSize m_sensorSize;
+    QMutex m_mutex;
 
     uint64_t serialNumber;
     LEP_OEM_SW_VERSION_T swVers;

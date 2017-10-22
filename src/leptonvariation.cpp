@@ -1,3 +1,4 @@
+#include <QMutexLocker>
 #include "leptonvariation.h"
 #include "uvc_sdk.h"
 #include "LEPTON_SDK.h"
@@ -40,6 +41,7 @@ LeptonVariation::LeptonVariation(uvc_context_t *ctx,
     : ctx(ctx)
     , dev(dev)
     , devh(devh)
+    , m_mutex()
 {
     printf("Initializing lepton SDK with UVC backend...\n");
 
@@ -204,6 +206,7 @@ LEP_RESULT LeptonVariation::UVC_GetAttribute(LEP_COMMAND_ID commandID,
     // Size in 16-bit words needs to be in bytes
     attributeWordLength *= 2;
 
+    QMutexLocker lock(&m_mutex);
     result = uvc_get_ctrl(devh, unit_id, control_id, attributePtr, attributeWordLength, UVC_GET_CUR);
     if (result != attributeWordLength)
     {
@@ -231,6 +234,7 @@ LEP_RESULT LeptonVariation::UVC_SetAttribute(LEP_COMMAND_ID commandID,
     // Size in 16-bit words needs to be in bytes
     attributeWordLength *= 2;
 
+    QMutexLocker lock(&m_mutex);
     result = uvc_set_ctrl(devh, unit_id, control_id, attributePtr, attributeWordLength);
     if (result != attributeWordLength)
     {
@@ -253,6 +257,7 @@ LEP_RESULT LeptonVariation::UVC_RunCommand(LEP_COMMAND_ID commandID)
 
     control_id = ((commandID & 0x00ff) >> 2) + 1;
 
+    QMutexLocker lock(&m_mutex);
     result = uvc_set_ctrl(devh, unit_id, control_id, &control_id, 1);
     if (result != 1)
     {
