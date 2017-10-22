@@ -34,6 +34,7 @@ void registerLeptonVariationQmlTypes()
     QML_REGISTER_ENUM(AGC_POLICY_E)
     QML_REGISTER_ENUM(AGC_HEQ_SCALE_FACTOR_E)
     QML_REGISTER_ENUM(RAD_TLINEAR_RESOLUTION_E)
+    QML_REGISTER_ENUM(SYS_GAIN_MODE_E)
 }
 
 LeptonVariation::LeptonVariation(uvc_context_t *ctx,

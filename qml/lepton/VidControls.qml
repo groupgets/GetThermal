@@ -59,6 +59,7 @@ Item {
         Label {
             id: labelRadGain
             width: parent.width
+            visible: acq.cci.supportsRadiometry
             text: qsTr("Radiometry TLinear Resolution:")
         }
 
@@ -74,6 +75,26 @@ Item {
             textRole: qsTr("text")
 
             currentIndex: acq.cci.radTLinearResolution
+        }
+
+        Label {
+            id: labelGainMode
+            width: parent.width
+            text: qsTr("Gain state:")
+        }
+
+        ComboBox {
+            id: comboSysGainMode
+            width: parent.width
+
+            model: ListModel {
+                ListElement { text: "High"; data: LEP_SYS_GAIN_MODE_E.LEP_SYS_GAIN_MODE_HIGH }
+                ListElement { text: "Low"; data: LEP_SYS_GAIN_MODE_E.LEP_SYS_GAIN_MODE_LOW }
+                ListElement { text: "Auto"; data: LEP_SYS_GAIN_MODE_E.LEP_SYS_GAIN_MODE_AUTO }
+            }
+            textRole: qsTr("text")
+
+            currentIndex: acq.cci.sysGainMode
         }
 
         Switch {
@@ -120,6 +141,12 @@ Item {
         target: acq.cci
         property: "radTLinearResolution"
         value: comboRadTLinearResolution.model.get(comboRadTLinearResolution.currentIndex).data
+    }
+
+    Binding {
+        target: acq.cci
+        property: "sysGainMode"
+        value: comboSysGainMode.model.get(comboSysGainMode.currentIndex).data
     }
 
     function delay(delayTime, cb) {

@@ -95,6 +95,8 @@ public:
 
     SDK_ENUM_PROPERTY(RAD_TLINEAR_RESOLUTION_E, radTLinearResolution, RadTLinearResolution)
 
+    SDK_ENUM_PROPERTY(SYS_GAIN_MODE_E, sysGainMode, SysGainMode)
+
     /* board-specific properties */
 
     Q_PROPERTY(const QString ptFirmwareVersion READ getPtFirmwareVersion)
@@ -138,6 +140,8 @@ signals:
     void vidSbNucEnableStateChanged(VID_SBNUC_ENABLE_E val);
 
     void radTLinearResolutionChanged(RAD_TLINEAR_RESOLUTION_E val);
+
+    void sysGainModeChanged(SYS_GAIN_MODE_E val);
 
 public slots:
     virtual void performFfc();
@@ -194,5 +198,6 @@ Q_DECLARE_METATYPE(AGC_ENABLE_E)
 Q_DECLARE_METATYPE(AGC_POLICY_E)
 Q_DECLARE_METATYPE(AGC_HEQ_SCALE_FACTOR_E)
 Q_DECLARE_METATYPE(RAD_TLINEAR_RESOLUTION_E)
+Q_DECLARE_METATYPE(SYS_GAIN_MODE_E)
 
 #endif // LEPTONVARIATION_H

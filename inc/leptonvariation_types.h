@@ -8,6 +8,7 @@
 #include "LEPTON_AGC.h"
 #include "LEPTON_VID.h"
 #include "LEPTON_RAD.h"
+#include "LEPTON_SYS.h"
 
 #define QML_ENUM(name, storageType, ...)\
       enum class name : storageType {\
@@ -65,6 +66,13 @@ namespace LEP {
         LEP_RAD_RESOLUTION_0_1, \
         LEP_RAD_RESOLUTION_0_01, \
     )
+
+    QML_ENUM(SYS_GAIN_MODE_E, char, \
+        LEP_SYS_GAIN_MODE_HIGH, \
+        LEP_SYS_GAIN_MODE_LOW, \
+        LEP_SYS_GAIN_MODE_AUTO, \
+    )
+
 }
 void registerLeptonVariationQmlTypes();
 
