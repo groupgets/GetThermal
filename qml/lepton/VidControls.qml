@@ -56,6 +56,26 @@ Item {
             currentIndex: acq.dataFormatter.pseudocolorPalette
         }
 
+        Label {
+            id: labelRadGain
+            width: parent.width
+            text: qsTr("Radiometry TLinear Resolution:")
+        }
+
+        ComboBox {
+            id: comboRadTLinearResolution
+            width: parent.width
+            visible: acq.cci.supportsRadiometry
+
+            model: ListModel {
+                ListElement { text: "Low (0.1K)"; data: LEP_RAD_TLINEAR_RESOLUTION_E.LEP_RAD_RESOLUTION_0_1 }
+                ListElement { text: "High (0.01K)"; data: LEP_RAD_TLINEAR_RESOLUTION_E.LEP_RAD_RESOLUTION_0_01 }
+            }
+            textRole: qsTr("text")
+
+            currentIndex: acq.cci.radTLinearResolution
+        }
+
         Switch {
             id: switchSbNuc
             text: qsTr("Scene-based NUC")
@@ -98,6 +118,14 @@ Item {
         target: switchSbNuc
         onCheckedChanged: {
             acq.cci.vidSbNucEnableState = (target.checked ? LEP_VID_SBNUC_ENABLE_E.LEP_VID_SBNUC_ENABLE : LEP_VID_SBNUC_ENABLE_E.LEP_VID_SBNUC_DISABLE)
+        }
+    }
+
+    Connections {
+        target: comboRadTLinearResolution
+        onCurrentIndexChanged: {
+            var currentItem = target.model.get(target.currentIndex);
+            acq.cci.radTLinearResolution = currentItem.data;
         }
     }
 

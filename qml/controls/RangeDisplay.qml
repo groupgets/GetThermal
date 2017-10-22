@@ -8,6 +8,7 @@ Item {
 
     property UvcAcquisition acq: null
     property bool farenheitTemps: false
+    property bool radiometryLowGain: acq.cci.radTLinearResolution == LEP_RAD_TLINEAR_RESOLUTION_E.LEP_RAD_RESOLUTION_0_1
 
     width: 160
 
@@ -16,7 +17,11 @@ Item {
     }
 
     function ktoc(val) {
-      return (val - 27315) / 100.0;
+        if (radiometryLowGain) {
+            return (val - 2731.5) / 10.0;
+        } else {
+            return (val - 27315) / 100.0;
+        }
     }
 
     function localtemp(k) {

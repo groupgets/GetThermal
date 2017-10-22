@@ -93,6 +93,8 @@ public:
     SDK_ENUM_PROPERTY(POLARITY_E, vidPolarity, VidPolarity)
     SDK_ENUM_PROPERTY(VID_SBNUC_ENABLE_E, vidSbNucEnableState, VidSbNucEnableState)
 
+    SDK_ENUM_PROPERTY(RAD_TLINEAR_RESOLUTION_E, radTLinearResolution, RadTLinearResolution)
+
     /* board-specific properties */
 
     Q_PROPERTY(const QString ptFirmwareVersion READ getPtFirmwareVersion)
@@ -134,6 +136,8 @@ signals:
     void vidPcolorLutChanged(PCOLOR_LUT_E val);
     void vidPolarityChanged(POLARITY_E val);
     void vidSbNucEnableStateChanged(VID_SBNUC_ENABLE_E val);
+
+    void radTLinearResolutionChanged(RAD_TLINEAR_RESOLUTION_E val);
 
 public slots:
     virtual void performFfc();
@@ -189,5 +193,6 @@ Q_DECLARE_METATYPE(VID_SBNUC_ENABLE_E)
 Q_DECLARE_METATYPE(AGC_ENABLE_E)
 Q_DECLARE_METATYPE(AGC_POLICY_E)
 Q_DECLARE_METATYPE(AGC_HEQ_SCALE_FACTOR_E)
+Q_DECLARE_METATYPE(RAD_TLINEAR_RESOLUTION_E)
 
 #endif // LEPTONVARIATION_H
