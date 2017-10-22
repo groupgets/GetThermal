@@ -1636,11 +1636,11 @@ LEP_RESULT LEP_SetRadSpotmeterRoi(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    return(result);
 }
 
-LEP_RESULT LEP_GetRadSpotmeterValueInKelvinX100(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                                LEP_RAD_SPOTMETER_KELVIN_T_PTR kelvinPtr)
+LEP_RESULT LEP_GetRadSpotmeterObjInKelvinX100(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                              LEP_RAD_SPOTMETER_OBJ_KELVIN_T_PTR kelvinPtr)
 {
    LEP_RESULT result = LEP_OK;
-   LEP_UINT16 attributeWordLength = 1;
+   LEP_UINT16 attributeWordLength = 4;
 
    if(kelvinPtr == NULL)
    {
@@ -1648,7 +1648,7 @@ LEP_RESULT LEP_GetRadSpotmeterValueInKelvinX100(LEP_CAMERA_PORT_DESC_T_PTR portD
    }
 
    result = LEP_GetAttribute(portDescPtr,
-                             (LEP_COMMAND_ID)LEP_CID_RAD_SPOTMETER_VALUE_KELVIN,
+                             (LEP_COMMAND_ID)LEP_CID_RAD_SPOTMETER_OBJ_KELVIN,
                              (LEP_ATTRIBUTE_T_PTR)kelvinPtr,
                              attributeWordLength);
    return(result);
@@ -1715,6 +1715,37 @@ LEP_RESULT LEP_SetRadArbitraryOffsetParams( LEP_CAMERA_PORT_DESC_T_PTR portDescP
                              (LEP_ATTRIBUTE_T_PTR)&arbitraryOffsetParams,
                              attributeWordLength);
    return(result);
+}
+
+extern LEP_RESULT LEP_GetRadRadioCalValues( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                            LEP_RAD_RADIO_CAL_VALUES_T_PTR radRadioCalValuesPtr)
+{
+    LEP_RESULT result = LEP_OK;
+    LEP_UINT16 attributeWordLength = 4;
+
+    if(radRadioCalValuesPtr == NULL)
+    {
+       return(LEP_BAD_ARG_POINTER_ERROR);
+    }
+
+    result = LEP_GetAttribute(portDescPtr,
+                              (LEP_COMMAND_ID)LEP_CID_RAD_RADIO_CAL_VALUES,
+                              (LEP_ATTRIBUTE_T_PTR)radRadioCalValuesPtr,
+                              attributeWordLength);
+    return(result);
+}
+
+extern LEP_RESULT LEP_SetRadRadioCalValues( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                            LEP_RAD_RADIO_CAL_VALUES_T radRadioCalValues )
+{
+    LEP_RESULT result = LEP_OK;
+    LEP_UINT16 attributeWordLength = 4;
+
+    result = LEP_SetAttribute(portDescPtr,
+                              (LEP_COMMAND_ID)LEP_CID_RAD_RADIO_CAL_VALUES,
+                              (LEP_ATTRIBUTE_T_PTR)&radRadioCalValues,
+                              attributeWordLength);
+    return(result);
 }
 
 /******************************************************************************/

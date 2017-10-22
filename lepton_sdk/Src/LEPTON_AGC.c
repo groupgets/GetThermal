@@ -244,16 +244,6 @@ LEP_RESULT LEP_SetAgcROI( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 4; /* four 16-bit values */
 
-   if( ( agcROI.startCol >= LEP_AGC_MIN_COL ) && 
-       ( agcROI.startCol <= LEP_AGC_MAX_COL ) &&
-       ( agcROI.endCol >= LEP_AGC_MIN_COL ) && 
-       ( agcROI.endCol <= LEP_AGC_MAX_COL ) &&
-       ( agcROI.startRow >= LEP_AGC_MIN_ROW ) && 
-       ( agcROI.startRow <= LEP_AGC_MAX_ROW ) &&
-       ( agcROI.endRow >= LEP_AGC_MIN_ROW ) && 
-       ( agcROI.endRow <= LEP_AGC_MAX_ROW ) 
-       )
-   {
    /* Perform Command
    ** Writing the Camera's AGC ROI
    */
@@ -261,9 +251,7 @@ LEP_RESULT LEP_SetAgcROI( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                               ( LEP_COMMAND_ID )LEP_CID_AGC_ROI,
                               ( LEP_ATTRIBUTE_T_PTR ) & agcROI,
                               attributeWordLength );
-   }
-   else
-      result = LEP_RANGE_ERROR;
+
 
    return( result );
 }
@@ -297,12 +285,6 @@ LEP_RESULT LEP_SetAgcLinearHistogramClipPercent( LEP_CAMERA_PORT_DESC_T_PTR port
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds check
-   */
-   if( agcLinearHistogramClipPercent >= LEP_AGC_MAX_HISTOGRAM_CLIP_PERCENT )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC Linear Histogram Clip Percent
@@ -346,12 +328,6 @@ LEP_RESULT LEP_SetAgcLinearHistogramTailSize( LEP_CAMERA_PORT_DESC_T_PTR portDes
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( agcLinearHistogramTailSize >= LEP_AGC_MAX_HISTOGRAM_TAIL_SIZE )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC Linear Histogram Clip Percent
@@ -423,13 +399,6 @@ LEP_RESULT LEP_SetAgcLinearMaxGain( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( ( agcLinearMaxGain > LEP_AGC_MAX_LINEAR_MAX_GAIN ) &&
-       ( agcLinearMaxGain < LEP_AGC_MIN_LINEAR_MAX_GAIN ) )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC Linear Max Gain
@@ -473,13 +442,6 @@ LEP_RESULT LEP_SetAgcLinearMidPoint( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( ( agcLinearMidPoint > LEP_AGC_MAX_LINEAR_MIDPOINT ) &&
-       ( agcLinearMidPoint < LEP_AGC_MIN_LINEAR_MIDPOINT ) )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC Linear Midpoint
@@ -523,12 +485,6 @@ LEP_RESULT LEP_SetAgcLinearDampeningFactor( LEP_CAMERA_PORT_DESC_T_PTR portDescP
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( agcLinearDampeningFactor > LEP_AGC_MAX_LINEAR_DAMPENING_FACTOR )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC Linear Histogram Dampening Factor
@@ -576,12 +532,6 @@ LEP_RESULT LEP_SetAgcHeqDampingFactor( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( agcHeqDampingFactor > LEP_AGC_MAX_HEQ_DAMPENING_FACTOR )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC HEQ Histogram Dampening Factor
@@ -625,13 +575,6 @@ LEP_RESULT LEP_SetAgcHeqMaxGain( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( ( agcHeqMaxGain > LEP_AGC_MAX_HEQ_MAX_GAIN ) &&
-       ( agcHeqMaxGain < LEP_AGC_MIN_HEQ_MAX_GAIN ) )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC HEQ Max Gain
@@ -676,12 +619,6 @@ LEP_RESULT LEP_SetAgcHeqClipLimitHigh( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( agcHeqClipLimitHigh > LEP_AGC_HEQ_CLIP_LIMIT_HIGH )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC HEQ Clip Limit High
@@ -725,12 +662,6 @@ LEP_RESULT LEP_SetAgcHeqClipLimitLow( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( agcHeqClipLimitLow > LEP_AGC_HEQ_CLIP_LIMIT_LOW )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC HEQ Clip Limit Low
@@ -774,12 +705,6 @@ LEP_RESULT LEP_SetAgcHeqBinExtension( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( agcHeqBinExtension > LEP_AGC_HEQ_MAX_BIN_EXTENSION )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC HEQ Bin Extension
@@ -823,13 +748,6 @@ LEP_RESULT LEP_SetAgcHeqMidPoint( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    LEP_RESULT  result = LEP_OK;
    LEP_UINT16 attributeWordLength = 1; /* single 16-bit value */
 
-   /* Bounds Check
-   */
-   if( ( agcHeqMidPoint > LEP_AGC_MAX_HEQ_MIDPOINT ) &&
-       ( agcHeqMidPoint < LEP_AGC_MIN_HEQ_MIDPOINT ) )
-   {
-      return( LEP_RANGE_ERROR );
-   }
 
    /* Perform Command
    ** Writing the Camera's AGC HEQ Midpoint
@@ -959,6 +877,39 @@ LEP_RESULT LEP_SetAgcCalcEnableState( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                               attributeWordLength );
 
    return( result );
+}
+
+LEP_RESULT LEP_GetAgcHeqLinearPercent( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                       LEP_UINT16 *agcHeqLinearPercentPtr)
+{
+   LEP_RESULT result = LEP_OK;
+   LEP_UINT16 attributeWordLength = 1;
+
+   if( agcHeqLinearPercentPtr == NULL )
+   {
+      return( LEP_BAD_ARG_POINTER_ERROR );
+   }
+
+   result = LEP_GetAttribute( portDescPtr,
+                              ( LEP_COMMAND_ID )LEP_CID_AGC_HEQ_LINEAR_PERCENT,
+                              ( LEP_ATTRIBUTE_T_PTR )agcHeqLinearPercentPtr,
+                              attributeWordLength );
+
+   return(result);
+}
+
+LEP_RESULT LEP_SetAgcHeqLinearPercent( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                       LEP_UINT16 agcHeqLinearPercent)
+{
+   LEP_RESULT result = LEP_OK;
+   LEP_UINT16 attributeWordLength = 1;
+
+   result = LEP_SetAttribute( portDescPtr,
+                              ( LEP_COMMAND_ID )LEP_CID_AGC_HEQ_LINEAR_PERCENT,
+                              ( LEP_ATTRIBUTE_T_PTR )&agcHeqLinearPercent,
+                              attributeWordLength );
+
+   return(result);
 }
 
 /******************************************************************************/

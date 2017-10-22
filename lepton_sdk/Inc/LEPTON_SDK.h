@@ -83,9 +83,9 @@ extern "C"
 //    #define LEP_USE_DYNAMIC_ALLOCATION
 
      #define LEP_JOVA_I2C
-     #define LEP_SDK_VERSION_MAJOR         0
+     #define LEP_SDK_VERSION_MAJOR         3
      #define LEP_SDK_VERSION_MINOR         3
-     #define LEP_SDK_VERSION_BUILD         53
+     #define LEP_SDK_VERSION_BUILD         13
 
     /* SDK Module Command IDs
     */ 
@@ -124,6 +124,9 @@ extern "C"
 /******************************************************************************/
 /** EXPORTED PUBLIC FUNCTIONS                                                **/
 /******************************************************************************/
+
+    extern LEP_RESULT LEP_SelectDevice(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr, 
+                                       LEP_PROTOCOL_DEVICE_E device);
 
     extern LEP_RESULT LEP_OpenPort(LEP_UINT16 portID,
                                    LEP_CAMERA_PORT_E portType,

@@ -131,13 +131,15 @@ extern "C"
    #define LEP_CID_RAD_TLINEAR_RESOLUTION          (LEP_RAD_MODULE_BASE + 0x00C4)
    #define LEP_CID_RAD_TLINEAR_AUTO_RESOLUTION     (LEP_RAD_MODULE_BASE + 0x00C8)
    #define LEP_CID_RAD_SPOTMETER_ROI               (LEP_RAD_MODULE_BASE + 0x00CC)
-   #define LEP_CID_RAD_SPOTMETER_VALUE_KELVIN      (LEP_RAD_MODULE_BASE + 0x00D0)
+   #define LEP_CID_RAD_SPOTMETER_OBJ_KELVIN        (LEP_RAD_MODULE_BASE + 0x00D0)
 
    #define LEP_CID_RAD_RBFO_INTERNAL_LG            (LEP_RAD_MODULE_BASE + 0x00D4 )  /* Low Gain */
    #define LEP_CID_RAD_RBFO_EXTERNAL_LG            (LEP_RAD_MODULE_BASE + 0x00D8 )  /* Low Gain */
 
    #define LEP_CID_RAD_ARBITRARY_OFFSET_MODE       (LEP_RAD_MODULE_BASE + 0x00DC)
    #define LEP_CID_RAD_ARBITRARY_OFFSET_PARAMS     (LEP_RAD_MODULE_BASE + 0x00E0)
+
+   #define LEP_CID_RAD_RADIO_CAL_VALUES            (LEP_RAD_MODULE_BASE + 0x00E4)
 
 /******************************************************************************/
 /** EXPORTED TYPE DEFINITIONS                                                **/
@@ -153,6 +155,7 @@ typedef LEP_UINT16   LEP_RAD_MEDIAN_VALUE_T, *LEP_RAD_MEDIAN_VALUE_T_PTR;
 typedef LEP_UINT16   LEP_RAD_PARAMETER_SCALE_FACTOR_T, *LEP_RAD_PARAMETER_SCALE_FACTOR_T_PTR;
 typedef LEP_INT16    LEP_RAD_ARBITRARY_OFFSET_T, *LEP_RAD_ARBITRARY_OFFSET_T_PTR;
 typedef LEP_UINT16   LEP_RAD_SPOTMETER_KELVIN_T, *LEP_RAD_SPOTMETER_KELVIN_T_PTR;
+
 
 /* TFpa and TAux counts
 */
@@ -293,11 +296,31 @@ typedef enum LEP_RAD_ARBITRARY_OFFSET_MODE_E_TAG
 
 typedef struct LEP_RAD_ARBITRARY_OFFSET_PARAMS_T_TAG
 {
-   LEP_UINT16 amplitude;
+   LEP_INT16 amplitude;
    LEP_UINT16 decay;
 
 } LEP_RAD_ARBITRARY_OFFSET_PARAMS_T, *LEP_RAD_ARBITRARY_OFFSET_PARAMS_T_PTR;
 
+
+typedef struct LEP_RAD_SPOTMETER_OBJ_KELVIN_T_TAG
+{
+    LEP_RAD_SPOTMETER_KELVIN_T  radSpotmeterValue;
+    LEP_UINT16                  radSpotmeterMaxValue;
+    LEP_UINT16                  radSpotmeterMinValue;
+    LEP_UINT16                  radSpotmeterPopulation;
+
+} LEP_RAD_SPOTMETER_OBJ_KELVIN_T, *LEP_RAD_SPOTMETER_OBJ_KELVIN_T_PTR;
+
+typedef struct LEP_RAD_RADIO_CAL_VALUES_T_TAG
+{
+   
+   LEP_RAD_TEMPERATURE_COUNTS_T  radTauxCounts;
+   LEP_RAD_TEMPERATURE_COUNTS_T  radTfpaCounts;
+
+   LEP_RAD_KELVIN_T              radTauxKelvin;
+   LEP_RAD_KELVIN_T              radTfpaKelvin;
+
+} LEP_RAD_RADIO_CAL_VALUES_T, *LEP_RAD_RADIO_CAL_VALUES_T_PTR;
 
 /******************************************************************************/
 /** EXPORTED PUBLIC DATA DECLARATIONS                                        **/
@@ -548,8 +571,8 @@ extern LEP_RESULT LEP_GetRadSpotmeterRoi( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr
 extern LEP_RESULT LEP_SetRadSpotmeterRoi( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                           LEP_RAD_ROI_T spotmeterRoi );
 
-extern LEP_RESULT LEP_GetRadSpotmeterValueInKelvinX100( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                                        LEP_RAD_SPOTMETER_KELVIN_T_PTR kelvinPtr );
+extern LEP_RESULT LEP_GetRadSpotmeterObjInKelvinX100( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                                      LEP_RAD_SPOTMETER_OBJ_KELVIN_T_PTR kelvinPtr );
 
 extern LEP_RESULT LEP_GetRadArbitraryOffsetMode( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                                  LEP_RAD_ARBITRARY_OFFSET_MODE_E_PTR arbitraryOffsetModePtr );
@@ -586,6 +609,12 @@ extern LEP_RESULT LEP_GetRadExternalRBFOLowGain( LEP_CAMERA_PORT_DESC_T_PTR port
 
 extern LEP_RESULT LEP_SetRadExternalRBFOLowGain( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                                  LEP_RBFO_T_PTR radRBFOPtr ); 
+
+extern LEP_RESULT LEP_GetRadRadioCalValues( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                            LEP_RAD_RADIO_CAL_VALUES_T_PTR radRadioCalValuesPtr);
+
+extern LEP_RESULT LEP_SetRadRadioCalValues( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                            LEP_RAD_RADIO_CAL_VALUES_T radRadioCalValues );
 
 /******************************************************************************/
    #ifdef __cplusplus

@@ -65,6 +65,10 @@
 #include "LEPTON_SDK.h"
 #include "LEPTON_VID.h"
 
+#if (USE_BORESIGHT_MEASUREMENT_FUNCTIONS == 1)
+#include "math.h"
+#endif
+
 /******************************************************************************/
 /** LOCAL DEFINES                                                            **/
 /******************************************************************************/
@@ -181,6 +185,51 @@ LEP_RESULT LEP_SetVidPcolorLut(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                               attributeWordLength);
    return( result );
 }
+LEP_RESULT LEP_GetVidLowGainPcolorLut(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                      LEP_PCOLOR_LUT_E_PTR vidPcolorLutPtr)
+{
+   LEP_RESULT  result = LEP_OK;
+   LEP_UINT16 attributeWordLength = 2; /* two 16-bit values for 32-bit enum */
+
+   /* Validate Parameter(s)
+   */
+   if( vidPcolorLutPtr == NULL )
+   {
+      return(LEP_BAD_ARG_POINTER_ERROR);
+   }
+
+   /* Perform Command
+   ** Reading the Camera's current Video LUT selection
+   */
+   result = LEP_GetAttribute( portDescPtr,
+                              (LEP_COMMAND_ID)LEP_CID_VID_LOW_GAIN_COLOR_LUT, 
+                              (LEP_ATTRIBUTE_T_PTR)vidPcolorLutPtr,
+                              attributeWordLength );
+   return( result );
+}
+
+LEP_RESULT LEP_SetVidLowGainPcolorLut(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                      LEP_PCOLOR_LUT_E vidPcolorLut)
+{
+   LEP_RESULT  result = LEP_OK;
+   LEP_UINT16 attributeWordLength = 2; /* two 16-bit values for 32-bit enum */
+
+   /* Validate Parameter(s)
+   */
+   if( vidPcolorLut >= LEP_VID_END_PCOLOR_LUT )
+   {
+      return(LEP_RANGE_ERROR);
+   }
+
+   /* Perform Command
+   ** Writing the Camera's current Video LUT selection
+   */
+   result = LEP_SetAttribute( portDescPtr,
+                              (LEP_COMMAND_ID)LEP_CID_VID_LOW_GAIN_COLOR_LUT, 
+                              (LEP_ATTRIBUTE_T_PTR)&vidPcolorLut,
+                              attributeWordLength);
+   return( result );
+}
 
 LEP_RESULT LEP_GetVidUserLut(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                              LEP_VID_LUT_BUFFER_T_PTR vidUserLutBufPtr)
@@ -277,6 +326,88 @@ LEP_RESULT LEP_SetVidFocusCalcEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr
                               attributeWordLength);
    return( result );
 }
+
+LEP_RESULT LEP_GetVidBoresightCalcEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                              LEP_VID_BORESIGHT_CALC_ENABLE_STATE_E_PTR boresightCalcEnableStatePtr)
+{
+   LEP_RESULT result = LEP_OK;
+   LEP_UINT16 attributeWordLength = 2; /* Enums are 32-bit */
+
+   if(boresightCalcEnableStatePtr == NULL)
+   {
+      return(LEP_BAD_ARG_POINTER_ERROR);
+   }
+
+   result = LEP_GetAttribute( portDescPtr,
+                           (LEP_COMMAND_ID)LEP_CID_VID_BORESIGHT_CALC_ENABLE, 
+                           (LEP_ATTRIBUTE_T_PTR)boresightCalcEnableStatePtr,
+                           attributeWordLength );
+
+
+   return(result);
+}
+
+LEP_RESULT LEP_SetVidBoresightCalcEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                              LEP_VID_BORESIGHT_CALC_ENABLE_STATE_E boresightCalcEnableState)
+{
+   LEP_RESULT result = LEP_OK;
+   LEP_UINT16 attributeWordLength = 2; /* Enums are 32-bit */
+
+   if(boresightCalcEnableState >= LEP_VID_END_BORESIGHT_CALC_ENABLE_STATE)
+   {
+      return(LEP_RANGE_ERROR);
+   }
+
+   result = LEP_SetAttribute( portDescPtr,
+                           (LEP_COMMAND_ID)LEP_CID_VID_BORESIGHT_CALC_ENABLE, 
+                           (LEP_ATTRIBUTE_T_PTR)&boresightCalcEnableState,
+                           attributeWordLength);
+
+   return(result);
+}
+LEP_RESULT LEP_GetVidBoresightCoordinates(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                          LEP_VID_BORESIGHT_COORDINATES_T_PTR boresightCoordinatesPtr)
+{
+   LEP_RESULT result = LEP_OK;
+   LEP_UINT16 attributeWordLength = 16;
+
+   if( boresightCoordinatesPtr == NULL )
+   {
+      return(LEP_BAD_ARG_POINTER_ERROR);
+   }
+
+   result = LEP_GetAttribute( portDescPtr,
+                        (LEP_COMMAND_ID)LEP_CID_VID_BORESIGHT_COORDINATES, 
+                        (LEP_ATTRIBUTE_T_PTR)boresightCoordinatesPtr,
+                        attributeWordLength );
+
+   return(result);
+}
+
+LEP_RESULT LEP_GetVidTargetPosition(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                    LEP_VID_TARGET_POSITION_T_PTR targetPositionPtr)
+{
+   LEP_RESULT result = LEP_OK;
+   LEP_VID_BORESIGHT_COORDINATES_T boresightCoordinates;
+   LEP_VID_BORESIGHT_CALC_ENABLE_STATE_E calcEnableState;
+
+   if(targetPositionPtr == NULL)
+   {
+      return(LEP_BAD_ARG_POINTER_ERROR);
+   }
+#if (USE_BORESIGHT_MEASUREMENT_FUNCTIONS == 1)
+   result = LEP_GetVidBoresightCoordinates(portDescPtr, &boresightCoordinates);
+   if(result == LEP_OK)
+   {
+      LEP_CalcVidBoresightAlignment(boresightCoordinates, targetPositionPtr);
+   }
+#else
+   return(LEP_FUNCTION_NOT_SUPPORTED);
+#endif
+
+   return(result);
+}
+
 
 LEP_RESULT LEP_GetVidROI(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                          LEP_VID_FOCUS_ROI_T_PTR vidROIPtr)
@@ -482,9 +613,102 @@ LEP_RESULT LEP_SetVidFreezeEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    return( result );
 }
 
+LEP_RESULT LEP_GetVidVideoOutputFormat( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                        LEP_VID_VIDEO_OUTPUT_FORMAT_E_PTR vidVideoOutputFormatPtr )
+{
+   LEP_RESULT  result = LEP_OK;
+   LEP_UINT16 attributeWordLength = 2; /* two 16-bit values for 32-bit enum */
+
+   /* Validate Parameter(s)
+   */
+   if( vidVideoOutputFormatPtr == NULL )
+   {
+      return( LEP_BAD_ARG_POINTER_ERROR );
+   }
+
+   /* Perform Command
+   ** Reading the Camera's current video output format
+   */
+   result = LEP_GetAttribute( portDescPtr,
+                              ( LEP_COMMAND_ID )LEP_CID_VID_VIDEO_OUTPUT_FORMAT,
+                              ( LEP_ATTRIBUTE_T_PTR )vidVideoOutputFormatPtr,
+                              attributeWordLength );
+   return( result );
+}
+
+
+LEP_RESULT LEP_SetVidVideoOutputFormat( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                        LEP_VID_VIDEO_OUTPUT_FORMAT_E vidVideoOutputFormat )
+{
+   LEP_RESULT  result = LEP_OK;
+   LEP_UINT16 attributeWordLength = 2; /* two 16-bit values for 32-bit enum */
+
+   /* Validate Parameter(s)
+   */
+   if( vidVideoOutputFormat >= LEP_END_VID_VIDEO_OUTPUT_FORMAT )
+   {
+      return( LEP_RANGE_ERROR );
+   }
+
+   /* Perform Command
+   ** Writing the Camera's current video output format
+   */
+   result = LEP_SetAttribute( portDescPtr,
+                              ( LEP_COMMAND_ID )LEP_CID_VID_VIDEO_OUTPUT_FORMAT,
+                              ( LEP_ATTRIBUTE_T_PTR ) & vidVideoOutputFormat,
+                              attributeWordLength );
+   return( result );
+}
+
 
 /******************************************************************************/
 /** PRIVATE MODULE FUNCTIONS                                                 **/
 /******************************************************************************/
 
+#if (USE_BORESIGHT_MEASUREMENT_FUNCTIONS == 1)
 
+LEP_RESULT LEP_CalcVidBoresightAlignment(LEP_VID_BORESIGHT_COORDINATES_T boresightCoordinates, LEP_VID_TARGET_POSITION_T_PTR targetPositionPtr)
+{
+   LEP_RESULT result = LEP_OK;
+   LEP_FLOAT32 top, bot, left, right, rows, cols;
+   
+   top = (boresightCoordinates.top_0.col + boresightCoordinates.top_1.col) / 2.0;
+   bot = (boresightCoordinates.bottom_0.col + boresightCoordinates.bottom_1.col) / 2.0;
+   left = (boresightCoordinates.left_0.row + boresightCoordinates.left_1.row) / 2.0;
+   right = (boresightCoordinates.right_0.row + boresightCoordinates.right_1.row) / 2.0;
+
+   rows = boresightCoordinates.bottom_1.row - boresightCoordinates.top_0.row + 1.0;
+   cols = boresightCoordinates.right_1.col - boresightCoordinates.left_0.col + 1.0;
+
+   /* Both lines are perfect horizontal/vertical */
+   if((left == right) && (top == bot))
+   {
+      targetPositionPtr->col = top;
+      targetPositionPtr->row = left;
+      targetPositionPtr->rotation = 0.0;
+   }
+   /* Line 1 is perfect horizontal and Line 2 has slope */
+   else if ((left == right) && (top != bot)) 
+   {
+      targetPositionPtr->row = left;
+      targetPositionPtr->col = (LEP_FLOAT32)(bot + ((top - bot) / rows) * left);
+      targetPositionPtr->rotation = (LEP_FLOAT32)((57.2957802 * atan((top - bot) / rows)) / 2.0);
+   }
+   /* Line 1 has slope and Line 2 is perfect vertical */ 
+   else if ((left != right) && (top == bot)) 
+   {
+      targetPositionPtr->col = top;
+      targetPositionPtr->row = (LEP_FLOAT32)(right + (right - left) / cols * top / cols);
+      targetPositionPtr->rotation = (LEP_FLOAT32)((57.2957802 * atan((right - left) / cols)) / 2.0);
+   } 
+   /* Both lines have slope */
+   else 
+   {
+      targetPositionPtr->col = (LEP_FLOAT32)(((rows - rows * top / (top - bot)) - left) / ((right - left) / cols - rows / (top - bot)));
+      targetPositionPtr->row = (LEP_FLOAT32)(left + targetPositionPtr->col * (right - left) / cols);
+      targetPositionPtr->rotation = (LEP_FLOAT32)((57.2957802 * (atan((right - left) / cols) + atan((top - bot) / rows))) / 2.0);
+   }
+
+   return(result);
+}
+#endif

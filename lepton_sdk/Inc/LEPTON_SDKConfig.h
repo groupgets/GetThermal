@@ -80,6 +80,7 @@ extern "C"
 #define USE_DEPRECATED_PART_NUMBER_INTERFACE    0
 #define USE_DEPRECATED_ASICID_INTERFACE         0
 #define USE_DEPRECATED_HOUSING_TCP_INTERFACE    0
+#define USE_BORESIGHT_MEASUREMENT_FUNCTIONS     1
 
 /******************************************************************************/
 /** EXPORTED TYPE DEFINITIONS                                                **/

@@ -96,6 +96,8 @@ typedef enum Result
    LEP_DATA_SIZE_ERROR               = -6,    /* Camera byte count error */
    LEP_UNDEFINED_FUNCTION_ERROR      = -7,    /* Camera undefined function error */
    LEP_FUNCTION_NOT_SUPPORTED        = -8,    /* Camera function not yet supported error */
+   LEP_DATA_OUT_OF_RANGE_ERROR       = -9,    /* Camera input DATA is out of valid range error */
+   LEP_COMMAND_NOT_ALLOWED           = -11,   /* Camera unable to execute command due to current camera state */
 
    /* OTP access errors */
    LEP_OTP_WRITE_ERROR               = -15,   /*!< Camera OTP write error */

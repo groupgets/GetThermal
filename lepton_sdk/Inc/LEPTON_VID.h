@@ -91,7 +91,10 @@ extern "C"
    #define LEP_CID_VID_SBNUC_ENABLE            (LEP_VID_MODULE_BASE + 0x001C )
    #define LEP_CID_VID_GAMMA_SELECT            (LEP_VID_MODULE_BASE + 0x0020 )
    #define LEP_CID_VID_FREEZE_ENABLE           (LEP_VID_MODULE_BASE + 0x0024 )
-
+   #define LEP_CID_VID_BORESIGHT_CALC_ENABLE   (LEP_VID_MODULE_BASE + 0x0028 )
+   #define LEP_CID_VID_BORESIGHT_COORDINATES   (LEP_VID_MODULE_BASE + 0x002C )
+   #define LEP_CID_VID_VIDEO_OUTPUT_FORMAT     (LEP_VID_MODULE_BASE + 0x0030 )
+   #define LEP_CID_VID_LOW_GAIN_COLOR_LUT      (LEP_VID_MODULE_BASE + 0x0034 )
 
    /* VID Module Attribute Limits
    */ 
@@ -201,6 +204,63 @@ extern "C"
 
    }LEP_VID_FREEZE_ENABLE_E, *LEP_VID_FREEZE_ENABLE_E_PTR ;
 
+   typedef enum LEP_VID_BORESIGHT_CALC_ENABLE_STATE_E_TAG
+   {
+      LEP_VID_BORESIGHT_CALC_DISABLED = 0,
+      LEP_VID_BORESIGHT_CALC_ENABLED,
+
+      LEP_VID_END_BORESIGHT_CALC_ENABLE_STATE,
+   } LEP_VID_BORESIGHT_CALC_ENABLE_STATE_E, *LEP_VID_BORESIGHT_CALC_ENABLE_STATE_E_PTR;
+
+   typedef struct LEP_PIXEL_COORDINATE_T_TAG
+   {
+      LEP_UINT16  row;
+      LEP_UINT16  col;
+
+   }LEP_PIXEL_COORDINATE_T, *LEP_PIXEL_COORDINATE_T_PTR;
+
+   typedef struct LEP_VID_BORESIGHT_COORDINATES_T_TAG
+   {
+      LEP_PIXEL_COORDINATE_T   top_0;        /* Top row 0 */
+      LEP_PIXEL_COORDINATE_T   top_1;        /* Top row 1 */
+      LEP_PIXEL_COORDINATE_T   bottom_0;     /* Bottom row 118 */
+      LEP_PIXEL_COORDINATE_T   bottom_1;     /* Bottom row 119 */
+      LEP_PIXEL_COORDINATE_T   left_0;       /* Left column 0 */
+      LEP_PIXEL_COORDINATE_T   left_1;       /* Left column 1 */
+      LEP_PIXEL_COORDINATE_T   right_0;      /* Right column 158 */
+      LEP_PIXEL_COORDINATE_T   right_1;      /* Right column 159 */
+
+   } LEP_VID_BORESIGHT_COORDINATES_T, *LEP_VID_BORESIGHT_COORDINATES_T_PTR;
+
+
+   typedef struct LEP_VID_TARGET_POSITION_T_TAG
+   {
+      LEP_FLOAT32 row;
+      LEP_FLOAT32 col;
+      LEP_FLOAT32 rotation;
+
+   }LEP_VID_TARGET_POSITION_T, *LEP_VID_TARGET_POSITION_T_PTR;
+
+   typedef enum LEP_VID_VIDEO_OUTPUT_FORMAT_TAG
+   {
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RAW8 = 0,          // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RAW10,             // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RAW12,             // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RGB888,            // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RGB666,            // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RGB565,            // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_YUV422_8BIT,       // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RAW14,             // SUPPORTED in this release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_YUV422_10BIT,      // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_USER_DEFINED,      // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RAW8_2,            // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RAW8_3,            // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RAW8_4,            // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RAW8_5,            // To be supported in later release
+      LEP_VID_VIDEO_OUTPUT_FORMAT_RAW8_6,            // To be supported in later release
+      LEP_END_VID_VIDEO_OUTPUT_FORMAT
+
+   }LEP_VID_VIDEO_OUTPUT_FORMAT_E, *LEP_VID_VIDEO_OUTPUT_FORMAT_E_PTR;
 
 /******************************************************************************/
 /** EXPORTED PUBLIC DATA                                                     **/
@@ -219,6 +279,11 @@ extern "C"
    extern LEP_RESULT LEP_SetVidPcolorLut(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                          LEP_PCOLOR_LUT_E vidPcolorLut);
 
+   extern LEP_RESULT LEP_GetVidLowGainPcolorLut(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                                LEP_PCOLOR_LUT_E_PTR vidPcolorLutPtr);
+   extern LEP_RESULT LEP_SetVidLowGainPcolorLut(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                                LEP_PCOLOR_LUT_E vidPcolorLut);
+
    extern LEP_RESULT LEP_GetVidUserLut(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                        LEP_VID_LUT_BUFFER_T_PTR vidUserLutBufPtr);
 
@@ -229,6 +294,15 @@ extern "C"
                                                     LEP_VID_FOCUS_CALC_ENABLE_E_PTR vidEnableFocusCalcStatePtr);
    extern LEP_RESULT LEP_SetVidFocusCalcEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                                     LEP_VID_FOCUS_CALC_ENABLE_E vidFocusCalcEnableState);
+
+   extern LEP_RESULT LEP_GetVidBoresightCalcEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                                        LEP_VID_BORESIGHT_CALC_ENABLE_STATE_E_PTR boresightCalcEnableStatePtr);
+   extern LEP_RESULT LEP_SetVidBoresightCalcEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                                        LEP_VID_BORESIGHT_CALC_ENABLE_STATE_E boresightCalcEnableState);
+   extern LEP_RESULT LEP_GetVidBoresightCoordinates(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                                    LEP_VID_BORESIGHT_COORDINATES_T_PTR boresightCoordinatesPtr);
+   extern LEP_RESULT LEP_GetVidTargetPosition(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                              LEP_VID_TARGET_POSITION_T_PTR targetPositionPtr);
 
    extern LEP_RESULT LEP_GetVidROI(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                    LEP_VID_FOCUS_ROI_T_PTR vidFocusROIPtr);
@@ -248,11 +322,15 @@ extern "C"
    extern LEP_RESULT LEP_SetVidSbNucEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                                 LEP_VID_SBNUC_ENABLE_E vidSbNucEnableState);
 
-   extern LEP_RESULT LEP_GetVidFreezeEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                                 LEP_VID_FREEZE_ENABLE_E_PTR vidFreezeEnableStatePtr);
-   extern LEP_RESULT LEP_SetVidFreezeEnableState(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                                 LEP_VID_FREEZE_ENABLE_E vidFreezeEnableState);
+   extern LEP_RESULT LEP_GetVidVideoOutputFormat( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                                  LEP_VID_VIDEO_OUTPUT_FORMAT_E_PTR vidVideoOutputFormatPtr );
+   extern LEP_RESULT LEP_SetVidVideoOutputFormat( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                                  LEP_VID_VIDEO_OUTPUT_FORMAT_E vidVideoOutputFormat );
 
+#if (USE_BORESIGHT_MEASUREMENT_FUNCTIONS == 1)
+   extern LEP_RESULT LEP_CalcVidBoresightAlignment(LEP_VID_BORESIGHT_COORDINATES_T boresightCoordinates, 
+                                                   LEP_VID_TARGET_POSITION_T_PTR targetPositionPtr);
+#endif
 /******************************************************************************/
    #ifdef __cplusplus
 }

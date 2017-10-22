@@ -68,7 +68,7 @@
 
 
 #ifdef LEP_USE_DYNAMIC_ALLOCATION
-    #include <stdlib.h>
+    #include "stdlib.h"
 #endif
 
 /******************************************************************************/
@@ -89,6 +89,7 @@
 /******************************************************************************/
 /** PRIVATE FUNCTION DECLARATIONS                                            **/
 /******************************************************************************/
+static LEP_RESULT _LEP_DelayCounts(LEP_UINT32 counts);
 
 /******************************************************************************/
 /** EXPORTED PUBLIC DATA                                                     **/
@@ -231,7 +232,6 @@ LEP_RESULT LEP_RunCommand(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
     return(result);
 }
 
-
 /******************************************************************************/
 /**
  * Opens a Lepton commnications port of the specified type and
@@ -259,7 +259,7 @@ LEP_RESULT LEP_OpenPort(LEP_UINT16 portID,
                         LEP_UINT16   portBaudRate,
                         LEP_CAMERA_PORT_DESC_T_PTR portDescPtr)
 {
-    LEP_RESULT result = LEP_ERROR;
+    LEP_RESULT result;
     LEP_UINT8 deviceAddress;
 
     /* Attempt to acquire memory
@@ -305,7 +305,7 @@ LEP_RESULT LEP_OpenPort(LEP_UINT16 portID,
 
 LEP_RESULT LEP_ClosePort(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr)
 {
-    LEP_RESULT result = LEP_ERROR;
+    LEP_RESULT result;
 	
     /* Validate the port descriptor
     */ 
@@ -343,7 +343,7 @@ LEP_RESULT LEP_ClosePort(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr)
 
 LEP_RESULT LEP_ResetPort(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr)
 {
-    LEP_RESULT result = LEP_ERROR;
+    LEP_RESULT result;
 
     /* Validate the port descriptor
     */ 
@@ -374,7 +374,8 @@ LEP_RESULT LEP_ResetPort(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr)
 LEP_RESULT LEP_GetPortStatus(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr, 
                              LEP_UINT16 *status)
 {
-    LEP_RESULT result = LEP_ERROR;
+    LEP_RESULT result;
+
 
     return(result);
 }
@@ -453,8 +454,7 @@ LEP_RESULT LEP_DirectWriteBuffer(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                  LEP_ATTRIBUTE_T_PTR attributePtr,
                                  LEP_UINT16 attributeWordLength)
 {
-   LEP_RESULT result = LEP_ERROR;
-
+   LEP_RESULT result;
    /* Validate the port descriptor
    */ 
    if( portDescPtr == NULL )
@@ -515,6 +515,24 @@ LEP_RESULT LEP_GetCameraBootStatus(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
    }
 
    return(result);
+}
+
+/******************************************************************************/
+/** PRIVATE MODULE FUNCTIONS                                                 **/
+/******************************************************************************/
+
+LEP_RESULT _LEP_DelayCounts(LEP_UINT32 counts)
+{
+    LEP_UINT32 a;
+    while( counts-- )
+    {
+        a=counts;        
+    }
+    if( a )
+    {
+        return(LEP_TIMEOUT_ERROR) ;
+    }
+    return(LEP_OK);
 }
 
 

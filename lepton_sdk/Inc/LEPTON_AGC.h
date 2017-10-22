@@ -98,6 +98,7 @@ extern "C"
    #define LEP_CID_AGC_HEQ_NORMALIZATION_FACTOR    (LEP_AGC_MODULE_BASE + 0x0040 )
    #define LEP_CID_AGC_HEQ_SCALE_FACTOR            (LEP_AGC_MODULE_BASE + 0x0044 )
    #define LEP_CID_AGC_CALC_ENABLE_STATE           (LEP_AGC_MODULE_BASE + 0x0048 )
+   #define LEP_CID_AGC_HEQ_LINEAR_PERCENT          (LEP_AGC_MODULE_BASE + 0x004C )
 
 /* AGC Module Attribute Scaling and Module Attribute Limits
 */
@@ -299,6 +300,12 @@ extern LEP_RESULT LEP_GetAgcCalcEnableState( LEP_CAMERA_PORT_DESC_T_PTR portDesc
 
 extern LEP_RESULT LEP_SetAgcCalcEnableState( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                              LEP_AGC_ENABLE_E agcCalculationEnableState ); 
+
+extern LEP_RESULT LEP_GetAgcHeqLinearPercent( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                              LEP_UINT16 *agcHeqLinearPercentPtr);
+
+extern LEP_RESULT LEP_SetAgcHeqLinearPercent( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                              LEP_UINT16 agcHeqLinearPercent);
 
    #ifdef __cplusplus
 

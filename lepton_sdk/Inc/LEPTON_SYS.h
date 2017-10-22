@@ -99,6 +99,11 @@ extern "C"
    #define LEP_CID_SYS_FFC_SHUTTER_MODE_OBJ        (LEP_SYS_MODULE_BASE + 0x003C )
    #define FLR_CID_SYS_RUN_FFC                     (LEP_SYS_MODULE_BASE + 0x0042 )
    #define LEP_CID_SYS_FFC_STATUS                  (LEP_SYS_MODULE_BASE + 0x0044 )
+   #define LEP_CID_SYS_GAIN_MODE                   (LEP_SYS_MODULE_BASE + 0x0048 )
+   #define LEP_CID_SYS_FFC_STATE                   (LEP_SYS_MODULE_BASE + 0x004C )
+   #define LEP_CID_SYS_GAIN_MODE_OBJ               (LEP_SYS_MODULE_BASE + 0x0050 )
+   #define LEP_CID_SYS_GAIN_MODE_DESIRED_FLAG      (LEP_SYS_MODULE_BASE + 0x0054 )
+   #define LEP_CID_SYS_BORESIGHT_VALUES            (LEP_SYS_MODULE_BASE + 0x0058 )
 
 /* SYS Module Attribute Limits
 */
@@ -119,16 +124,20 @@ typedef LEP_UINT16  LEP_SYS_AUX_TEMPERATURE_KELVIN_T, *LEP_SYS_AUX_TEMPERATURE_K
 typedef LEP_UINT16  LEP_SYS_FPA_TEMPERATURE_KELVIN_T, *LEP_SYS_FPA_TEMPERATURE_KELVIN_T_PTR;
 //typedef LEP_UINT8   LEP_SYS_NUM_AVERAGE_FRAMES_T, *LEP_SYS_NUM_AVERAGE_FRAMES_T_PTR;
 typedef LEP_UINT16  LEP_SYS_THERMAL_SHUTDOWN_COUNTS_T, *LEP_SYS_THERMAL_SHUTDOWN_COUNTS_T_PTR;
+typedef LEP_UINT16  LEP_SYS_THRESHOLD_T, *LEP_SYS_THRESHOLD_T_PTR;
 
-#if USE_DEPRECATED_SERIAL_NUMBER_INTERFACE
+   #if USE_DEPRECATED_SERIAL_NUMBER_INTERFACE
 typedef LEP_CHAR8 *LEP_SYS_CUST_SERIAL_NUMBER_T, *LEP_SYS_CUST_SERIAL_NUMBER_T_PTR;
-#else
+   #else
 typedef struct LEP_SYS_CUST_SERIAL_NUMBER_T_TAG
 {
    LEP_CHAR8 value[LEP_SYS_MAX_SERIAL_NUMBER_CHAR_SIZE];
 } LEP_SYS_CUST_SERIAL_NUMBER_T, *LEP_SYS_CUST_SERIAL_NUMBER_T_PTR;
-#endif
+   #endif
 
+/* SYS Camera System Status Enum
+   Captures basic camera operation
+*/
 typedef enum LEP_SYSTEM_STATUS_STATES_E_TAG
 {
    LEP_SYSTEM_READY = 0,
@@ -136,12 +145,14 @@ typedef enum LEP_SYSTEM_STATUS_STATES_E_TAG
    LEP_SYSTEM_IN_LOW_POWER_MODE,
    LEP_SYSTEM_GOING_INTO_STANDBY,
    LEP_SYSTEM_FLAT_FIELD_IN_PROCESS,
+   LEP_SYSTEM_FLAT_FIELD_IMMINENT,
+   LEP_SYSTEM_THERMAL_SHUTDOWN_IMMINENT,
 
    LEP_SYSTEM_END_STATES
 
 }LEP_SYSTEM_STATUS_STATES_E, *LEP_SYSTEM_STATUS_STATES_E_PTR;
 
-typedef struct
+typedef struct LEP_STATUS_T_TAG
 {
    LEP_SYSTEM_STATUS_STATES_E  camStatus;
    LEP_UINT16                  commandCount;
@@ -244,14 +255,15 @@ typedef enum LEP_SYS_SHUTTER_TEMP_LOCKOUT_STATE_E_TAG
 
 }LEP_SYS_SHUTTER_TEMP_LOCKOUT_STATE_E,*LEP_SYS_SHUTTER_TEMP_LOCKOUT_STATE_E_PTR;
 
-#if 0
+   #if 0
 typedef struct LEP_SYS_FFC_SHUTTER_TEMP_LOCKOUT_T_TAG
 {
    LEP_UINT16  lowTempThreshold;             /* in Kelvin */
    LEP_UINT16  highTempThreshold;            /* in Kelvin */
    LEP_SYS_SHUTTER_TEMP_LOCKOUT_STATE_E tempLockoutState;
-}LEP_SYS_FFC_SHUTTER_TEMP_LOCKOUT_T, *LEP_SYS_FFC_SHUTTER_TEMP_LOCKOUT_T_PTR; 
-#endif
+}
+LEP_SYS_FFC_SHUTTER_TEMP_LOCKOUT_T, *LEP_SYS_FFC_SHUTTER_TEMP_LOCKOUT_T_PTR;
+   #endif
 
 typedef struct LEP_SYS_FFC_SHUTTER_MODE_OBJ_T_TAG
 {
@@ -266,10 +278,13 @@ typedef struct LEP_SYS_FFC_SHUTTER_MODE_OBJ_T_TAG
    LEP_UINT16 desiredFfcTempDelta;           /* in Kelvin x100  */
    LEP_UINT16 imminentDelay;                 /* in frame counts x1 */
 
-   
+
 }LEP_SYS_FFC_SHUTTER_MODE_OBJ_T, *LEP_SYS_FFC_SHUTTER_MODE_OBJ_T_PTR;
 
-typedef enum
+/* SYS  Status Enum
+   Captures the FFC operation status
+*/
+typedef enum LEP_SYS_STATUS_E_TAG
 {
    LEP_SYS_STATUS_WRITE_ERROR = -2,
    LEP_SYS_STATUS_ERROR = -1,
@@ -279,6 +294,80 @@ typedef enum
    LEP_SYS_STATUS_END
 
 } LEP_SYS_STATUS_E, *LEP_SYS_STATUS_E_PTR;
+
+typedef enum LEP_SYS_GAIN_MODE_E_TAG
+{
+   LEP_SYS_GAIN_MODE_HIGH = 0,
+   LEP_SYS_GAIN_MODE_LOW,
+   LEP_SYS_GAIN_MODE_AUTO,
+
+   LEP_SYS_END_GAIN_MODE,
+} LEP_SYS_GAIN_MODE_E, *LEP_SYS_GAIN_MODE_E_PTR;
+
+
+/* System Gain Mode ROI Structure
+*/
+typedef struct LEP_SYS_GAIN_MODE_ROI_T_TAG
+{
+   LEP_UINT16 startCol;
+   LEP_UINT16 startRow;
+   LEP_UINT16 endCol;
+   LEP_UINT16 endRow;
+
+}LEP_SYS_GAIN_MODE_ROI_T, *LEP_SYS_GAIN_MODE_ROI_T_PTR;
+
+/* Gain Mode Support
+*/
+typedef struct LEP_SYS_GAIN_MODE_THRESHOLDS_T_TAG
+{
+   LEP_SYS_THRESHOLD_T sys_P_high_to_low;    /* Range: [0 – 100], percent   */
+   LEP_SYS_THRESHOLD_T sys_P_low_to_high;    /* Range: [0 – 100], percent   */
+
+   LEP_SYS_THRESHOLD_T sys_C_high_to_low;    /* Range: [0-600], degrees C   */
+   LEP_SYS_THRESHOLD_T sys_C_low_to_high;    /* Range: [0-600], degrees C   */
+
+   LEP_SYS_THRESHOLD_T sys_T_high_to_low;    /* Range: [0-900], Kelvin   */
+   LEP_SYS_THRESHOLD_T sys_T_low_to_high;    /* Range: [0-900], Kelvin   */
+
+}LEP_SYS_GAIN_MODE_THRESHOLDS_T, *LEP_SYS_GAIN_MODE_THRESHOLDS_T_PTR;
+
+/* Gain Mode Object
+*/
+typedef struct LEP_SYS_GAIN_MODE_OBJ_T_TAG
+{
+   LEP_SYS_GAIN_MODE_ROI_T          sysGainModeROI;         /* Specified ROI to use for Gain Mode switching */
+   LEP_SYS_GAIN_MODE_THRESHOLDS_T   sysGainModeThresholds;  /* Set of threshold triggers */
+   LEP_UINT16                       sysGainRoiPopulation;   /* Population size in pixels within the ROI */
+   LEP_UINT16                       sysGainModeTempEnabled; /* True if T-Linear is implemented */
+   LEP_UINT16                       sysGainModeFluxThresholdLow;     /* calculated from desired temp */
+   LEP_UINT16                       sysGainModeFluxThresholdHigh;    /* calculated from desired temp */
+
+}LEP_SYS_GAIN_MODE_OBJ_T, *LEP_SYS_GAIN_MODE_OBJ_T_PTR;
+
+
+/* SYS FFC States Enum
+   Captures the current camera FFC operation state
+*/
+typedef enum LEP_SYS_FFC_STATES_E_TAG
+{
+   LEP_SYS_FFC_NEVER_COMMANDED = 0,
+   LEP_SYS_FFC_IMMINENT,
+   LEP_SYS_FFC_IN_PROCESS,
+   LEP_SYS_FFC_DONE,
+
+   LEP_SYS_END_FFC_STATES
+
+}LEP_SYS_FFC_STATES_E, *LEP_SYS_FFC_STATES_E_PTR;
+
+typedef struct LEP_SYS_BORESIGHT_VALUES_T_TAG
+{
+    LEP_UINT16  targetRow;
+    LEP_UINT16  targetCol;
+    LEP_INT16   targetRotation;
+    LEP_INT16   fovX;
+    LEP_INT16   fovY;
+
+} LEP_SYS_BORESIGHT_VALUES_T, *LEP_SYS_BORESIGHT_VALUES_T_PTR;
 
 /******************************************************************************/
 /** EXPORTED PUBLIC DATA                                                     **/
@@ -295,13 +384,13 @@ extern LEP_RESULT LEP_GetSysFlirSerialNumber( LEP_CAMERA_PORT_DESC_T_PTR portDes
                                               LEP_SYS_FLIR_SERIAL_NUMBER_T_PTR sysSerialNumberBufPtr );
 
 /* Deprecated: Use LEP_GetSysCustSN instead */
-#if LEP_SYS_CUST_SERIAL_NUMBER_T
+   #if LEP_SYS_CUST_SERIAL_NUMBER_T
 extern LEP_RESULT LEP_GetSysCustSerialNumber( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                               LEP_SYS_CUST_SERIAL_NUMBER_T_PTR sysSerialNumberPtr );
-#else
-extern LEP_RESULT LEP_GetSysCustSerialNumber(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                             LEP_SYS_CUST_SERIAL_NUMBER_T_PTR sysCustSNPtr);
-#endif
+   #else
+extern LEP_RESULT LEP_GetSysCustSerialNumber( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                              LEP_SYS_CUST_SERIAL_NUMBER_T_PTR sysCustSNPtr );
+   #endif
 extern LEP_RESULT LEP_GetSysCameraUpTime( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                           LEP_SYS_UPTIME_NUMBER_T_PTR sysCameraUpTimePtr );
 
@@ -340,31 +429,46 @@ extern LEP_RESULT LEP_GetSysSceneStatistics( LEP_CAMERA_PORT_DESC_T_PTR portDesc
 
 extern LEP_RESULT LEP_RunFrameAverage( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr );
 
-extern LEP_RESULT LEP_GetSysSceneRoi(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                     LEP_SYS_VIDEO_ROI_T_PTR sceneRoiPtr);
-extern LEP_RESULT LEP_SetSysSceneRoi(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                     LEP_SYS_VIDEO_ROI_T sceneRoi);
+extern LEP_RESULT LEP_GetSysSceneRoi( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                      LEP_SYS_VIDEO_ROI_T_PTR sceneRoiPtr );
+extern LEP_RESULT LEP_SetSysSceneRoi( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                      LEP_SYS_VIDEO_ROI_T sceneRoi );
 
-extern LEP_RESULT LEP_GetSysThermalShutdownCount(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                                 LEP_SYS_THERMAL_SHUTDOWN_COUNTS_T_PTR thermalCountsPtr);
+extern LEP_RESULT LEP_GetSysThermalShutdownCount( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                                  LEP_SYS_THERMAL_SHUTDOWN_COUNTS_T_PTR thermalCountsPtr );
 
-extern LEP_RESULT LEP_GetSysShutterPosition(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                         LEP_SYS_SHUTTER_POSITION_E_PTR shutterPositionPtr);
+extern LEP_RESULT LEP_GetSysShutterPosition( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                             LEP_SYS_SHUTTER_POSITION_E_PTR shutterPositionPtr );
 
-extern LEP_RESULT LEP_SetSysShutterPosition(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                         LEP_SYS_SHUTTER_POSITION_E shutterPosition);
+extern LEP_RESULT LEP_SetSysShutterPosition( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                             LEP_SYS_SHUTTER_POSITION_E shutterPosition );
 
 extern LEP_RESULT LEP_GetSysFfcShutterModeObj( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                            LEP_SYS_FFC_SHUTTER_MODE_OBJ_T_PTR shutterModeObjPtr );
+                                               LEP_SYS_FFC_SHUTTER_MODE_OBJ_T_PTR shutterModeObjPtr );
 
 extern LEP_RESULT LEP_SetSysFfcShutterModeObj( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
-                                            LEP_SYS_FFC_SHUTTER_MODE_OBJ_T shutterModeObj );
+                                               LEP_SYS_FFC_SHUTTER_MODE_OBJ_T shutterModeObj );
 
 extern LEP_RESULT LEP_GetSysFFCStatus( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
                                        LEP_SYS_STATUS_E_PTR ffcStatusPtr );
 
-extern LEP_RESULT LEP_RunSysFFCNormalization(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr);
+extern LEP_RESULT LEP_RunSysFFCNormalization( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr );
 
+extern LEP_RESULT LEP_GetSysGainMode( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                      LEP_SYS_GAIN_MODE_E_PTR gainModePtr );
+extern LEP_RESULT LEP_SetSysGainMode( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                      LEP_SYS_GAIN_MODE_E gainMode );
+
+extern LEP_RESULT LEP_GetSysFFCStates( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                       LEP_SYS_FFC_STATES_E_PTR ffcStatePtr );
+
+extern LEP_RESULT LEP_GetSysGainModeObj( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                         LEP_SYS_GAIN_MODE_OBJ_T_PTR gainModeObjPtr );
+extern LEP_RESULT LEP_SetSysGainModeObj( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                         LEP_SYS_GAIN_MODE_OBJ_T gainModeObj );
+
+extern LEP_RESULT LEP_GetSysBoresightValues( LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
+                                             LEP_SYS_BORESIGHT_VALUES_T_PTR boresightValuesPtr);
 
 /******************************************************************************/
    #ifdef __cplusplus
@@ -373,3 +477,5 @@ extern LEP_RESULT LEP_RunSysFFCNormalization(LEP_CAMERA_PORT_DESC_T_PTR portDesc
 
 #endif  /* _LEPTON_SYS_H_ */
 
+
+//+++++++++++++++++++++++++++ 
