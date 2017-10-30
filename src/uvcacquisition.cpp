@@ -199,6 +199,7 @@ void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
 
     // Notify connections of format change
     emit formatChanged(m_format);
+    emit videoSizeChanged(m_format.frameSize());
 
     /* Start the video stream. The library will call user function cb:
      *   cb(frame, (void*) 12345)

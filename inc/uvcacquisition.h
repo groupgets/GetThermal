@@ -34,11 +34,15 @@ public:
     Q_PROPERTY(DataFormatter* dataFormatter READ getDataFormatter() NOTIFY dataFormatterChanged)
     DataFormatter* getDataFormatter() { return &m_df; }
 
+    Q_PROPERTY(const QSize& videoSize READ getVideoSize NOTIFY videoSizeChanged)
+    const QSize& getVideoSize() { return m_format.frameSize(); }
+
 signals:
     void frameReady(const QVideoFrame &frame);
     void formatChanged(const QVideoSurfaceFormat &format);
     void cciChanged(AbstractCCInterface *format);
     void dataFormatterChanged(AbstractCCInterface *format);
+    void videoSizeChanged(const QSize &size);
 
 public slots:
     void setVideoFormat(const QVideoSurfaceFormat &format);

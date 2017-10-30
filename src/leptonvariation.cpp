@@ -1,4 +1,5 @@
 #include <QMutexLocker>
+#include <QTimer>
 #include "leptonvariation.h"
 #include "uvc_sdk.h"
 #include "LEPTON_SDK.h"
@@ -83,7 +84,13 @@ LeptonVariation::LeptonVariation(uvc_context_t *ctx,
     LEP_GetOemFlirPartNumber(&m_portDesc, &partNumber);
     serialNumber = pget<uint64_t, uint64_t>(LEP_GetSysFlirSerialNumber);
 
+    LEP_GetRadSpotmeterRoi(&m_portDesc, &m_spotmeterRoi);
+
     this->setObjectName("LeptonVariation");
+
+    m_periodicTimer = new QTimer(this);
+    connect(m_periodicTimer, SIGNAL(timeout()), this, SLOT(updateSpotmeter()));
+    m_periodicTimer->start(1000);
 }
 
 LeptonVariation::~LeptonVariation()
@@ -149,6 +156,20 @@ const QVideoSurfaceFormat LeptonVariation::getDefaultFormat()
     {
         return QVideoSurfaceFormat(m_sensorSize, QVideoFrame::Format_RGB24);
     }
+}
+
+void LeptonVariation::updateSpotmeter()
+{
+    emit radSpotmeterInKelvinX100Changed();
+}
+
+unsigned int LeptonVariation::getRadSpotmeterObjInKelvinX100()
+{
+    LEP_RAD_SPOTMETER_OBJ_KELVIN_T spotmeterObj;
+    if (LEP_GetRadSpotmeterObjInKelvinX100(&m_portDesc, &spotmeterObj) == LEP_OK)
+        return spotmeterObj.radSpotmeterValue;
+    else
+        return 0;
 }
 
 

@@ -93,6 +93,16 @@ public:
     SDK_ENUM_PROPERTY(POLARITY_E, vidPolarity, VidPolarity)
     SDK_ENUM_PROPERTY(VID_SBNUC_ENABLE_E, vidSbNucEnableState, VidSbNucEnableState)
 
+    Q_PROPERTY(unsigned int radSpotmeterInKelvinX100 READ getRadSpotmeterObjInKelvinX100 NOTIFY radSpotmeterInKelvinX100Changed)
+    unsigned int getRadSpotmeterObjInKelvinX100();
+
+    Q_PROPERTY(const QRect& radSpotmeterRoi READ getRadSpotmeterRoi NOTIFY radSpotmeterRoiChanged)
+    const QRect& getRadSpotmeterRoi() {
+        return QRect(m_spotmeterRoi.startCol, m_spotmeterRoi.startRow,
+                     m_spotmeterRoi.endCol - m_spotmeterRoi.startCol,
+                     m_spotmeterRoi.endRow - m_spotmeterRoi.startRow);
+    }
+
     SDK_ENUM_PROPERTY(RAD_TLINEAR_RESOLUTION_E, radTLinearResolution, RadTLinearResolution)
 
     SDK_ENUM_PROPERTY(SYS_GAIN_MODE_E, sysGainMode, SysGainMode)
@@ -140,11 +150,14 @@ signals:
     void vidSbNucEnableStateChanged(VID_SBNUC_ENABLE_E val);
 
     void radTLinearResolutionChanged(RAD_TLINEAR_RESOLUTION_E val);
+    void radSpotmeterInKelvinX100Changed();
+    void radSpotmeterRoiChanged();
 
     void sysGainModeChanged(SYS_GAIN_MODE_E val);
 
 public slots:
     virtual void performFfc();
+    void updateSpotmeter();
 
 private:
 
@@ -183,6 +196,9 @@ private:
     uvc_device_descriptor_t *desc;
     QSize m_sensorSize;
     QMutex m_mutex;
+    LEP_RAD_ROI_T m_spotmeterRoi;
+
+    QTimer *m_periodicTimer;
 
     uint64_t serialNumber;
     LEP_OEM_SW_VERSION_T swVers;

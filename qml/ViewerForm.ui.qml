@@ -48,6 +48,14 @@ Item {
                 anchors.fill: parent
                 fillMode: VideoOutput.PreserveAspectFit
                 source: player
+                VideoRoi {
+                    id: radRoi
+                    visible: acq.cci.supportsRadiometry
+                    acq: acq
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    roi: acq.cci.radSpotmeterRoi
+                }
             }
         }
 
@@ -60,8 +68,21 @@ Item {
             Layout.fillHeight: true
             visible: acq.cci.supportsRadiometry
 
+            SpotInfo {
+                id: spotInfo
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                acq: acq
+                farenheitTemps: rangeDisplay.farenheitTemps
+            }
+
             RangeDisplay {
-                anchors.fill: parent
+                id: rangeDisplay
+                anchors.top: spotInfo.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
                 acq: acq
             }
         }
