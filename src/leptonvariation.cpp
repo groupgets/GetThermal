@@ -162,6 +162,8 @@ const QVideoSurfaceFormat LeptonVariation::getDefaultFormat()
 void LeptonVariation::updateSpotmeter()
 {
     emit radSpotmeterInKelvinX100Changed();
+    emit sysAuxTemperatureKelvinChanged();
+    emit sysFpaTemperatureKelvinChanged();
 }
 
 unsigned int LeptonVariation::getRadSpotmeterObjInKelvinX100()

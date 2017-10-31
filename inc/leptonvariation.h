@@ -27,11 +27,19 @@ using namespace LEP;
                WRITE (bind_set<sdk_type, type>(LEP_Set##sdk_name, (bind(&LeptonVariation::name##Changed, _t, _1)))) \
                NOTIFY name##Changed)
 
+#define SDK_SIMPLE_RO_PROPERTY(type, sdk_type, name, sdk_name) \
+    Q_PROPERTY(type name \
+               READ (bind_get<sdk_type, type>(LEP_Get##sdk_name)) \
+               NOTIFY name##Changed)
+
 #define SDK_ENUM_PROPERTY(type, name, sdk_name) \
     SDK_SIMPLE_PROPERTY(type, LEP_##type, name, sdk_name)
 
 #define SDK_UINT16_PROPERTY(name, sdk_name) \
     SDK_SIMPLE_PROPERTY(unsigned int, uint16_t, name, sdk_name)
+
+#define SDK_UINT16_RO_PROPERTY(name, sdk_name) \
+    SDK_SIMPLE_RO_PROPERTY(unsigned int, uint16_t, name, sdk_name)
 
 class LeptonVariation : public AbstractCCInterface
 {
@@ -106,6 +114,8 @@ public:
     SDK_ENUM_PROPERTY(RAD_TLINEAR_RESOLUTION_E, radTLinearResolution, RadTLinearResolution)
 
     SDK_ENUM_PROPERTY(SYS_GAIN_MODE_E, sysGainMode, SysGainMode)
+    SDK_UINT16_RO_PROPERTY(sysAuxTemperatureKelvin, SysAuxTemperatureKelvin)
+    SDK_UINT16_RO_PROPERTY(sysFpaTemperatureKelvin, SysFpaTemperatureKelvin)
 
     /* board-specific properties */
 
@@ -154,6 +164,8 @@ signals:
     void radSpotmeterRoiChanged();
 
     void sysGainModeChanged(SYS_GAIN_MODE_E val);
+    void sysAuxTemperatureKelvinChanged();
+    void sysFpaTemperatureKelvinChanged();
 
 public slots:
     virtual void performFfc();

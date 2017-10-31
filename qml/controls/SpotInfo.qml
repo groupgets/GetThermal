@@ -9,12 +9,12 @@ Item {
     property UvcAcquisition acq: null
     property bool farenheitTemps: false
     property bool radiometryLowGain: acq.cci.radTLinearResolution == LEP_RAD_TLINEAR_RESOLUTION_E.LEP_RAD_RESOLUTION_0_1
+    width: 300
+    height: 150
 
-    width: 160
-    height: 60
 
     function ktof(val) {
-      return (1.8 * ktoc(val) + 32.0);
+        return (1.8 * ktoc(val) + 32.0);
     }
 
     function ktoc(val) {
@@ -34,20 +34,51 @@ Item {
         }
     }
 
-    GroupBox {
-        id: groupBox
+    Column {
+        id: column
         anchors.fill: parent
-        title: qsTr("Spot Temp")
 
-        Label {
-            id: labelSpot
-            x: -89
-            y: -14
-            text: localtemp(acq.cci.radSpotmeterInKelvinX100)
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+        GroupBox {
+            id: groupBox
+            anchors.right: parent.right
+            anchors.left: parent.left
+            title: qsTr("Spot Temp")
+
+            Label {
+                id: labelSpot
+                text: localtemp(acq.cci.radSpotmeterInKelvinX100)
+                anchors.horizontalCenter: parent.horizontalCenter
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
+
+        GroupBox {
+            id: groupBox2
+            anchors.right: parent.right
+            anchors.left: parent.left
+            title: qsTr("Camera Temp")
+
+            Column {
+                id: column1
+                anchors.fill: parent
+
+                Label {
+                    id: labelAux
+                    text: localtemp(acq.cci.sysAuxTemperatureKelvin)
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Label {
+                    id: labelFpa
+                    text: localtemp(acq.cci.sysFpaTemperatureKelvin)
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
         }
     }
 }
