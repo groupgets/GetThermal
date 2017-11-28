@@ -149,14 +149,7 @@ bool LeptonVariation::getSupportsRuntimeAgcChange() const
 
 const QVideoSurfaceFormat LeptonVariation::getDefaultFormat()
 {
-    if (!getSupportsHwPseudoColor() || getSupportsRadiometry())
-    {
-        return QVideoSurfaceFormat(m_sensorSize, QVideoFrame::Format_Y16);
-    }
-    else
-    {
-        return QVideoSurfaceFormat(m_sensorSize, QVideoFrame::Format_RGB24);
-    }
+    return QVideoSurfaceFormat(m_sensorSize, QVideoFrame::Format_Y16);
 }
 
 void LeptonVariation::updateSpotmeter()
