@@ -97,7 +97,7 @@ public:
     unsigned int getRadSpotmeterObjInKelvinX100();
 
     Q_PROPERTY(const QRect& radSpotmeterRoi READ getRadSpotmeterRoi NOTIFY radSpotmeterRoiChanged)
-    const QRect& getRadSpotmeterRoi() {
+    const QRect getRadSpotmeterRoi() {
         return QRect(m_spotmeterRoi.startCol, m_spotmeterRoi.startRow,
                      m_spotmeterRoi.endCol - m_spotmeterRoi.startCol,
                      m_spotmeterRoi.endRow - m_spotmeterRoi.startRow);

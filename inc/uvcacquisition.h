@@ -35,7 +35,7 @@ public:
     DataFormatter* getDataFormatter() { return &m_df; }
 
     Q_PROPERTY(const QSize& videoSize READ getVideoSize NOTIFY videoSizeChanged)
-    const QSize& getVideoSize() { return m_format.frameSize(); }
+    const QSize getVideoSize() { return m_format.frameSize(); }
 
 signals:
     void frameReady(const QVideoFrame &frame);
