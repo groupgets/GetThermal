@@ -22,6 +22,10 @@ QT_CONFIG -= no-pkg-config
 CONFIG += c++11 \
           link_pkgconfig
 
+MacBuild: {
+    PKG_CONFIG = /usr/local/bin/pkg-config
+}
+
 SOURCES += \
     src/main.cpp \
     src/uvcvideoproducer.cpp \
