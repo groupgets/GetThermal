@@ -45,8 +45,18 @@ To build the `libuvc` fork, you can run these shell commands:
 
 ## Build GetThermal
 
-GetThermal is a QT qmake project. So all you have to do now is fire up QTCreator, open the project file,
-and hit run. You can also build from the command line:
+GetThermal is a QT qmake project. So all you should have to do now is to fire up QTCreator, open the project file,
+and hit run. 
+
+### OSx Qt-Creator build prerequisites
+If Qt Creator fails to run the application due to errors with linking the proper ImageIO.framework or libjpeg version, go to Projects -> Run -> Run Environment and edit the DYLD_FRAMEWORK_PATH and DYLD_LIBRARY_PATH by adding
+
+        /System/Library/Frameworks/ImageIO.framework/Resources:
+
+to the beginning of the line.
+
+### Via Command Line
+You can also build from the command line:
 
     qmake # or depending on your installation, maybe ~/Qt/5.7/clang_64/bin/qmake 
     make
