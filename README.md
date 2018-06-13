@@ -1,4 +1,8 @@
-`GetThermal` is a cross-platform thermal camera viewer application.
+# GetThermal
+
+[![Build Status](https://travis-ci.org/groupgets/GetThermal.svg?branch=master)](https://travis-ci.org/groupgets/GetThermal)
+
+A cross-platform thermal camera viewer application.
 
 ![GetThermal screenshot](https://groupgets-files.s3.amazonaws.com/lepton/getthermal_app.png)
 
@@ -11,10 +15,11 @@ platform that runs QT 5.7+ and libusb should function with some effort.
 # Supported Cameras
 
 GetThermal supports all FLIR Lepton variants used with the USB
-[PureThermal 1 Smart I/O Module](https://groupgets.com/manufacturers/getlab/products/purethermal-1-flir-lepton-smart-i-o-module),
-including the Radiometric Lepton 2.5
+[PureThermal 1](https://groupgets.com/manufacturers/getlab/products/purethermal-1-flir-lepton-smart-i-o-module) or
+[PureThermal 2](https://groupgets.com/manufacturers/getlab/products/purethermal-2-flir-lepton-smart-i-o-module) Smart I/O Modules,
+including the Radiometric Lepton 2.5 and 3.5
 
-Preliminary support for FLIR Boson has been added and is under development.
+It also supports basic thermal data acquisition from [FLIR Boson](https://groupgets.com/manufacturers/flir/products/boson) 320 and 640.
 
 # Building
 
