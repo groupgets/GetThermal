@@ -67,3 +67,7 @@ before_script:
 
 script:
   - make -C "$TRAVIS_BUILD_DIR-build" all
+  - '[ "$TRAVIS_OS_NAME" != linux ] || mkdir -p "$TRAVIS_BUILD_DIR-build/release/package"'
+  - '[ "$TRAVIS_OS_NAME" != linux ] || pushd "$TRAVIS_BUILD_DIR-build/release/package"'
+  - '[ "$TRAVIS_OS_NAME" != linux ] || $TRAVIS_BUILD_DIR/deploy/create_linux_appimage.sh "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR-build/release"'
+  - '[ "$TRAVIS_OS_NAME" != linux ] || popd'
