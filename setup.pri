@@ -97,13 +97,6 @@ LinuxBuild {
             libQt5QuickWidgets.so.5 \
             libQt5XcbQpa.so.5
 
-        !contains(DEFINES, __rasp_pi2__) {
-            QT_LIB_LIST += \
-                libicudata.so.56 \
-                libicui18n.so.56 \
-                libicuuc.so.56
-        }
-
         for(QT_LIB, QT_LIB_LIST) {
             QMAKE_POST_LINK += && $$QMAKE_COPY --dereference $$[QT_INSTALL_LIBS]/$$QT_LIB $$DESTDIR/Qt/libs/
         }
@@ -111,7 +104,6 @@ LinuxBuild {
         # QT_INSTALL_PLUGINS
         QT_PLUGIN_LIST = \
             bearer \
-            iconengines \
             imageformats \
             platforminputcontexts \
             platforms

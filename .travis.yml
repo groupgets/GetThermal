@@ -1,0 +1,69 @@
+language: cpp
+
+os:
+  - linux
+  - osx
+
+dist: trusty
+
+compiler:
+  - clang
+  - gcc
+
+env:
+  global:
+   - secure: "QXa5MUcWCi9eKx2V4Cq8aA7TuF06LmPe553dsB7u5AVRoHQytYqgivPHYWzTwpY5cy2ksQbQvFW/HM0AFz9skvrMCian6pS7I9PkBIdNdyvJgwqdnImYH67Dg/KNogYaPTrBBI9RElzJHp1uGmZuLIuo9hXo+w8zGvGwGnjh+tKsQtaSEBRnj5CTRucI19JSfb7JcwrZowDldpeqYkCUccB6Ma+AEPfONX654O71v+4bqYG8S0qHEFF8bdU/HiMvwEHPgwNVWIOcLiF4xUIFwqwlFGfPIqi/fNY0S6dBmmNySLUT2c0gbcI11BQF8fvRcLk9tjLdKg4a9zYgYuWiQ9bZ++pZlRn0h25CJFdZxnU9Tsnh2/sNaSuXXFjpq/ORUNV5ngu2q3T0yZFfbe+40TSNQuplNUDKLYxzfZHBXXQPYv7Ru0hzbGk65hdjdKAnAIxR6lxwEHkTaU3mruUudFRtlGz/IRWWjDESpSh25x8GL1Ul06fzqdcEhVUQBY4cHXAiifcOho08GB2yP5xA3+9vUBPW1F80Boob5yMXpct+ZstlPb0O7mWBLHLv092q02VT6MlnzlGpP6j2L7XKRpnk7MnyOWt6KPANVqrMviLTEo/KAiK5joPD5pc2JNnnnid485JZTDcUuP6cSX2WhyhatK6Zqcg7OPaxxxszIkM="
+  matrix:
+    # - QT=57 BREW=ex   PPA=beineri/opt-qt571-trusty
+    # - QT=58 BREW=ex   PPA=beineri/opt-qt58-trusty
+    - QT=59 BREW=ex   PPA=beineri/opt-qt593-trusty
+    # - QT=510 BREW=@ex PPA=beineri/opt-qt-5.10.1-trusty
+
+matrix:
+  exclude:
+    - { os: osx, compiler: gcc }
+    - { os: linux, compiler: clang }
+
+addons:
+  coverity_scan:
+    project:
+      name: "groupgets/GetThermal"
+      description: "Build submitted via Travis CI"
+    notification_email: kurt@groupgets.com
+    build_command_prepend: >
+      cp -a "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR-scan" &&
+      pushd "$TRAVIS_BUILD_DIR-scan" &&
+      qmake -qt=qt5 -Wall -Wlogic -Wparser CONFIG+=debug_and_release
+    build_command: make all
+    branch_pattern: coverity_scan
+
+before_install:
+  - '[[ "$TRAVIS_OS_NAME" != linux || -z "$PPA" ]] || sudo add-apt-repository -y ppa:$PPA'
+  - '[ "$TRAVIS_OS_NAME" != linux ] || sudo apt-get -qy update'
+  - '[ "$TRAVIS_OS_NAME" != osx   ] || brew update'
+
+install:
+  - '[ "$TRAVIS_OS_NAME" != linux ] || sudo apt-get -qy install qt${QT}base qt${QT}xmlpatterns qt${QT}declarative qt${QT}quickcontrols2 qt${QT}multimedia libusb-1.0-0-dev'
+  - '[ "$TRAVIS_OS_NAME" != osx ] || brew install qt'
+  - '[ "$TRAVIS_OS_NAME" != osx ] || brew link --force qt'
+  - qmake -v
+
+before_script:
+  - '[[ "$TRAVIS_OS_NAME" != linux || "$CXX" != clang++ ]] || export QMAKESPEC=linux-clang'
+  - '[[ "$TRAVIS_OS_NAME" != linux || "$CXX" != g++     ]] || export QMAKESPEC=linux-g++'
+  - '[[ "$TRAVIS_OS_NAME" != osx   || "$CXX" != clang++ ]] || export QMAKESPEC=macx-clang'
+  - '[[ "$TRAVIS_OS_NAME" != osx   || "$CXX" != g++     ]] || export QMAKESPEC=macx-g++'
+  - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" != */opt-* ]] || . /opt/qt${QT}/bin/qt${QT}-env.sh'
+  - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" == */opt-* ]] || export QT_SELECT=qt5'
+  - pushd libuvc
+  - mkdir build
+  - pushd build
+  - cmake ..
+  - make
+  - popd
+  - popd
+  - mkdir -p "$TRAVIS_BUILD_DIR-build"
+  - qmake -o "$TRAVIS_BUILD_DIR-build" -r CONFIG+=release CONFIG+=installer "$TRAVIS_BUILD_DIR"
+
+script:
+  - make -C "$TRAVIS_BUILD_DIR-build" all
