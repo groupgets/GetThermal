@@ -33,7 +33,7 @@ addons:
     build_command_prepend: >
       cp -a "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR-scan" &&
       pushd "$TRAVIS_BUILD_DIR-scan" &&
-      qmake -qt=qt5 -Wall -Wlogic -Wparser CONFIG+=debug_and_release
+      qmake CONFIG+=debug_and_release
     build_command: make all
     branch_pattern: coverity_scan
 
