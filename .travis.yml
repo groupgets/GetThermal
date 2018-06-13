@@ -71,3 +71,26 @@ script:
   - '[ "$TRAVIS_OS_NAME" != linux ] || pushd "$TRAVIS_BUILD_DIR-build/release/package"'
   - '[ "$TRAVIS_OS_NAME" != linux ] || $TRAVIS_BUILD_DIR/deploy/create_linux_appimage.sh "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR-build/release"'
   - '[ "$TRAVIS_OS_NAME" != linux ] || popd'
+
+deploy:
+  - provider: s3
+    access_key_id: AKIAJGQ2AT747PZ7POLA
+    secret_access_key:
+      secure: nTrRPshAm2dTH7PFZU0qjs82xk8d02sBLrY6IUovdMkpDypO9ztv0TGcoo330F9q9PZMel9OmtzR6BGUz/O6tmxzs3quc7OO7QlidpzMSi3r9+MxfcpXbJ0XTeQyM+wCd8lo65DeHQCjjt5Ze3tM9kfp+E3TnJJ8Qtc6UIiQNbnK39a1GwHnXL4nseBxaTZRHGgKTJvkN9vV54q3795rlDXIH0wv1xQTjjBlHi/Fc1ciziZ+U9PTn/OtFTO7zrK0oDPlzUJJDlT9v2JLvFtTrNfgZgN2rTqhQRK9zcaZwmAzUcrAT8re9jnQPG46gG0TOnsHIaAR5cFSyRTw5Kbmx3wWSpHk8iDM0K0FHnzb1jPSI15TMQdx+etr8mHhRDsn74YP6SdGXqZMmnDtZmoQS7jfKkddNc+S8c/2c1/sUmihZoRstth5FmQ+eiflOyyfZCNgvYf1d+YBqMgrOM0TJtlaqOuJkz/1NiV+GEQSNjFoF9wbsWukS5rWj/h/OXv2e99vRWdRBcjNfHXsKS/rnNOG6rAUVaAdvqKO6e1wVlGNfOMQsGE1CddLZ/XOagbT/g7yWXhONKnE06n/GgPhzKoMFJR9kWwYxJKgdFXc4eTnOpafws/s/yIbcDUQWQfFAHD2jooko8vSb3IH+gPi+LWPV7n5WPIkjuDGF5nrVGw=
+    bucket: groupgets-ci
+    local-dir: ${TRAVIS_BUILD_DIR}-build/release/package
+    upload-dir: builds/${TRAVIS_BRANCH}
+    acl: public_read
+    skip_cleanup: true
+    on:
+      repo: groupgets/GetThermal
+      all_branches: true
+  - provider: releases
+    api_key:
+      secure: jTB9BnOADARnmOuhXv7eVXJhM3lIyb/hjnrqmdyrsJKFfzbASvMBCufaWtmsYMyJFMUUVIJ75XkNZ2fHgIkEikQEl8FytQT6G7s0WHZGnP+DSlRETFaZC5cK+nnYoPW9cK2n7Jp+QUPv5NOYiTJzScrnf4EfxPdC3smZNL07kpeWtuUQXHJ6PPhCHohFnUjX2x6n48vBK3S3Ys9unQgUlB238/4j+k2spZT3DGb5uZkiPbV4aEkKGH45u3v3e9js8pXzQJpzoMnWUJTLMSrwnnNWmHLaQc7eBAUbP4MVYOTQioLOFdFBGYGSoN+lDsMlhS1mBAXoqapRkhoROx/gFlhArC3QN1xhsSj6n4yDyBmXOUdRTgk4RCyBf9W8t5U6fXjZ/TTvN5P4ONk/cF3LXh/aVJctkJG/H2JMBkOqspUPaBjl+QPaOSEnu6hYNJXIArGRb/iuF1OK3EH9Uklyp7/yZDafJ8JvrRZpy0wsQXjM70a9yLQ1a7rbFkSeSgMoQKve44RzHjizhFk7MschI5SaN63xO5w6UUd44AQybojxC8gsoywCU4ZEJkSZwCV7IPGeaTe94bmBmqhjLbYnste8EKPaSNmbg3DRe5EOVvsYbpes/Mys3p8CHgoYyQ8LHIqhH+Q4fgxhcN9VvayKwyPcZaRvZjnPNe3HjThcNl8=
+    file_glob: true
+    file: "${TRAVIS_BUILD_DIR}-build/release/package/*"
+    skip_cleanup: true
+    on:
+      repo: groupgets/GetThermal
+      tags: true
