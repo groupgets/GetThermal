@@ -54,7 +54,6 @@ Item {
                     acq: acq
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    roi: acq.cci.radSpotmeterRoi
                 }
             }
         }

@@ -96,12 +96,13 @@ public:
     Q_PROPERTY(unsigned int radSpotmeterInKelvinX100 READ getRadSpotmeterObjInKelvinX100 NOTIFY radSpotmeterInKelvinX100Changed)
     unsigned int getRadSpotmeterObjInKelvinX100();
 
-    Q_PROPERTY(const QRect& radSpotmeterRoi READ getRadSpotmeterRoi NOTIFY radSpotmeterRoiChanged)
+    Q_PROPERTY(const QRect& radSpotmeterRoi READ getRadSpotmeterRoi WRITE setRadSpotmeterRoi NOTIFY radSpotmeterRoiChanged)
     const QRect getRadSpotmeterRoi() {
         return QRect(m_spotmeterRoi.startCol, m_spotmeterRoi.startRow,
                      m_spotmeterRoi.endCol - m_spotmeterRoi.startCol,
                      m_spotmeterRoi.endRow - m_spotmeterRoi.startRow);
     }
+    void setRadSpotmeterRoi(const QRect& roi);
 
     SDK_ENUM_PROPERTY(RAD_TLINEAR_RESOLUTION_E, radTLinearResolution, RadTLinearResolution)
 

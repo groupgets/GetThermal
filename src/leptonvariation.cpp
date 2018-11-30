@@ -173,6 +173,24 @@ unsigned int LeptonVariation::getRadSpotmeterObjInKelvinX100()
         return 0;
 }
 
+void LeptonVariation::setRadSpotmeterRoi(const QRect& roi)
+{
+    LEP_RAD_ROI_T newSpot = {
+        static_cast<unsigned short>(roi.y()),
+        static_cast<unsigned short>(roi.x()),
+        static_cast<unsigned short>(roi.y() + roi.height()),
+        static_cast<unsigned short>(roi.x() + roi.width())
+    };
+
+    if (LEP_SetRadSpotmeterRoi(&m_portDesc, newSpot) != LEP_OK) {
+        printf("LEP_SetRadSpotmeterRoi failed");
+        return;
+    }
+
+    m_spotmeterRoi = newSpot;
+    emit radSpotmeterRoiChanged();
+    emit radSpotmeterInKelvinX100Changed();
+}
 
 void LeptonVariation::performFfc()
 {
