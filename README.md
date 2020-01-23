@@ -23,30 +23,20 @@ It also supports basic thermal data acquisition from [FLIR Boson](https://groupg
 
 # Building
 
-Prerequisites: You will need `libusb-1.0` and [CMake](http://www.cmake.org/) installed. You will
-also need [QT 5.7](https://www.qt.io/download-open-source/) or newer. On OS X, these packages should
-be available via Homebrew.
+Prerequisites: You will need `libusb-1.0` and [libuvc](https://github.com/libuvc/libuvc) installed. You will
+also need [QT 5.7](https://www.qt.io/download-open-source/) or newer. On MacOS these packages should
+be available via Homebrew. On Debian-based systems you can find them in apt.
 
-`GetThermal` uses a modified version of `libuvc` for camera image download and control. Even if
-you have `libuvc` on your system already, you will have to build the fork.
+`GetThermal` no longer uses a modified version of `libuvc`.
+
+## Get build prerequisites
+
+    sudo apt install libusb-1.0-0-dev libuvc-dev
 
 ## Get the source code
 
     git clone https://github.com/groupgets/GetThermal
     cd GetThermal
-
-## Get libuvc and build
-
-To build the `libuvc` fork, you can run these shell commands:
-
-    git submodule init
-    git submodule update
-    pushd libuvc
-    mkdir build
-    cd build
-    cmake ..
-    make
-    popd
 
 ## Build GetThermal
 
