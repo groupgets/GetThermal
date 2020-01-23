@@ -97,21 +97,12 @@ HEADERS += \
 DISTFILES += \
     qml/qtquickcontrols2.conf
 
-PKGCONFIG += libusb-1.0
+PKGCONFIG += libusb-1.0 libuvc
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/libuvc/build/release/ -luvc
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/libuvc/build/debug/ -luvc
-else:macos: LIBS += -L$$PWD/libuvc/build/ -luvc
-else:unix: LIBS += -L$$PWD/libuvc/build/ -luvcstatic
-
 INCLUDEPATH += $$PWD/lepton_sdk/Inc \
-               $$PWD/libuvc/build/include \
-               $$PWD/libuvc/include \
                $$PWD/inc
-DEPENDPATH += $$PWD/libuvc/build/include \
-              $$PWD/libuvc/include
 
 MacBuild {
     QMAKE_INFO_PLIST    = Custom-Info.plist
