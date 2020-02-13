@@ -31,11 +31,6 @@ iOSBuild | MacBuild {
     QMAKE_POST_LINK += && /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $${MAC_BUILD}\" $$DESTDIR/$${TARGET}.app/Contents/Info.plist
 }
 
-MacBuild {
-    # Copy non-standard frameworks into app package
-    QMAKE_POST_LINK += && rsync -a --delete $$BASEDIR/libuvc/build/*.dylib $$DESTDIR/$${TARGET}.app/Contents/
-}
-
 WindowsBuild {
     BASEDIR_WIN = $$replace(BASEDIR, "/", "\\")
     DESTDIR_WIN = $$replace(DESTDIR, "/", "\\")
