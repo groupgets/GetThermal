@@ -55,11 +55,14 @@ before_script:
   - '[[ "$TRAVIS_OS_NAME" != osx   || "$CXX" != g++     ]] || export QMAKESPEC=macx-g++'
   - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" != */opt-* ]] || . /opt/qt${QT}/bin/qt${QT}-env.sh'
   - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" == */opt-* ]] || export QT_SELECT=qt5'
+  - export LIBUVC_PREFIX=/usr
+  - '[ "$TRAVIS_OS_NAME" != osx ] || export LIBUVC_PREFIX=/usr/local'
   - pushd libuvc
   - mkdir build
   - pushd build
-  - cmake ..
+  - cmake -DCMAKE_BUILD_TARGET=Shared -DCMAKE_INSTALL_PREFIX=$LIBUVC_PREFIX -DCMAKE_INSTALL_NAME_DIR=$LIBUVC_PREFIX/lib ..
   - make
+  - sudo make install
   - popd
   - popd
   - mkdir -p "$TRAVIS_BUILD_DIR-build"
