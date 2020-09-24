@@ -58,5 +58,16 @@ Item {
                 }
             }
         }
+        Rectangle {
+            id: maxpoint
+            x: acq.dataFormatter.maxPoint.x * (scaledvid.width / videoSize.width)
+            y: acq.dataFormatter.maxPoint.y * (scaledvid.width / videoSize.width)
+            color: "#80ff0000"
+            border.color: "#80000000"
+            width: roi.width * (scaledvid.width / videoSize.width)
+            height: roi.height * (scaledvid.height / videoSize.height)
+            visible: false
+
+          }
     }
 }

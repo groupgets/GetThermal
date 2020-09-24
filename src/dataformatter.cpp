@@ -58,15 +58,15 @@ void DataFormatter::FindMinMax(const uvc_frame_t *input, QPoint &minPoint, uint1
             if (val > maxVal)
             {
                 maxVal = val;
-                maxPoint.setX(i);
-                maxPoint.setY(j);
+                maxPoint.setX(j);
+                maxPoint.setY(i);
             }
 
             if (val < minVal)
             {
                 minVal = val;
-                minPoint.setX(i);
-                minPoint.setY(j);
+                minPoint.setX(j);
+                minPoint.setY(i);
             }
         }
     }
@@ -77,7 +77,7 @@ void DataFormatter::AutoGain(uvc_frame_t *input_output)
     uint16_t minval = 0, maxval = 0;
     QPoint minpoint, maxpoint;
     FindMinMax(input_output, minpoint, minval, maxpoint, maxval);
-    FixedGain(input_output, minval, maxval);
+    FixedGain(input_output, minpoint, minval, maxpoint, maxval);
 
     /*
     Ptr<CLAHE> clahe = createCLAHE();
@@ -90,7 +90,7 @@ void DataFormatter::AutoGain(uvc_frame_t *input_output)
     */
 }
 
-void DataFormatter::FixedGain(uvc_frame_t *input_output, ushort minval, ushort maxval)
+void DataFormatter::FixedGain(uvc_frame_t *input_output, QPoint minpoint, ushort minval, QPoint maxpoint, ushort maxval)
 {
     uint8_t bytes_per_pixel = 0;
 
@@ -141,6 +141,18 @@ void DataFormatter::FixedGain(uvc_frame_t *input_output, ushort minval, ushort m
     {
         m_maxVal = maxval;
         maxValChanged(maxval);
+    }
+
+    if (m_minPoint != minpoint)
+    {
+        m_minPoint = minpoint;
+        minPointChanged(minpoint);
+    }
+
+    if (m_maxPoint != maxpoint)
+    {
+        m_maxPoint = maxpoint;
+        maxPointChanged(maxpoint);
     }
 
 }

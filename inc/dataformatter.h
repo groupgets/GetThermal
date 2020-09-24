@@ -25,7 +25,7 @@ public:
 
     void FindMinMax(const uvc_frame_t *input, QPoint &minPoint, uint16_t &minVal, QPoint &maxPoint, uint16_t &maxVal) const;
     void AutoGain(uvc_frame_t *input_output);
-    void FixedGain(uvc_frame_t *input_output, ushort minval, ushort maxval);
+    void FixedGain(uvc_frame_t *input_output, QPoint minpoint, ushort minval, QPoint maxpoint, ushort maxval);
     void Colorize(const uvc_frame_t *input, QVideoFrame &output) const;
 
     static const colormap_t* getPalette(Palette palette);
@@ -36,16 +36,25 @@ public:
     Q_PROPERTY(ushort maxVal READ getMaxVal NOTIFY maxValChanged)
     ushort getMaxVal() const { return m_maxVal; }
 
+    Q_PROPERTY(QPoint minPoint READ getMinPoint NOTIFY minPointChanged)
+    QPoint getMinPoint() const { return m_minPoint; }
+
+    Q_PROPERTY(QPoint maxPoint READ getMaxPoint NOTIFY maxPointChanged)
+    QPoint getMaxPoint() const { return m_maxPoint; }
+
 signals:
 
     void psuedocolorPaletteChanged(Palette val);
     void minValChanged(ushort val);
     void maxValChanged(ushort val);
+    void minPointChanged(QPoint point);
+    void maxPointChanged(QPoint point);
 
 private:
 
     Palette m_pseudocolor_palette;
     ushort m_minVal, m_maxVal;
+    QPoint m_minPoint, m_maxPoint;
 };
 
 #endif // DATAFORMATTER_H
