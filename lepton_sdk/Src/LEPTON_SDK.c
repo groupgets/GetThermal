@@ -64,7 +64,7 @@
 /** INCLUDE FILES                                                            **/
 /******************************************************************************/
 #include "LEPTON_SDK.h"
-
+#include "uvc_sdk.h"
 
 
 #ifdef LEP_USE_DYNAMIC_ALLOCATION
