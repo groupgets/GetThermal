@@ -83,7 +83,7 @@ LinuxBuild {
             libQt5DBus.so.5 \
             libQt5Gui.so.5 \
             libQt5Multimedia.so.5 \
-            libQt5MultimediaQuick_p.so.5 \
+            libQt5MultimediaQuick.so.5 \
             libQt5OpenGL.so.5 \
             libQt5Qml.so.5 \
             libQt5Quick.so.5 \

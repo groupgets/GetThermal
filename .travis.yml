@@ -4,7 +4,8 @@ os:
   - linux
   - osx
 
-dist: trusty
+dist: xenial
+osx_image: xcode11.3
 
 compiler:
   - clang
@@ -13,11 +14,6 @@ compiler:
 env:
   global:
    - secure: "QXa5MUcWCi9eKx2V4Cq8aA7TuF06LmPe553dsB7u5AVRoHQytYqgivPHYWzTwpY5cy2ksQbQvFW/HM0AFz9skvrMCian6pS7I9PkBIdNdyvJgwqdnImYH67Dg/KNogYaPTrBBI9RElzJHp1uGmZuLIuo9hXo+w8zGvGwGnjh+tKsQtaSEBRnj5CTRucI19JSfb7JcwrZowDldpeqYkCUccB6Ma+AEPfONX654O71v+4bqYG8S0qHEFF8bdU/HiMvwEHPgwNVWIOcLiF4xUIFwqwlFGfPIqi/fNY0S6dBmmNySLUT2c0gbcI11BQF8fvRcLk9tjLdKg4a9zYgYuWiQ9bZ++pZlRn0h25CJFdZxnU9Tsnh2/sNaSuXXFjpq/ORUNV5ngu2q3T0yZFfbe+40TSNQuplNUDKLYxzfZHBXXQPYv7Ru0hzbGk65hdjdKAnAIxR6lxwEHkTaU3mruUudFRtlGz/IRWWjDESpSh25x8GL1Ul06fzqdcEhVUQBY4cHXAiifcOho08GB2yP5xA3+9vUBPW1F80Boob5yMXpct+ZstlPb0O7mWBLHLv092q02VT6MlnzlGpP6j2L7XKRpnk7MnyOWt6KPANVqrMviLTEo/KAiK5joPD5pc2JNnnnid485JZTDcUuP6cSX2WhyhatK6Zqcg7OPaxxxszIkM="
-  matrix:
-    # - QT=57 BREW=ex   PPA=beineri/opt-qt571-trusty
-    # - QT=58 BREW=ex   PPA=beineri/opt-qt58-trusty
-    - QT=59 BREW=ex   PPA=beineri/opt-qt593-trusty
-    # - QT=510 BREW=@ex PPA=beineri/opt-qt-5.10.1-trusty
 
 matrix:
   exclude:
@@ -36,43 +32,43 @@ addons:
       qmake CONFIG+=debug_and_release
     build_command: make all
     branch_pattern: coverity_scan
-
-before_install:
-  - '[[ "$TRAVIS_OS_NAME" != linux || -z "$PPA" ]] || sudo add-apt-repository -y ppa:$PPA'
-  - '[ "$TRAVIS_OS_NAME" != linux ] || sudo apt-get -qy update'
-  - '[ "$TRAVIS_OS_NAME" != osx   ] || brew update'
+  apt:
+    sources:
+    - sourceline: ppa:beineri/opt-qt-5.15.2-xenial
+    packages:
+    - qt515base
+    - qt515xmlpatterns
+    - qt515declarative
+    - qt515quickcontrols2
+    - qt515multimedia
+    - libusb-1.0-0-dev
+    - libgl1-mesa-dev
+  homebrew:
+    packages:
+    - libusb
+    - qt5
 
 install:
-  - '[ "$TRAVIS_OS_NAME" != linux ] || sudo apt-get -qy install qt${QT}base qt${QT}xmlpatterns qt${QT}declarative qt${QT}quickcontrols2 qt${QT}multimedia libusb-1.0-0-dev'
-  - '[ "$TRAVIS_OS_NAME" != osx ] || brew install qt'
-  - '[ "$TRAVIS_OS_NAME" != osx ] || brew link --force qt'
-  - qmake -v
+  - '[ "$TRAVIS_OS_NAME" != osx ] || brew link --force qt5'
+  - '[ "$TRAVIS_OS_NAME" != osx ] || brew install --HEAD libuvc'
 
 before_script:
   - '[[ "$TRAVIS_OS_NAME" != linux || "$CXX" != clang++ ]] || export QMAKESPEC=linux-clang'
   - '[[ "$TRAVIS_OS_NAME" != linux || "$CXX" != g++     ]] || export QMAKESPEC=linux-g++'
   - '[[ "$TRAVIS_OS_NAME" != osx   || "$CXX" != clang++ ]] || export QMAKESPEC=macx-clang'
   - '[[ "$TRAVIS_OS_NAME" != osx   || "$CXX" != g++     ]] || export QMAKESPEC=macx-g++'
-  - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" != */opt-* ]] || . /opt/qt${QT}/bin/qt${QT}-env.sh'
-  - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" == */opt-* ]] || export QT_SELECT=qt5'
-  - export LIBUVC_PREFIX=/usr
-  - '[ "$TRAVIS_OS_NAME" != osx ] || export LIBUVC_PREFIX=/usr/local'
-  - pushd libuvc
-  - mkdir build
-  - pushd build
-  - cmake -DCMAKE_BUILD_TARGET=Shared -DCMAKE_INSTALL_PREFIX=$LIBUVC_PREFIX -DCMAKE_INSTALL_NAME_DIR=$LIBUVC_PREFIX/lib ..
-  - make
-  - sudo make install
-  - popd
-  - popd
-  - mkdir -p "$TRAVIS_BUILD_DIR-build"
-  - qmake -o "$TRAVIS_BUILD_DIR-build" -r CONFIG+=release CONFIG+=installer "$TRAVIS_BUILD_DIR"
+  - '[[ "$TRAVIS_OS_NAME" != linux ]] || . /opt/qt515/bin/qt515-env.sh'
+  - '[[ "$TRAVIS_OS_NAME" != linux ]] || export LIBUVC_PREFIX=/usr'
+  - '[[ "$TRAVIS_OS_NAME" != linux ]] || ${TRAVIS_BUILD_DIR}/deploy/libuvc_build.sh'
+  - qmake -v
+  - mkdir -p "${TRAVIS_JOB_NUMBER}-build"
+  - qmake -o "${TRAVIS_JOB_NUMBER}-build" -r CONFIG+=release CONFIG+=installer "${TRAVIS_BUILD_DIR}"
 
 script:
-  - make -C "$TRAVIS_BUILD_DIR-build" all
-  - '[ "$TRAVIS_OS_NAME" != linux ] || mkdir -p "$TRAVIS_BUILD_DIR-build/release/package"'
-  - '[ "$TRAVIS_OS_NAME" != linux ] || pushd "$TRAVIS_BUILD_DIR-build/release/package"'
-  - '[ "$TRAVIS_OS_NAME" != linux ] || $TRAVIS_BUILD_DIR/deploy/create_linux_appimage.sh "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR-build/release"'
+  - make -C "${TRAVIS_JOB_NUMBER}-build" all
+  - '[ "$TRAVIS_OS_NAME" != linux ] || mkdir -p "${TRAVIS_JOB_NUMBER}-build/release/package"'
+  - '[ "$TRAVIS_OS_NAME" != linux ] || pushd "${TRAVIS_JOB_NUMBER}-build/release/package"'
+  - '[ "$TRAVIS_OS_NAME" != linux ] || ${TRAVIS_BUILD_DIR}/deploy/create_linux_appimage.sh "${TRAVIS_BUILD_DIR}" "${TRAVIS_BUILD_DIR}/${TRAVIS_JOB_NUMBER}-build/release"'
   - '[ "$TRAVIS_OS_NAME" != linux ] || popd'
 
 deploy:
@@ -81,7 +77,7 @@ deploy:
     secret_access_key:
       secure: nTrRPshAm2dTH7PFZU0qjs82xk8d02sBLrY6IUovdMkpDypO9ztv0TGcoo330F9q9PZMel9OmtzR6BGUz/O6tmxzs3quc7OO7QlidpzMSi3r9+MxfcpXbJ0XTeQyM+wCd8lo65DeHQCjjt5Ze3tM9kfp+E3TnJJ8Qtc6UIiQNbnK39a1GwHnXL4nseBxaTZRHGgKTJvkN9vV54q3795rlDXIH0wv1xQTjjBlHi/Fc1ciziZ+U9PTn/OtFTO7zrK0oDPlzUJJDlT9v2JLvFtTrNfgZgN2rTqhQRK9zcaZwmAzUcrAT8re9jnQPG46gG0TOnsHIaAR5cFSyRTw5Kbmx3wWSpHk8iDM0K0FHnzb1jPSI15TMQdx+etr8mHhRDsn74YP6SdGXqZMmnDtZmoQS7jfKkddNc+S8c/2c1/sUmihZoRstth5FmQ+eiflOyyfZCNgvYf1d+YBqMgrOM0TJtlaqOuJkz/1NiV+GEQSNjFoF9wbsWukS5rWj/h/OXv2e99vRWdRBcjNfHXsKS/rnNOG6rAUVaAdvqKO6e1wVlGNfOMQsGE1CddLZ/XOagbT/g7yWXhONKnE06n/GgPhzKoMFJR9kWwYxJKgdFXc4eTnOpafws/s/yIbcDUQWQfFAHD2jooko8vSb3IH+gPi+LWPV7n5WPIkjuDGF5nrVGw=
     bucket: groupgets-ci
-    local-dir: ${TRAVIS_BUILD_DIR}-build/release/package
+    local-dir: ${TRAVIS_JOB_NUMBER}-build/release/package
     upload-dir: builds/${TRAVIS_BRANCH}
     acl: public_read
     skip_cleanup: true
@@ -92,7 +88,7 @@ deploy:
     api_key:
       secure: jTB9BnOADARnmOuhXv7eVXJhM3lIyb/hjnrqmdyrsJKFfzbASvMBCufaWtmsYMyJFMUUVIJ75XkNZ2fHgIkEikQEl8FytQT6G7s0WHZGnP+DSlRETFaZC5cK+nnYoPW9cK2n7Jp+QUPv5NOYiTJzScrnf4EfxPdC3smZNL07kpeWtuUQXHJ6PPhCHohFnUjX2x6n48vBK3S3Ys9unQgUlB238/4j+k2spZT3DGb5uZkiPbV4aEkKGH45u3v3e9js8pXzQJpzoMnWUJTLMSrwnnNWmHLaQc7eBAUbP4MVYOTQioLOFdFBGYGSoN+lDsMlhS1mBAXoqapRkhoROx/gFlhArC3QN1xhsSj6n4yDyBmXOUdRTgk4RCyBf9W8t5U6fXjZ/TTvN5P4ONk/cF3LXh/aVJctkJG/H2JMBkOqspUPaBjl+QPaOSEnu6hYNJXIArGRb/iuF1OK3EH9Uklyp7/yZDafJ8JvrRZpy0wsQXjM70a9yLQ1a7rbFkSeSgMoQKve44RzHjizhFk7MschI5SaN63xO5w6UUd44AQybojxC8gsoywCU4ZEJkSZwCV7IPGeaTe94bmBmqhjLbYnste8EKPaSNmbg3DRe5EOVvsYbpes/Mys3p8CHgoYyQ8LHIqhH+Q4fgxhcN9VvayKwyPcZaRvZjnPNe3HjThcNl8=
     file_glob: true
-    file: "${TRAVIS_BUILD_DIR}-build/release/package/*"
+    file: "${TRAVIS_JOB_NUMBER}-build/release/package/*"
     skip_cleanup: true
     on:
       repo: groupgets/GetThermal

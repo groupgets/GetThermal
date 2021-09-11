@@ -99,7 +99,7 @@ DISTFILES += \
 
 PKGCONFIG += libusb-1.0 libuvc
 
-QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.14
 
 INCLUDEPATH += $$PWD/lepton_sdk/Inc \
                $$PWD/inc

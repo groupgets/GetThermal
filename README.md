@@ -42,19 +42,10 @@ be available via Homebrew. On Debian-based systems you can find them in apt.
 
 ### MacOS
 
-Note that Qt 5.x is required, and Qt 6.x (brew package `qt`) is not supported, and can interfere with the build. If you encounter problems building, uninstall package `qt`
+Note that Qt 5.x is required, and Qt 6.x (brew package `qt`) is not supported, and can interfere with the build. If you encounter problems building, uninstall package `qt`. Also, Homebrew's stable libuvc is out of date, so it must be build from git.
 
     brew install qt@5 libusb
-
-The Mac installation also requires building libuvc from source, since the homebrew version is out of date.
-
-    git submodule update --init
-    cd libuvc
-    mkdir build
-    cd build
-    cmake ..
-    make -j 8
-    make install
+    brew install --HEAD libuvc
 
 ## Build GetThermal
 
