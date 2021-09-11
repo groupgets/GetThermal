@@ -29,26 +29,37 @@ be available via Homebrew. On Debian-based systems you can find them in apt.
 
 `GetThermal` no longer uses a modified version of `libuvc`.
 
-## Get build prerequisites
-
-    sudo apt install libusb-1.0-0-dev libuvc-dev
-
 ## Get the source code
 
     git clone https://github.com/groupgets/GetThermal
     cd GetThermal
 
+## Install build prerequisites
+
+### Linux
+
+    sudo apt install libusb-1.0-0-dev libuvc-dev
+
+### MacOS
+
+Note that Qt 5.x is required, and Qt 6.x (brew package `qt`) is not supported, and can interfere with the build. If you encounter problems building, uninstall package `qt`
+
+    brew install qt@5 libusb
+
+The Mac installation also requires building libuvc from source, since the homebrew version is out of date.
+
+    git submodule update --init
+    cd libuvc
+    mkdir build
+    cd build
+    cmake ..
+    make -j 8
+    make install
+
 ## Build GetThermal
 
 GetThermal is a QT qmake project. So all you should have to do now is to fire up QTCreator, open the project file,
-and hit run. 
-
-### OSx Qt-Creator build prerequisites
-If Qt Creator fails to run the application due to errors with linking the proper ImageIO.framework or libjpeg version, go to Projects -> Run -> Run Environment and edit the DYLD_FRAMEWORK_PATH and DYLD_LIBRARY_PATH by adding
-
-        /System/Library/Frameworks/ImageIO.framework/Resources:
-
-to the beginning of the line.
+and hit run.
 
 ### Via Command Line
 You can also build from the command line:
