@@ -115,7 +115,7 @@ void UvcAcquisition::init()
 
     /* Print out a message containing all the information that libuvc
      * knows about the device */
-    uvc_print_diag(devh, stderr);
+    // uvc_print_diag(devh, stderr);
 
     uvc_device_descriptor_t *desc;
     uvc_get_device_descriptor(dev, &desc);
