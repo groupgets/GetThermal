@@ -150,13 +150,13 @@ void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
     switch(format.pixelFormat())
     {
     case QVideoFrame::Format_YUV420P:
-        uvcFormat = UVC_FRAME_FORMAT_I420;
+        uvcFormat = UVC_FRAME_FORMAT_BA81;
         break;
     case QVideoFrame::Format_RGB24:
         uvcFormat = UVC_FRAME_FORMAT_RGB;
         break;
     case QVideoFrame::Format_Y16:
-        uvcFormat = UVC_FRAME_FORMAT_Y16;
+        uvcFormat = UVC_FRAME_FORMAT_GRAY16;
         break;
     default:
         uvcFormat = UVC_FRAME_FORMAT_UNKNOWN;
