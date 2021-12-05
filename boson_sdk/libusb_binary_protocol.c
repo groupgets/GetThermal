@@ -1,5 +1,5 @@
 //#include "UART_HalfDuplex.h"
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 #include "flirCRC.h"
 #include "flirChannels.h"
 

@@ -15,7 +15,7 @@
 #ifndef UART_CONNECTOR_H
 #define UART_CONNECTOR_H
 
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 #include <stdint.h>
 #include "ReturnCodes.h"
 
