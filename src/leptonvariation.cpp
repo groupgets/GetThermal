@@ -1,5 +1,7 @@
 #include <QMutexLocker>
 #include <QTimer>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 #include "leptonvariation.h"
 #include "uvc_sdk.h"
 #include "LEPTON_SDK.h"
@@ -123,9 +125,23 @@ const QString LeptonVariation::getOemDspSoftwareVersion()
     return QString::asprintf("%d.%d.%d", swVers.dsp_major, swVers.dsp_minor, swVers.dsp_build);
 }
 
-const QString LeptonVariation::getPtFirmwareVersion() const
+const QString LeptonVariation::getPtSerialNumber() const
 {
     return QString::asprintf("%s", desc->serialNumber);
+}
+
+const QString LeptonVariation::getPtFirmwareVersion() const
+{
+    // Newer versions have the verison number in the product string, look here first
+    QRegularExpression re("\\(fw:(\\S+)\\)$");
+    QRegularExpressionMatch match = re.match(desc->product);
+    if (match.hasMatch()) {
+        QString matched = match.captured(1);
+        return matched;
+    }
+    else {
+        return QString::asprintf("%s", desc->serialNumber);
+    }
 }
 
 bool LeptonVariation::getSupportsHwPseudoColor() const

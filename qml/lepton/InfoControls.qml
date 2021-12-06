@@ -4,55 +4,88 @@ import GetThermal 1.0
 
 Item {
     id: root
-    width: 200
+    width: 300
     property UvcAcquisition acq: null
 
-    GroupBox {
-        id: groupBox1
-        clip: true
+    Grid {
+        id: grid
 
-        anchors.margins: 5
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.left: parent.left
-        title: qsTr("Lepton")
+        columns: 1
+        anchors.fill: parent
+        spacing: 10
+        flow: Grid.TopToBottom
 
-        Grid {
-            id: grid
+        GroupBox {
+            id: groupBox1
+            clip: true
 
-            columns: 1
-            rows: 8
-            anchors.fill: parent
-            spacing: 10
-            flow: Grid.TopToBottom
+            width: parent.width
+            title: qsTr("Lepton")
 
-            Label {
-                id: labelPartNumber
-                text: qsTr("Part: ") + acq.cci.oemFlirPartNumber
-            }
+            Grid {
+                id: grid2
 
-            Label {
-                id: labelSerialNumber
-                text: qsTr("Serial Number: ") + acq.cci.sysFlirSerialNumber
-            }
+                columns: 1
+                spacing: 10
+                flow: Grid.TopToBottom
 
-            Label {
-                id: labelGppSoftwareVers
-                text: qsTr("GPP Version: ") + acq.cci.oemGppSoftwareVersion
-            }
+                Label {
+                    id: labelPartNumber
+                    text: qsTr("Part: ") + acq.cci.oemFlirPartNumber
+                }
 
-            Label {
-                id: labelDspSoftwareVers
-                text: qsTr("DSP Version: ") + acq.cci.oemDspSoftwareVersion
-            }
+                Label {
+                    id: labelSerialNumber
+                    text: qsTr("Serial: ") + acq.cci.sysFlirSerialNumber
+                }
 
-            Label {
-                id: labelPtFirwmareVers
-                text: qsTr("PT1 FW Version: ") + acq.cci.ptFirmwareVersion
+                Label {
+                    id: labelGppSoftwareVers
+                    text: qsTr("GPP Version: ") + acq.cci.oemGppSoftwareVersion
+                }
+
+                Label {
+                    id: labelDspSoftwareVers
+                    text: qsTr("DSP Version: ") + acq.cci.oemDspSoftwareVersion
+                }
             }
         }
 
+        GroupBox {
+            id: groupBox2
+            clip: true
 
+            width: parent.width
+            title: qsTr("PureThermal")
+
+            Grid {
+                id: grid3
+
+                columns: 1
+                spacing: 10
+                flow: Grid.TopToBottom
+
+                Label {
+                    id: labelPtFirwmareVers
+                    text: qsTr("Version: ") + acq.cci.ptFirmwareVersion
+                }
+
+                Label {
+                    id: labelPtSerialNumber
+                    text: qsTr("Serial: ") + acq.cci.ptSerialNumber
+                    wrapMode: Text.WordWrap
+                    ToolTip.text: text
+                    ToolTip.visible: ma.containsMouse
+                    MouseArea {
+                        id: ma
+                        anchors.fill: parent
+                        hoverEnabled: true
+                    }
+                }
+            }
+
+
+        }
     }
 
 

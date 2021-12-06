@@ -110,6 +110,9 @@ public:
 
     /* board-specific properties */
 
+    Q_PROPERTY(const QString ptSerialNumber READ getPtSerialNumber)
+    const QString getPtSerialNumber() const;
+
     Q_PROPERTY(const QString ptFirmwareVersion READ getPtFirmwareVersion)
     const QString getPtFirmwareVersion() const;
 
