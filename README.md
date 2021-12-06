@@ -42,9 +42,18 @@ be available via Homebrew. On Debian-based systems you can find them in apt.
 
 ### MacOS
 
-Note that Qt 5.x is required, and Qt 6.x (brew package `qt`) is not supported, and can interfere with the build. If you encounter problems building, uninstall package `qt`. Also, Homebrew's stable libuvc is out of date, so it must be build from git.
+Note that Qt 5.x is required, and Qt 6.x (brew package `qt`) is not supported, and can interfere with the build. If you encounter problems building, uninstall package `qt`.
 
-    brew install qt@5 libusb
+MacOS 12 creates some conflicts with cameras handled via libuvc for applications without
+special entitlements. For now, this means that in order to use this application, the binary must
+be run with sudo. At the time of this writing, in order for even this workaround to function, libusb
+must be installed from the git version as noted below.
+
+Finally, Homebrew's stable libuvc is out of date, so it must also be built from git.
+
+    brew install qt@5
+    brew unlink libusb
+    brew install --HEAD libusb
     brew install --HEAD libuvc
 
 ## Build GetThermal
