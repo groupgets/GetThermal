@@ -153,7 +153,7 @@ void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
         uvcFormat = UVC_FRAME_FORMAT_NV12;
         break;
     case QVideoFrame::Format_RGB24:
-        uvcFormat = UVC_FRAME_FORMAT_RGB;
+        uvcFormat = UVC_FRAME_FORMAT_BGR;
         break;
     case QVideoFrame::Format_Y16:
         uvcFormat = UVC_FRAME_FORMAT_GRAY16;
@@ -168,13 +168,13 @@ void UvcAcquisition::setVideoFormat(const QVideoSurfaceFormat &format)
                 uvcFormat,
                 format.frameWidth(), format.frameHeight(), 0);
 
-    /* Print out the result */
-    uvc_print_stream_ctrl(&ctrl, stderr);
-
     if (res < 0) {
-        uvc_perror(res, "get_mode"); /* device doesn't provide a matching stream */
+        qWarning("UVC get stream failed: %s", uvc_strerror(res));
         return;
     }
+
+    /* Print out the result */
+    uvc_print_stream_ctrl(&ctrl, stdout);
 
     m_uvc_format = format;
 
