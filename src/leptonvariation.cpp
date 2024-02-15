@@ -138,7 +138,7 @@ bool LeptonVariation::getSupportsRadiometry()
     bool runtimeAgc = getSupportsRuntimeAgcChange();
     bool y16Firmware = getPtFirmwareVersion().contains("Y16");
     bool radiometricLepton = getOemFlirPartNumber().contains("500-0763-01")
-            || getOemFlirPartNumber().contains("500-0771-01");
+            || getOemFlirPartNumber().contains("500-0771-01") || getOemFlirPartNumber().contains("500-0758-01") ;
     return (runtimeAgc || y16Firmware) && radiometricLepton;
 }
 
