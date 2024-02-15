@@ -30,7 +30,7 @@ void DataFormatter::FindMinMax(const uvc_frame_t *input, QPoint &minPoint, uint1
     uint8_t bytes_per_pixel = 0;
 
     switch (input->frame_format) {
-    case UVC_FRAME_FORMAT_Y16:
+    case UVC_FRAME_FORMAT_GRAY16:
         bytes_per_pixel = 2;
         break;
     case UVC_FRAME_FORMAT_GRAY8:
@@ -95,7 +95,7 @@ void DataFormatter::FixedGain(uvc_frame_t *input_output, QPoint minpoint, ushort
     uint8_t bytes_per_pixel = 0;
 
     switch (input_output->frame_format) {
-    case UVC_FRAME_FORMAT_Y16:
+    case UVC_FRAME_FORMAT_GRAY16:
         bytes_per_pixel = 2;
         break;
     case UVC_FRAME_FORMAT_GRAY8:
@@ -165,7 +165,7 @@ void DataFormatter::Colorize(const uvc_frame_t *input, QVideoFrame &output) cons
     Q_ASSERT(output.pixelFormat() == QVideoFrame::Format_RGB32);
 
     switch (input->frame_format) {
-    case UVC_FRAME_FORMAT_Y16:
+    case UVC_FRAME_FORMAT_GRAY16:
         bytes_per_pixel = 2;
         break;
     case UVC_FRAME_FORMAT_GRAY8:
