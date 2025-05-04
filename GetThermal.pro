@@ -104,7 +104,7 @@ QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/libuvc/build/release/ -luvc
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/libuvc/build/debug/ -luvc
 else:macos: LIBS += -L$$PWD/libuvc/build/ -luvc
-else:unix: LIBS += -L$$PWD/libuvc/build/ -luvcstatic
+else:unix: LIBS += -L$$PWD/libuvc/build/ -luvc
 
 INCLUDEPATH += $$PWD/lepton_sdk/Inc \
                $$PWD/libuvc/build/include \
