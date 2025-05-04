@@ -139,7 +139,7 @@ LEP_RESULT LEP_GetAttribute(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
     }
     else if ( portDescPtr->portType == LEP_CCI_UVC )
     {
-        result = UVC_GetAttribute(portDescPtr, commandID, attributePtr, attributeWordLength);
+        result = LEP_GetAttribute(portDescPtr, commandID, attributePtr, attributeWordLength);
     }
     else
         result = LEP_COMM_INVALID_PORT_ERROR;
@@ -185,7 +185,7 @@ LEP_RESULT LEP_SetAttribute(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
     }
     else if ( portDescPtr->portType == LEP_CCI_UVC )
     {
-        result = UVC_SetAttribute(portDescPtr, commandID, attributePtr, attributeWordLength);
+        result = LEP_SetAttribute(portDescPtr, commandID, attributePtr, attributeWordLength);
     }
     else
         result = LEP_COMM_INVALID_PORT_ERROR;
@@ -224,7 +224,7 @@ LEP_RESULT LEP_RunCommand(LEP_CAMERA_PORT_DESC_T_PTR portDescPtr,
     }
     else if ( portDescPtr->portType == LEP_CCI_UVC )
     {
-        result = UVC_RunCommand(portDescPtr, commandID);
+        result = LEP_RunCommand(portDescPtr, commandID);
     }
     else
         result = LEP_COMM_INVALID_PORT_ERROR;
