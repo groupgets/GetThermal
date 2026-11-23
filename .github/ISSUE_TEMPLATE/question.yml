@@ -5,24 +5,13 @@ body:
   - type: markdown
     attributes:
       value: |
-        This repository covers the GetThermal desktop viewer. GroupGets provides this code as is and does not offer support, but clear reports help everyone who uses it.
+        This repository covers the GetThermal desktop viewer. GroupGets provides this code as is and does not offer support, but clear reports help everyone who uses it. GetThermal currently receives limited maintenance.
+
+        This repository is for a PureThermal board connected over USB. For a Lepton read over VoSPI (SPI), use [pylepton](https://github.com/groupgets/pylepton) or [LeptonModule](https://github.com/groupgets/LeptonModule).
 
         Before filing, please check the [README](https://github.com/groupgets/GetThermal#readme) and search existing issues, open and closed.
 
         Problems flashing or updating the board's firmware belong in the [firmware repository](https://github.com/groupgets/purethermal1-firmware/issues).
-  - type: dropdown
-    id: board
-    attributes:
-      label: "Board"
-      options:
-        - "PureThermal 3"
-        - "PureThermal 2"
-        - "PureThermal 1"
-        - "PureThermal Mini"
-        - "PureThermal Mini Pro"
-        - "Other"
-    validations:
-      required: true
   - type: dropdown
     id: lepton
     attributes:
@@ -35,13 +24,6 @@ body:
         - "Lepton 2.5"
         - "Lepton 2.0"
         - "Not sure"
-    validations:
-      required: true
-  - type: input
-    id: os
-    attributes:
-      label: "Host computer and operating system"
-      description: "For example `Windows 11 24H2`, `macOS 15.1 on Apple Silicon`, `Ubuntu 24.04`, or `Raspberry Pi OS bookworm on a Pi 5`."
     validations:
       required: true
   - type: textarea
