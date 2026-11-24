@@ -1,5 +1,8 @@
 # GetThermal (this software no longer works)
 
+> To capture from PureThermal boards in your own code, see the examples in
+> [purethermal1-uvc-capture](https://github.com/groupgets/purethermal1-uvc-capture).
+
 [![Build Status](https://travis-ci.org/groupgets/GetThermal.svg?branch=master)](https://travis-ci.org/groupgets/GetThermal)
 
 A cross-platform thermal camera viewer application.
@@ -10,7 +13,7 @@ A cross-platform thermal camera viewer application.
 
 Binaries are available for desktop Linux (x64) and Mac OS platforms; see the Releases tab on GitHub. The Wiki tab has 
 instructions for building on Raspbian. Success has also been reported on NVIDIA Linux for Tegra. Ultimately, any
-platform that runs QT 5.7+ and libusb should function with some effort.
+platform that runs Qt 5 (5.7 or a later 5.x release) and libusb should function with some effort. Qt 6 is not supported.
 
 # Supported Cameras
 
@@ -24,8 +27,12 @@ It also supports basic thermal data acquisition from [FLIR Boson](https://groupg
 # Building
 
 Prerequisites: You will need `libusb-1.0` and [CMake](http://www.cmake.org/) installed. You will
-also need [QT 5.7](https://www.qt.io/download-open-source/) or newer. On OS X, these packages should
-be available via Homebrew.
+also need [Qt 5](https://www.qt.io/download-open-source/) (5.7 or a later 5.x release). Qt 6 is not
+supported. On OS X, these packages should be available via Homebrew.
+
+On Debian and Ubuntu, the QML modules GetThermal uses are separate packages:
+
+    sudo apt install qml-module-qtmultimedia qml-module-qtquick-controls2 qml-module-qtquick-layouts
 
 `GetThermal` uses a modified version of `libuvc` for camera image download and control. Even if
 you have `libuvc` on your system already, you will have to build the fork.
@@ -50,8 +57,8 @@ To build the `libuvc` fork, you can run these shell commands:
 
 ## Build GetThermal
 
-GetThermal is a QT qmake project. So all you should have to do now is to fire up QTCreator, open the project file,
-and hit run. 
+GetThermal is a Qt qmake project. So all you should have to do now is to fire up Qt Creator, open `GetThermal.pro`
+with a Qt 5 kit, and hit run.
 
 ### OSx Qt-Creator build prerequisites
 If Qt Creator fails to run the application due to errors with linking the proper ImageIO.framework or libjpeg version, go to Projects -> Run -> Run Environment and edit the DYLD_FRAMEWORK_PATH and DYLD_LIBRARY_PATH by adding
@@ -61,10 +68,21 @@ If Qt Creator fails to run the application due to errors with linking the proper
 to the beginning of the line.
 
 ### Via Command Line
-You can also build from the command line:
+You can also build from the command line. GetThermal requires a shadow build (a separate build directory):
 
-    qmake # or depending on your installation, maybe ~/Qt/5.7/clang_64/bin/qmake 
+    mkdir build
+    cd build
+    qmake ../GetThermal.pro   # or the full path to your Qt 5 qmake
     make
+
+## Linux: camera access
+
+If GetThermal reports `uvc_open: Access denied (-3)`, your user cannot open the camera's USB device.
+Create `/etc/udev/rules.d/99-pt1.rules` containing:
+
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="1e4e", ATTRS{idProduct}=="0100", MODE="0666"
+
+Then run `sudo udevadm control --reload-rules` and replug the camera.
 
 # Releases
 
