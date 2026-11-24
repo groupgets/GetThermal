@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Lepton community group"
+    url: https://groups.google.com/g/flir-lepton
+    about: "Usage questions and help from other Lepton users."
+  - name: "PureThermal firmware problems"
+    url: https://github.com/groupgets/purethermal1-firmware/issues
+    about: "Flashing, DFU mode, or a fault that persists on the latest firmware."

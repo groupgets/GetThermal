@@ -1,0 +1,35 @@
+name: Setup question
+description: Help getting something working, or a question about how to use this repository.
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repository covers the GetThermal desktop viewer. GroupGets provides this code as is and does not offer support, but clear reports help everyone who uses it. GetThermal currently receives limited maintenance.
+
+        This repository is for a PureThermal board connected over USB. For a Lepton read over VoSPI (SPI), use [pylepton](https://github.com/groupgets/pylepton) or [LeptonModule](https://github.com/groupgets/LeptonModule).
+
+        Before filing, please check the [README](https://github.com/groupgets/GetThermal#readme) and search existing issues, open and closed.
+
+        Problems flashing or updating the board's firmware belong in the [firmware repository](https://github.com/groupgets/purethermal1-firmware/issues).
+  - type: dropdown
+    id: lepton
+    attributes:
+      label: "Lepton model"
+      description: "Printed on the label on the back of the Lepton module."
+      options:
+        - "Lepton 3.5"
+        - "Lepton 3.1R"
+        - "Lepton 3.0"
+        - "Lepton 2.5"
+        - "Lepton 2.0"
+        - "Not sure"
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: "Your question"
+      description: "What you are trying to do and where you got stuck. Include any error output."
+    validations:
+      required: true
